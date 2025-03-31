@@ -1,1 +1,4 @@
-# harstack-capstone
+# Capstone Project
+
+Members:
+- Carl Angelo T. Pepino
