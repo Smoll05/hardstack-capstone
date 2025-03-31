@@ -20,5 +20,5 @@ Members:
  - Carl Angelo T. Pepino
  - Nathanael Jedd N. Del Castillo
  - Mary Avriel Rainne M. Borromeo
- - Brent Micheal S. Tolentino (ethiopian king)
- - Ivann James M. Paradero (Streak Dancer)
+ - Brent Micheal S. Tolentino
+ - Ivann James M. Paradero (Streak Dancer, ethiopian king)
