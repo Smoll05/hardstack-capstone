@@ -16,8 +16,7 @@ This idea revolves around creating a digital version of the timeless strategy ga
 ###  1. ADH Helper Chatbot
 The ADH Helper Chatbot is an idea for a chatbot designed to assist individuals with Attention Deficit Hyperactivity Disorder (ADHD). This concept would help users manage their daily tasks, set reminders, and stay productive by offering personalized support. The chatbot would provide helpful suggestions for staying focused, breaking tasks into manageable steps, and maintaining motivation throughout the day, making life easier for those managing ADHD.
 
-
-> Members:
+Members:
  - Carl Angelo T. Pepino
  - Nathanael Jedd N. Del Castillo
  - Mary Avriel Rainne M. Borromeo
