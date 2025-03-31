@@ -18,8 +18,8 @@ The ADH Helper Chatbot is an idea for a chatbot designed to assist individuals w
 
 
 > Members:
-- Carl Angelo T. Pepino
-- Nathanael Jedd N. Del Castillo
-- Mary Avriel Rainne M. Borromeo
-- Brent Micheal S. Tolentino (ethiopian king)
-- Ivann James M. Paradero (Streak Dancer)
+ - Carl Angelo T. Pepino
+ - Nathanael Jedd N. Del Castillo
+ - Mary Avriel Rainne M. Borromeo
+ - Brent Micheal S. Tolentino (ethiopian king)
+ - Ivann James M. Paradero (Streak Dancer)
