@@ -14,9 +14,6 @@ import javafx.util.Duration;
 public class MainApplication extends GameApplication {
     private Entity player1, player2;
     Text nameTag1, nameTag2;
-    boolean isMoving = false;
-    boolean leftDown = false;
-    boolean rightDown = false;
     private long lastMoveTimeJoe = 0;
     private final long idleDelayJoe = 50;
     private long lastMoveTimeMarie = 0;
@@ -125,19 +122,28 @@ public class MainApplication extends GameApplication {
 //            Checking if on the ground
             if (Math.abs(physics.getVelocityY()) < 0.1) {
                 physics.setVelocityY(-400);
+                pc.jump();
                 lastMoveTimeJoe = System.currentTimeMillis();
             }
         });
 
         FXGL.onKey(KeyCode.A, () -> {
+            if (Math.abs(physics.getVelocityY()) < 0.1) {
+                pc.moveLeft();
+            } else {
+                pc.jump();
+            }
             physics.setVelocityX(-150);
-            pc.moveLeft();
             lastMoveTimeJoe = System.currentTimeMillis();
         });
 
         FXGL.onKey(KeyCode.D, () -> {
+            if (Math.abs(physics.getVelocityY()) < 0.1) {
+                pc.moveRight();
+            } else {
+                pc.jump();
+            }
             physics.setVelocityX(150);
-            pc.moveRight();
             lastMoveTimeJoe = System.currentTimeMillis();
         });
 
@@ -152,14 +158,15 @@ public class MainApplication extends GameApplication {
         FXGL.onKeyDown(KeyCode.UP, () -> {
 //            Checking if on the ground
             if (Math.abs(physics2.getVelocityY()) < 0.1) {
-                physics2.setVelocityY(-400);
+                physics2.setVelocityY(-400);;
+                pc2.jump();
                 lastMoveTimeMarie = System.currentTimeMillis();
             }
         });
 
         FXGL.onKey(KeyCode.LEFT, () -> {
             physics2.setVelocityX(-150);
-            pc2.moveLeft();
+            pc.moveLeft();
             lastMoveTimeMarie = System.currentTimeMillis();
         });
 

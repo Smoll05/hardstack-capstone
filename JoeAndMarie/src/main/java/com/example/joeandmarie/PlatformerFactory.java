@@ -30,14 +30,15 @@ public class PlatformerFactory implements EntityFactory {
 
         // Create animations for idle, move, and crouch
         AnimationChannel idle = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        AnimationChannel move = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
+        AnimationChannel move = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 24, 31);
         AnimationChannel crouch = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
+        AnimationChannel jump = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
 
         // Initialize the AnimatedTexture with idle animation
         AnimatedTexture anim = new AnimatedTexture(idle);
 
         // Pass animations into PlayerComponent
-        PlayerComponent playerComponent = new PlayerComponent(anim, idle, move, crouch);
+        PlayerComponent playerComponent = new PlayerComponent(anim, idle, move, crouch, jump);
 
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER1)
@@ -83,14 +84,15 @@ public class PlatformerFactory implements EntityFactory {
 
         // Create animations for idle, move, and crouch
         AnimationChannel idle = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        AnimationChannel move = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
+        AnimationChannel move = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 24, 31);
         AnimationChannel crouch = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
+        AnimationChannel jump = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
 
         // Initialize the AnimatedTexture with idle animation
         AnimatedTexture anim = new AnimatedTexture(idle);
 
         // Pass animations into PlayerComponent
-        PlayerComponent playerComponent = new PlayerComponent(anim, idle, move, crouch);
+        PlayerComponent playerComponent = new PlayerComponent(anim, idle, move, crouch, jump);
 
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER2)
@@ -122,6 +124,7 @@ public class PlatformerFactory implements EntityFactory {
                 .bbox(new HitBox("BODY", BoundingShape.box(200, 20)))
                 .viewWithBBox(new Rectangle(200, 20, Color.DARKGRAY))
                 .with(new PhysicsComponent()) // Default STATIC
+//                .viewWithBBox("mossed-platform.png")
                 .build();
     }
 }

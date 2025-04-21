@@ -7,13 +7,14 @@ import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
     private final AnimatedTexture texture;
-    private final AnimationChannel idle, move, crouch;
+    private final AnimationChannel idle, move, crouch, jump;
 
-    public PlayerComponent(AnimatedTexture texture, AnimationChannel idle, AnimationChannel move, AnimationChannel crouch) {
+    public PlayerComponent(AnimatedTexture texture, AnimationChannel idle, AnimationChannel move, AnimationChannel crouch, AnimationChannel jump) {
         this.texture = texture;
         this.idle = idle;
         this.move = move;
         this.crouch = crouch;
+        this.jump = jump;
     }
 
     @Override
@@ -23,6 +24,26 @@ public class PlayerComponent extends Component {
             entity.getViewComponent().addChild(texture);
         }
         texture.loopAnimationChannel(idle); // Start with idle animation
+    }
+
+    public void jump() {
+        if (texture.getAnimationChannel() != jump) {
+            texture.loopAnimationChannel(jump); // Switch
+        }
+    }
+
+    public void jumpLeft() {
+        if (texture.getAnimationChannel() != jump) {
+            texture.loopAnimationChannel(jump); // Switch
+        }
+        texture.setScaleX(1);
+    }
+
+    public void jumpRight() {
+        if (texture.getAnimationChannel() != jump) {
+            texture.loopAnimationChannel(jump); // Switch
+        }
+        texture.setScaleX(-1);
     }
 
     public void moveLeft() {
