@@ -1,4 +1,4 @@
-package com.example.joeandmarie;
+package com.example.joeandmarie.factory;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -11,22 +11,27 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJoint;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Point2D;
+import com.example.joeandmarie.component.PlayerComponent;
+import com.example.joeandmarie.entity.EntityType;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class PlatformerFactory implements EntityFactory {
+import java.lang.reflect.Field;
+
+public class PlayerFactory implements EntityFactory {
 
     @Spawns("player1")
     public Entity newPlayer1(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-        physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
+        FixtureDef fd = new FixtureDef();
+        fd.friction(5.0f);
+
+        physics.setFixtureDef(fd);
 
         // Create animations for idle, move, and crouch
         AnimationChannel idle = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
@@ -79,7 +84,11 @@ public class PlatformerFactory implements EntityFactory {
     public Entity newPlayer2(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-        physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
+        FixtureDef fd = new FixtureDef();
+        fd.friction(5f);
+
+        physics.setFixtureDef(fd);
 
         // Create animations for idle, move, and crouch
         AnimationChannel idle = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
@@ -94,7 +103,7 @@ public class PlatformerFactory implements EntityFactory {
 
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER2)
-                .bbox(new HitBox("BODY", BoundingShape.box(64,64)))
+                .bbox(new HitBox("BODY", BoundingShape.box(16,16)))
                 .viewWithBBox(anim)
                 .with(physics)
                 .with(new CollidableComponent(true))
@@ -114,15 +123,4 @@ public class PlatformerFactory implements EntityFactory {
 //                .with(new CollidableComponent(true))
 //                .build();
     }
-
-    @Spawns("platform")
-    public Entity newPlatform(SpawnData data) {
-        return FXGL.entityBuilder(data)
-                .type(EntityType.PLATFORM)
-                .bbox(new HitBox("BODY", BoundingShape.box(200, 20)))
-                .viewWithBBox(new Rectangle(200, 20, Color.DARKGRAY))
-                .with(new PhysicsComponent()) // Default STATIC
-                .build();
-    }
 }
-
