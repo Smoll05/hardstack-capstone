@@ -1,15 +1,36 @@
 package com.example.joeandmarie;
 
+import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.MenuItem;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.LoadingScene;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.awt.*;
+import java.util.EnumSet;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getApp;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 public class MainApplication extends GameApplication {
     private Entity player1, player2;
@@ -24,14 +45,28 @@ public class MainApplication extends GameApplication {
 
 
 
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Joe and Marie");
-//        settings.setFullScreenAllowed(true);
-//        settings.setFullScreenFromStart(true);
+        settings.setVersion("1.0");
         settings.setWidth(1280);
         settings.setHeight(720);
+        settings.setFullScreenAllowed(true);
+        settings.setMainMenuEnabled(false);
+        settings.setIntroEnabled(false);
+        settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
+
+        // Attach your custom menu
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new JoeMainMenu();
+            }
+        });
     }
+
+
 
     @Override
     protected void initGame() {
@@ -217,8 +252,9 @@ public class MainApplication extends GameApplication {
 
 
     public static void main(String[] args) {
-        launch(args);
+        GameApplication.launch(MainApplication.class, args);
     }
+
 
     private Entity getPlayer1() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER1);
