@@ -5,6 +5,15 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJoint;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJointDef;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.RopeJoint;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.RopeJointDef;
+import com.example.joeandmarie.component.PlayerComponent;
+import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.entity.EntityType;
+import com.example.joeandmarie.factory.PlatformerFactory;
+import com.example.joeandmarie.factory.PlayerFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -31,11 +40,13 @@ public class MainApplication extends GameApplication {
 //        settings.setFullScreenFromStart(true);
         settings.setWidth(1280);
         settings.setHeight(720);
+
     }
 
     @Override
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
+        FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
         FXGL.spawn("player1", 300, 300);
         FXGL.spawn("player2", 400, 0);
@@ -92,7 +103,8 @@ public class MainApplication extends GameApplication {
 
         long currentTime = System.currentTimeMillis();
 
-        if (!inputInitializedJoe && FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER1).size() > 0 && !inputInitializedMarie && FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER2).size() > 0) {
+        if (!inputInitializedJoe && FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER1).size() > 0
+                && !inputInitializedMarie && FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER2).size() > 0) {
             setupInput();
             inputInitializedJoe = true;
             inputInitializedMarie = true;
@@ -121,22 +133,49 @@ public class MainApplication extends GameApplication {
         var pc2 = player2.getComponent(PlayerComponent.class);
         var physics2 = player2.getComponent(PhysicsComponent.class);
 
+//        DistanceJointDef def = new DistanceJointDef();
+//        def.setBodyA(physics.getBody());
+//        def.setBodyB(physics2.getBody());
+//        def.localAnchorA.set(0, 0);
+//        def.localAnchorB.set(0, 0);
+//        def.length = 6f;
+//        def.frequencyHz = 1.5f;
+//        def.dampingRatio = 0.6f;
+//        def.setBodyCollisionAllowed(false);
+//
+//        DistanceJoint rope = FXGL.getPhysicsWorld()
+//                        .getJBox2DWorld().createJoint(def);
+//
+//        rope.setLength(4f);
+//        rope.setDampingRatio(0.8f);
+
+        RopeJointDef def = new RopeJointDef();
+        def.localAnchorA.set(0, 0);
+        def.localAnchorB.set(0, 0);
+        def.maxLength = 5.0f;
+        def.setBodyCollisionAllowed(false);
+
+        def.setBodyA(physics.getBody());
+        def.setBodyB(physics2.getBody());
+
+        RopeJoint rope = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(def);
+
         FXGL.onKeyDown(KeyCode.W, () -> {
 //            Checking if on the ground
             if (Math.abs(physics.getVelocityY()) < 0.1) {
-                physics.setVelocityY(-400);
+                physics.setVelocityY(-Constants.JUMP_FORCE);
                 lastMoveTimeJoe = System.currentTimeMillis();
             }
         });
 
         FXGL.onKey(KeyCode.A, () -> {
-            physics.setVelocityX(-150);
+            physics.setVelocityX(-Constants.RUNNING_SPEED);
             pc.moveLeft();
             lastMoveTimeJoe = System.currentTimeMillis();
         });
 
         FXGL.onKey(KeyCode.D, () -> {
-            physics.setVelocityX(150);
+            physics.setVelocityX(Constants.RUNNING_SPEED);
             pc.moveRight();
             lastMoveTimeJoe = System.currentTimeMillis();
         });
@@ -158,13 +197,13 @@ public class MainApplication extends GameApplication {
         });
 
         FXGL.onKey(KeyCode.LEFT, () -> {
-            physics2.setVelocityX(-150);
+            physics2.setVelocityX(-Constants.RUNNING_SPEED);
             pc2.moveLeft();
             lastMoveTimeMarie = System.currentTimeMillis();
         });
 
         FXGL.onKey(KeyCode.RIGHT, () -> {
-            physics2.setVelocityX(150);
+            physics2.setVelocityX(Constants.RUNNING_SPEED);
             pc2.moveRight();
             lastMoveTimeMarie = System.currentTimeMillis();
         });

@@ -1,4 +1,4 @@
-package com.example.joeandmarie;
+package com.example.joeandmarie.entity;
 
 public enum EntityType {
     PLAYER1,

@@ -1,4 +1,4 @@
-package com.example.joeandmarie;
+package com.example.joeandmarie.component;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
