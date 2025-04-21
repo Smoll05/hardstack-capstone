@@ -68,6 +68,7 @@ public class MainApplication extends GameApplication {
 
 
 
+
     @Override
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
