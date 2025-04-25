@@ -10,6 +10,7 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
+import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
@@ -20,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.example.joeandmarie.config.Constants.ROPE_LENGTH;
 
 public class MainApplication extends GameApplication {
     private Entity player1, player2;
@@ -55,14 +57,11 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
-        FXGL.spawn("player1", 500, 200);
-        FXGL.spawn("player2", 500, 300);
+        Entity player2 = FXGL.spawn("player2", 500, 300);
+        Entity player1 = FXGL.spawn("player1", 500, 200);
 
-//        FXGL.spawn("platform", 450, 315);
-//        FXGL.spawn("platform", 550, 260);
-//        FXGL.spawn("platform", 350, 260);
-//        FXGL.spawn("platform", 450, 220);
-
+        getControlP1().loadPlayer2(player2);
+        getControlP2().loadPlayer1(player1);
 
         FXGL.spawn("platform", 0, 700);
         FXGL.spawn("platform", 100, 700);
@@ -408,7 +407,7 @@ public class MainApplication extends GameApplication {
         ropeDef.setBodyB(bodyB);
         ropeDef.localAnchorA.set(0, 0);
         ropeDef.localAnchorB.set(0, 0);
-        ropeDef.maxLength = 3.0f;
+        ropeDef.maxLength = Constants.ROPE_LENGTH;
         ropeDef.setBodyCollisionAllowed(false);
 
         FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
