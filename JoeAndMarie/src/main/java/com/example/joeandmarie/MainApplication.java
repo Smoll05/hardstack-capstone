@@ -250,6 +250,20 @@ public class MainApplication extends GameApplication {
         // Player 1 Controls
         FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
 
+        FXGL.getInput().addAction(new UserAction("Cry1") {
+            @Override
+            protected void onAction() {
+                getControlP1().cry();
+                getControlP2().cry();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+                getControlP2().stand();
+            }
+        }, KeyCode.C);
+
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {

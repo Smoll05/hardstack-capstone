@@ -31,7 +31,7 @@ public class Player1Component extends Component {
     private Entity player2;
 
     private final AnimatedTexture texture;
-    private final AnimationChannel animIdle, animMove, animCrouch, animJump, animHang;
+    private final AnimationChannel animIdle, animMove, animCrouch, animJump, animHang, animCry, animFall;
 
     private final EntityState STAND = new EntityState("STAND");
     private final EntityState WALK = new EntityState("WALK");
@@ -41,6 +41,7 @@ public class Player1Component extends Component {
     private final EntityState PULL = new EntityState("PULL");
     private final EntityState CHECKPOINT = new EntityState("CHECKPOINT");
     private final EntityState SAVE = new EntityState("SAVE");
+    private final EntityState HOLD = new EntityState("HOLD");
 
     private final EntityState JUMP = new EntityState("JUMP") {
         @Override
@@ -74,17 +75,21 @@ public class Player1Component extends Component {
         animJump = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
         animCrouch = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
         animHang = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animCry = new AnimationChannel(FXGL.image("joe_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+
+
 
         stateData = Map.of(
                 STAND, new StateData(animIdle, 0),
                 WALK, new StateData(animMove, -Constants.RUNNING_SPEED),
                 CROUCH, new StateData(animCrouch, 0),
                 JUMP, new StateData(animJump, Constants.JUMP_FORCE),
-                FALL, new StateData(animJump, 0),
+                FALL, new StateData(animFall, 0),
                 HANG, new StateData(animHang,0),
                 SWING, new StateData(animIdle, -Constants.RUNNING_SPEED),
                 PULL, new StateData(animIdle, 0),
-                CHECKPOINT, new StateData(animIdle, 0),
+                CHECKPOINT, new StateData(animCry, 0),
                 SAVE, new StateData(animIdle, 0)
         );
 
@@ -100,11 +105,13 @@ public class Player1Component extends Component {
 
     @Override
     public void onAdded() {
+
         state = entity.getComponent(StateComponent.class);
         physics = entity.getComponent(PhysicsComponent.class);
         view = entity.getComponent(ViewComponent.class);
 
         view.addChild(texture);
+
         state.changeState(STAND);
 
         state.currentStateProperty().addListener((o, oldState, newState) -> {
@@ -130,6 +137,10 @@ public class Player1Component extends Component {
 
     public void swingRight() {
         tryMovingState(SWING, -1);
+    }
+
+    public void cry() {
+        state.changeState(CHECKPOINT);
     }
 
     public void stop() {
