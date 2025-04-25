@@ -65,7 +65,7 @@ public class PlayerFactory implements EntityFactory {
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(0.25f));
+        physics.setFixtureDef(new FixtureDef().friction(50f).density(0.25f));
         physics.setBodyDef(bd);
 
         HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(40, 10));
