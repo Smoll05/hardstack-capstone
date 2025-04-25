@@ -2,14 +2,14 @@ package com.example.joeandmarie;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.joints.RopeJoint;
-import com.almasb.fxgl.physics.box2d.dynamics.joints.RopeJointDef;
-import com.example.joeandmarie.component.PlayerComponent;
-import com.example.joeandmarie.config.Constants;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
+import com.example.joeandmarie.component.Player1Component;
+import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
@@ -19,8 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.onKey;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class MainApplication extends GameApplication {
     private Entity player1, player2;
@@ -32,6 +31,11 @@ public class MainApplication extends GameApplication {
     private final long idleDelayJoe = 50;
     private long lastMoveTimeMarie = 0;
     private final long idleDelayMarie = 5; // milliseconds
+
+    private static final double TARGET_FPS = 60;
+    private static final double TARGET_TPF = 1.0 / TARGET_FPS;
+
+    private double lastUpdateTime = 0;
 
 
 
@@ -51,21 +55,28 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
-//        FXGL.spawn("player1", 300, 300);
-        FXGL.spawn("player2", 100, 0);
+        FXGL.spawn("player1", 500, 200);
+        FXGL.spawn("player2", 500, 300);
 
+//        FXGL.spawn("platform", 450, 315);
+//        FXGL.spawn("platform", 550, 260);
+//        FXGL.spawn("platform", 350, 260);
+//        FXGL.spawn("platform", 450, 220);
 
-        FXGL.spawn("platform", 0, 500);
-        FXGL.spawn("platform", 200, 400);
-        FXGL.spawn("platform", 400, 300);
-        FXGL.spawn("platform", 600, 200);
 
         FXGL.spawn("platform", 0, 700);
+        FXGL.spawn("platform", 100, 700);
         FXGL.spawn("platform", 200, 700);
+        FXGL.spawn("platform", 300, 700);
         FXGL.spawn("platform", 400, 700);
+        FXGL.spawn("platform", 500, 700);
         FXGL.spawn("platform", 600, 700);
+        FXGL.spawn("platform", 700, 700);
         FXGL.spawn("platform", 800, 700);
+        FXGL.spawn("platform", 900, 700);
         FXGL.spawn("platform", 1000, 700);
+
+        FXGL.spawn("platform", 500, 500);
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
@@ -84,7 +95,7 @@ public class MainApplication extends GameApplication {
             nameTag2.setTranslateX(-nameTag1.getLayoutBounds().getWidth() / 2);
             nameTag2.setTranslateY(-20);
 
-//            getPlayer1().getViewComponent().addChild(nameTag1);
+            getPlayer1().getViewComponent().addChild(nameTag1);
             getPlayer2().getViewComponent().addChild(nameTag2);
         }, Duration.seconds(0.1));
     }
@@ -222,43 +233,84 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initInput() {
-        FXGL.onKey(KeyCode.W, () -> getControl().jump());
 
-        FXGL.getInput().addAction(new UserAction("Left") {
+        // Player 1 Controls
+        FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
+
+        FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {
-                getControl().moveLeft();
+                getControlP1().moveLeft();
             }
 
             @Override
             protected void onActionEnd() {
-                getControl().stop();
+                getControlP1().stop();
             }
         }, KeyCode.A);
 
-        FXGL.getInput().addAction(new UserAction("Right") {
+        FXGL.getInput().addAction(new UserAction("Right1") {
             @Override
             protected void onAction() {
-                getControl().moveRight();
+                getControlP1().moveRight();
             }
 
             @Override
             protected void onActionEnd() {
-                getControl().stop();
+                getControlP1().stop();
             }
         }, KeyCode.D);
 
-        FXGL.getInput().addAction(new UserAction("Crouch") {
+        FXGL.getInput().addAction(new UserAction("Crouch1") {
             @Override
             protected void onAction() {
-                getControl().crouch();
+                getControlP1().crouch();
             }
 
             @Override
             protected void onActionEnd() {
-                getControl().stand();
+                getControlP1().stand();
             }
         }, KeyCode.S);
+
+        // Player 2 Controls
+        FXGL.onKey(KeyCode.UP, () -> getControlP2().jump());
+
+        FXGL.getInput().addAction(new UserAction("Left2") {
+            @Override
+            protected void onAction() {
+                getControlP2().moveLeft();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP2().stop();
+            }
+        }, KeyCode.LEFT);
+
+        FXGL.getInput().addAction(new UserAction("Right2") {
+            @Override
+            protected void onAction() {
+                getControlP2().moveRight();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP2().stop();
+            }
+        }, KeyCode.RIGHT);
+
+        FXGL.getInput().addAction(new UserAction("Crouch3") {
+            @Override
+            protected void onAction() {
+                getControlP2().crouch();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP2().stand();
+            }
+        }, KeyCode.DOWN);
     }
 
     //    @Override
@@ -294,18 +346,91 @@ public class MainApplication extends GameApplication {
 //        }
 //    }
 
-    private PlayerComponent getControl() {
-        return getGameWorld().getSingleton(e -> e.hasComponent(PlayerComponent.class))
-                .getComponent(PlayerComponent.class);
+
+    @Override
+    protected void initPhysics() {
+        super.initPhysics();
+
+        var player1 = getPlayer1();
+        var physics1 = player1.getComponent(PhysicsComponent.class);
+
+        var player2 = getPlayer2();
+        var physics2 = player2.getComponent(PhysicsComponent.class);
+
+//        RopeJointDef def = new RopeJointDef();
+//        def.localAnchorA.set(0, 0);
+//        def.localAnchorB.set(0, 0);
+//        def.maxLength = 3.0f;
+//        def.setBodyCollisionAllowed(false);
+//
+//        def.setBodyA(physics1.getBody());
+//        def.setBodyB(physics2.getBody());
+//
+//        RopeJoint rope = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(def);
+
+        var bodyA = physics1.getBody();
+        var bodyB = physics2.getBody();
+
+//        RevoluteJoint revoluteJoint = new RevoluteJointDef(bodyA, bodyB, new Vec2(0, 0));  // fixedAnchorBody is the body where the rope or bar is attached
+//        revoluteJoint.setMaxMotorTorque(100f); // Limit the motor torque to control swinging force
+//        revoluteJoint.setMotorSpeed(10f); // Set motor speed for rotating around the fixed point
+
+//        DistanceJointDef def = new DistanceJointDef();
+//        def.initialize(bodyA, bodyB, bodyA.getWorldCenter(), bodyB.getWorldCenter());
+//        def.length = 3.0f;
+//        def.setBodyCollisionAllowed(false);
+////        def.collideConnected = false;
+
+//        RevoluteJointDef def = new RevoluteJointDef();
+//        def.initialize(bodyA, bodyB, bodyA.getWorldCenter());
+//
+//        def.setBodyCollisionAllowed(false);
+
+
+        // THIS IS THE BODY
+
+//        RevoluteJointDef jointDef = new RevoluteJointDef();
+//        jointDef.initialize(bodyA, bodyB, bodyA.getWorldCenter());
+//        jointDef.maxMotorTorque = 100f;
+//        jointDef.motorSpeed = 10f;
+//        jointDef.setBodyCollisionAllowed(false);
+//
+//        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(jointDef);
+//
+
+
+        // 1. Create a RopeJoint to limit the maximum rope length
+
+//        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
+
+        RopeJointDef ropeDef = new RopeJointDef();
+        ropeDef.setBodyA(bodyA);
+        ropeDef.setBodyB(bodyB);
+        ropeDef.localAnchorA.set(0, 0);
+        ropeDef.localAnchorB.set(0, 0);
+        ropeDef.maxLength = 3.0f;
+        ropeDef.setBodyCollisionAllowed(false);
+
+        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
+    }
+
+    private Player1Component getControlP1() {
+        return getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))
+                .getComponent(Player1Component.class);
+    }
+
+    private Player2Component getControlP2() {
+        return getGameWorld().getSingleton(e -> e.hasComponent(Player2Component.class))
+                .getComponent(Player2Component.class);
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-//    private Entity getPlayer1() {
-//        return FXGL.getGameWorld().getSingleton(EntityType.PLAYER1);
-//    }
+    private Entity getPlayer1() {
+        return FXGL.getGameWorld().getSingleton(EntityType.PLAYER1);
+    }
 
     private Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
