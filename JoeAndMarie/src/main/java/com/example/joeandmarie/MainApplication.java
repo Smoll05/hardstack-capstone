@@ -75,12 +75,6 @@ public class MainApplication extends GameApplication {
         getControlP1().loadPlayer2(player2);
         getControlP2().loadPlayer1(player1);
 
-        FXGL.spawn("platform", 450, 315);
-        FXGL.spawn("platform", 550, 260);
-        FXGL.spawn("platform", 350, 260);
-        FXGL.spawn("platform", 450, 220);
-
-
         FXGL.spawn("platform", 0, 700);
         FXGL.spawn("platform", 100, 700);
         FXGL.spawn("platform", 200, 700);
@@ -92,6 +86,8 @@ public class MainApplication extends GameApplication {
         FXGL.spawn("platform", 800, 700);
         FXGL.spawn("platform", 900, 700);
         FXGL.spawn("platform", 1000, 700);
+
+        FXGL.spawn("platform", 500, 500);
 //
 //        FXGL.spawn("platform", 500, 500);
 
