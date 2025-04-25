@@ -4,33 +4,20 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.IntroScene;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import javafx.animation.FillTransition;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import com.example.joeandmarie.Starting.JoeIntroScene;
+import com.example.joeandmarie.Starting.JoeMainMenu;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.EnumSet;
-
 
 public class MainApplication extends GameApplication {
     private Entity player1, player2;
@@ -52,11 +39,15 @@ public class MainApplication extends GameApplication {
         settings.setHeight(720);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
-        settings.setIntroEnabled(false);
+        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
 
         // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public IntroScene newIntro() {
+                return new JoeIntroScene.MyIntroScene();
+            }
             @Override
             public FXGLMenu newMainMenu() {
                 return new JoeMainMenu();
@@ -64,11 +55,9 @@ public class MainApplication extends GameApplication {
         });
     }
 
-    @Override
 
+    @Override
     public void initGame() {
-        // Remove home UI
-        FXGL.getGameScene().clearUINodes();
 
         // Initialize the actual game content
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
@@ -154,7 +143,6 @@ public class MainApplication extends GameApplication {
         var physics2 = player2.getComponent(PhysicsComponent.class);
 
         FXGL.onKeyDown(KeyCode.W, () -> {
-//            Checking if on the ground
             if (Math.abs(physics.getVelocityY()) < 0.1) {
                 physics.setVelocityY(-400);
                 lastMoveTimeJoe = System.currentTimeMillis();
@@ -182,7 +170,6 @@ public class MainApplication extends GameApplication {
         });
 
         FXGL.onKeyDown(KeyCode.UP, () -> {
-//            Checking if on the ground
             if (Math.abs(physics2.getVelocityY()) < 0.1) {
                 physics2.setVelocityY(-400);
                 lastMoveTimeMarie = System.currentTimeMillis();
@@ -222,85 +209,5 @@ public class MainApplication extends GameApplication {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
     }
 
+
 }
-
-//    public void start(Stage stage) throws Exception{
-//        stage.setScene(new Scene(createContent()));
-//        stage.show();
-//    }
-//    private Parent createContent(){
-//        Pane root = new Pane();
-//        root.setPrefSize(1280, 720);
-//
-//        Image bgImage = new Image(getClass().getResource("/assets/textures/bgimages.png").toExternalForm(), 1280, 720, false, true);
-//
-//        VBox box = new VBox(10,
-//                new MenuItems("CO-OP Campaign", () -> {}),
-//                new MenuItems("Multiplayer", () -> {}),
-//                new MenuItems("Collection", () -> {}),
-//                new MenuItems("Settings", () -> {}),
-//                new MenuItems("Quit", () -> Platform.exit())
-//        );
-//
-//        box.setBackground(new Background(
-//                new BackgroundFill(Color.web("black", 0.6) , null, null)
-//        ));
-//
-//        box.setTranslateX(1280 - 300);
-//        box.setTranslateY(720 - 300);
-//
-//        root.getChildren().addAll(new ImageView(bgImage), box);
-//        return  root;
-//    }
-//
-//    private static class MenuItems extends StackPane {
-//        MenuItems(String names, Runnable action) {
-//            LinearGradient gradient = new LinearGradient(0, 0.5, 1, 0.5, true, CycleMethod.NO_CYCLE,
-//                    new Stop(0.1, Color.web("white", 0.5)),
-//                    new Stop(0.1, Color.web("black", 0.5)));
-//
-//            Rectangle bg = new Rectangle(250, 30, gradient);
-//            Rectangle bg1 = new Rectangle(250, 30, Color.web("black", 0.2)); // Corrected color
-//            FillTransition ft = new FillTransition(Duration.seconds(1), bg1, Color.web("black", 0.2), Color.web("white", 0.2)); // Corrected color
-//
-//            ft.setAutoReverse(true);
-//            ft.setCycleCount(Integer.MAX_VALUE);
-//
-//            hoverProperty().addListener((o, oldValue, isHovering) -> {
-//                if (isHovering) {
-//                    ft.playFromStart();
-//                } else {
-//                    ft.stop();
-//                    bg1.setFill(Color.web("black", 0.2)); // Reset to original color
-//                }
-//            });
-//
-//            Rectangle line = new Rectangle(2, 30);
-//            line.widthProperty().bind(
-//                    Bindings.when(hoverProperty()).then(8).otherwise(5)
-//            );
-//            line.fillProperty().bind(
-//                    Bindings.when(hoverProperty()).then(Color.RED).otherwise(Color.GRAY)
-//            );
-//
-//            Text text = new Text(names);
-//            text.fillProperty().bind(
-//                    Bindings.when(hoverProperty()).then(Color.WHITE).otherwise(Color.GRAY)
-//            );
-//
-//            setOnMousePressed(e -> bg.setFill(Color.LIGHTBLUE));
-//            setOnMouseReleased(e -> bg.setFill(gradient));
-//            setOnMouseClicked(e -> action.run());
-//
-//            setAlignment(Pos.CENTER_LEFT);
-//
-//            HBox box = new HBox(15, line, text);
-//            box.setAlignment(Pos.CENTER_LEFT);
-//            getChildren().addAll(bg, bg1, box);
-//        }
-//    }
-//
-//    public static void main(String[] args){
-//        launch(args);
-//    }
-
