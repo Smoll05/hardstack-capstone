@@ -22,7 +22,7 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class MainApplication extends GameApplication {
-    private Entity player1, player2;
+
     Text nameTag1, nameTag2;
     boolean isMoving = false;
     boolean leftDown = false;
@@ -46,48 +46,52 @@ public class MainApplication extends GameApplication {
 //        settings.setFullScreenFromStart(true);
         settings.setWidth(1280);
         settings.setHeight(720);
-//        settings.setDeveloperMenuEnabled(true);
-//        settings.setProfilingEnabled(true);
+        settings.setDeveloperMenuEnabled(true);
+        settings.setProfilingEnabled(true);
     }
 
     @Override
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
-        try {
-            FXGL.setLevelFromMap("test.tmx");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        var viewport = FXGL.getGameScene().getViewport();
+//        try {
+//            FXGL.setLevelFromMap("test.tmx");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        var viewport = FXGL.getGameScene().getViewport();
+//
+//        int mapWidth = 40 * 32;
+//        int mapHeight = 23 * 32;
+//        viewport.setBounds(0, 0, mapWidth, mapHeight);
+//
+//        viewport.setZoom(0.8);
 
-        int mapWidth = 40 * 32;
-        int mapHeight = 23 * 32;
-        viewport.setBounds(0, 0, mapWidth, mapHeight);
+        Entity player2 = FXGL.spawn("player2", 500, 300);
+        Entity player1 = FXGL.spawn("player1", 500, 200);
 
-        viewport.setZoom(0.8);
+        getControlP1().loadPlayer2(player2);
+        getControlP2().loadPlayer1(player1);
 
-        FXGL.spawn("player1", 500, 200);
-        FXGL.spawn("player2", 500, 300);
-
-//        FXGL.spawn("platform", 450, 315);
-//        FXGL.spawn("platform", 550, 260);
-//        FXGL.spawn("platform", 350, 260);
-//        FXGL.spawn("platform", 450, 220);
+        FXGL.spawn("platform", 450, 315);
+        FXGL.spawn("platform", 550, 260);
+        FXGL.spawn("platform", 350, 260);
+        FXGL.spawn("platform", 450, 220);
 
 
-//        FXGL.spawn("platform", 0, 700);
-//        FXGL.spawn("platform", 100, 700);
-//        FXGL.spawn("platform", 200, 700);
-//        FXGL.spawn("platform", 300, 700);
-//        FXGL.spawn("platform", 400, 700);
-//        FXGL.spawn("platform", 500, 700);
-//        FXGL.spawn("platform", 600, 700);
-//        FXGL.spawn("platform", 700, 700);
-//        FXGL.spawn("platform", 800, 700);
-//        FXGL.spawn("platform", 900, 700);
-//        FXGL.spawn("platform", 1000, 700);
+        FXGL.spawn("platform", 0, 700);
+        FXGL.spawn("platform", 100, 700);
+        FXGL.spawn("platform", 200, 700);
+        FXGL.spawn("platform", 300, 700);
+        FXGL.spawn("platform", 400, 700);
+        FXGL.spawn("platform", 500, 700);
+        FXGL.spawn("platform", 600, 700);
+        FXGL.spawn("platform", 700, 700);
+        FXGL.spawn("platform", 800, 700);
+        FXGL.spawn("platform", 900, 700);
+        FXGL.spawn("platform", 1000, 700);
 //
 //        FXGL.spawn("platform", 500, 500);
 
