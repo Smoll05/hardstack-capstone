@@ -10,6 +10,7 @@ public class JoeMainMenu extends FXGLMenu {
         super(MenuType.MAIN_MENU);
 
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/assets/joe_main_menu.fxml"));
             Parent root = loader.load();
             getContentRoot().getChildren().add(root);
