@@ -19,6 +19,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class MainApplication extends GameApplication {
@@ -87,9 +92,22 @@ public class MainApplication extends GameApplication {
         FXGL.spawn("platform", 900, 700);
         FXGL.spawn("platform", 1000, 700);
 
-        FXGL.spawn("platform", 500, 500);
-//
-//        FXGL.spawn("platform", 500, 500);
+        var e = FXGL.spawn("player1", 500, 200);
+        var e2 = FXGL.spawn("player2", 500, 300);
+
+        getGameScene().getViewport().setBounds(0, 0, 50800 - 30, 50100 - 30);
+
+        FXGL.getGameScene().getViewport().unbind();
+
+        FXGL.getGameTimer().runAtInterval(() -> {
+            double midX = (e.getX() + e2.getX()) / 2;
+            double midY = (e.getY() + e2.getY()) / 2;
+
+            // Offset camera to center on midpoint
+            FXGL.getGameScene().getViewport().setX(midX - FXGL.getAppWidth() / 2);
+            FXGL.getGameScene().getViewport().setY(midY - FXGL.getAppHeight() / 2);
+        }, Duration.seconds(1.0 / 60));
+
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
