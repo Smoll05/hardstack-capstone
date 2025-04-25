@@ -35,7 +35,7 @@ public class Player2Component extends Component {
     private final Entity player1;
 
     private final AnimatedTexture texture;
-    private final AnimationChannel animIdle, animMove, animCrouch, animJump;
+    private final AnimationChannel animIdle, animMove, animCrouch, animJump, animCry;
 
     private final EntityState STAND = new EntityState("STAND");
     private final EntityState WALK = new EntityState("WALK");
@@ -79,6 +79,7 @@ public class Player2Component extends Component {
         animMove = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
         animJump = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
         animCrouch = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
+        animCry = new AnimationChannel(FXGL.image("marie_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
 
 
         stateData = Map.of(
@@ -90,7 +91,7 @@ public class Player2Component extends Component {
                 HANG, new StateData(animIdle,0),
                 SWING, new StateData(animIdle, 0),
                 PULL, new StateData(animIdle, 0),
-                CHECKPOINT, new StateData(animIdle, 0),
+                CHECKPOINT, new StateData(animCry, 0),
                 SAVE, new StateData(animIdle, 0)
         );
 
@@ -134,6 +135,10 @@ public class Player2Component extends Component {
 
     public void moveRight() {
         tryMovingState(WALK, -1);
+    }
+
+    public void cry() {
+        state.changeState(CHECKPOINT);
     }
 
     public void stop() {
