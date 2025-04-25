@@ -5,7 +5,9 @@ module com.example.joeandmarie {
     requires com.almasb.fxgl.all;
     requires java.desktop;
 
-    opens com.example.joeandmarie to javafx.fxml;
+    opens com.example.joeandmarie to javafx.fxml;  // Allows FXMLLoader to access the main package
+    opens com.example.joeandmarie.Controller to javafx.fxml;  // Add this line to open the Controller package
+
     opens assets.textures;
     opens assets.sounds;
     exports com.example.joeandmarie;
