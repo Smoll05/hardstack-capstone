@@ -2,7 +2,6 @@ package com.example.joeandmarie;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
@@ -19,6 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class MainApplication extends GameApplication {
@@ -46,8 +47,8 @@ public class MainApplication extends GameApplication {
 //        settings.setFullScreenFromStart(true);
         settings.setWidth(1280);
         settings.setHeight(720);
-        settings.setDeveloperMenuEnabled(true);
-        settings.setProfilingEnabled(true);
+//        settings.setDeveloperMenuEnabled(true);
+//        settings.setProfilingEnabled(true);
     }
 
     @Override
@@ -55,28 +56,22 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
+        try {
+            FXGL.setLevelFromMap("test.tmx");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        var viewport = FXGL.getGameScene().getViewport();
+
+        int mapWidth = 40 * 32;
+        int mapHeight = 23 * 32;
+        viewport.setBounds(0, 0, mapWidth, mapHeight);
+
+        viewport.setZoom(0.8);
+
         FXGL.spawn("player1", 500, 200);
         FXGL.spawn("player2", 500, 300);
-
-//        FXGL.spawn("platform", 450, 315);
-//        FXGL.spawn("platform", 550, 260);
-//        FXGL.spawn("platform", 350, 260);
-//        FXGL.spawn("platform", 450, 220);
-
-
-        FXGL.spawn("platform", 0, 700);
-        FXGL.spawn("platform", 100, 700);
-        FXGL.spawn("platform", 200, 700);
-        FXGL.spawn("platform", 300, 700);
-        FXGL.spawn("platform", 400, 700);
-        FXGL.spawn("platform", 500, 700);
-        FXGL.spawn("platform", 600, 700);
-        FXGL.spawn("platform", 700, 700);
-        FXGL.spawn("platform", 800, 700);
-        FXGL.spawn("platform", 900, 700);
-        FXGL.spawn("platform", 1000, 700);
-
-        FXGL.spawn("platform", 500, 500);
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
