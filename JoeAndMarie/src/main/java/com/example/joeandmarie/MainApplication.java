@@ -2,6 +2,7 @@ package com.example.joeandmarie;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
@@ -26,7 +27,7 @@ import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class MainApplication extends GameApplication {
-    private Entity player1, player2;
+
     Text nameTag1, nameTag2;
     boolean isMoving = false;
     boolean leftDown = false;
@@ -50,8 +51,8 @@ public class MainApplication extends GameApplication {
 //        settings.setFullScreenFromStart(true);
         settings.setWidth(1280);
         settings.setHeight(720);
-//        settings.setDeveloperMenuEnabled(true);
-//        settings.setProfilingEnabled(true);
+        settings.setDeveloperMenuEnabled(true);
+        settings.setProfilingEnabled(true);
     }
 
     @Override
@@ -59,19 +60,37 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
-        try {
-            FXGL.setLevelFromMap("test.tmx");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FXGL.setLevelFromMap("test.tmx");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        var viewport = FXGL.getGameScene().getViewport();
+//
+//        int mapWidth = 40 * 32;
+//        int mapHeight = 23 * 32;
+//        viewport.setBounds(0, 0, mapWidth, mapHeight);
+//
+//        viewport.setZoom(0.8);
 
-        var viewport = FXGL.getGameScene().getViewport();
+        Entity player2 = FXGL.spawn("player2", 500, 300);
+        Entity player1 = FXGL.spawn("player1", 500, 200);
 
-        int mapWidth = 40 * 32;
-        int mapHeight = 23 * 32;
-        viewport.setBounds(0, 0, mapWidth, mapHeight);
+        getControlP1().loadPlayer2(player2);
+        getControlP2().loadPlayer1(player1);
 
-        viewport.setZoom(0.8);
+        FXGL.spawn("platform", 0, 700);
+        FXGL.spawn("platform", 100, 700);
+        FXGL.spawn("platform", 200, 700);
+        FXGL.spawn("platform", 300, 700);
+        FXGL.spawn("platform", 400, 700);
+        FXGL.spawn("platform", 500, 700);
+        FXGL.spawn("platform", 600, 700);
+        FXGL.spawn("platform", 700, 700);
+        FXGL.spawn("platform", 800, 700);
+        FXGL.spawn("platform", 900, 700);
+        FXGL.spawn("platform", 1000, 700);
 
         var e = FXGL.spawn("player1", 500, 200);
         var e2 = FXGL.spawn("player2", 500, 300);
@@ -88,6 +107,7 @@ public class MainApplication extends GameApplication {
             FXGL.getGameScene().getViewport().setX(midX - FXGL.getAppWidth() / 2);
             FXGL.getGameScene().getViewport().setY(midY - FXGL.getAppHeight() / 2);
         }, Duration.seconds(1.0 / 60));
+
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
@@ -247,6 +267,20 @@ public class MainApplication extends GameApplication {
 
         // Player 1 Controls
         FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
+
+        FXGL.getInput().addAction(new UserAction("Cry1") {
+            @Override
+            protected void onAction() {
+                getControlP1().cry();
+                getControlP2().cry();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+                getControlP2().stand();
+            }
+        }, KeyCode.C);
 
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
@@ -417,8 +451,6 @@ public class MainApplication extends GameApplication {
         RopeJointDef ropeDef = new RopeJointDef();
         ropeDef.setBodyA(bodyA);
         ropeDef.setBodyB(bodyB);
-        ropeDef.localAnchorA.set(0, 0);
-        ropeDef.localAnchorB.set(0, 0);
         ropeDef.maxLength = 3.0f;
         ropeDef.setBodyCollisionAllowed(false);
 

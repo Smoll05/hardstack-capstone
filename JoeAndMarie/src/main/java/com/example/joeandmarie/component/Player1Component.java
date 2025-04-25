@@ -1,16 +1,18 @@
 package com.example.joeandmarie.component;
 
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.example.joeandmarie.config.Constants;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import java.util.Map;
@@ -21,8 +23,15 @@ public class Player1Component extends Component {
     private PhysicsComponent physics;
     private ViewComponent view;
 
+    // Components of the other player
+    private StateComponent otherState;
+    private PhysicsComponent otherPhysics;
+    private ViewComponent otherView;
+
+    private Entity player2;
+
     private final AnimatedTexture texture;
-    private final AnimationChannel animIdle, animMove, animCrouch, animJump;
+    private final AnimationChannel animIdle, animMove, animCrouch, animJump, animHang, animCry, animFall;
 
     private final EntityState STAND = new EntityState("STAND");
     private final EntityState WALK = new EntityState("WALK");
@@ -32,6 +41,7 @@ public class Player1Component extends Component {
     private final EntityState PULL = new EntityState("PULL");
     private final EntityState CHECKPOINT = new EntityState("CHECKPOINT");
     private final EntityState SAVE = new EntityState("SAVE");
+    private final EntityState HOLD = new EntityState("HOLD");
 
     private final EntityState JUMP = new EntityState("JUMP") {
         @Override
@@ -53,24 +63,21 @@ public class Player1Component extends Component {
         }
     };
 
-    private static class StateData {
-        private final AnimationChannel channel;
-        private final int moveSpeed;
-
-        public StateData(AnimationChannel channel, int moveSpeed) {
-            this.channel = channel;
-            this.moveSpeed = moveSpeed;
-        }
-    }
+    private record StateData(AnimationChannel channel, int moveSpeed) { }
 
     private final Map<EntityState, StateData> stateData;
 
     public Player1Component() {
+
         // Create animations for idle, move, and crouch
         animIdle = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animMove = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
         animJump = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
         animCrouch = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
+        animHang = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animCry = new AnimationChannel(FXGL.image("joe_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+
 
 
         stateData = Map.of(
@@ -78,11 +85,11 @@ public class Player1Component extends Component {
                 WALK, new StateData(animMove, -Constants.RUNNING_SPEED),
                 CROUCH, new StateData(animCrouch, 0),
                 JUMP, new StateData(animJump, Constants.JUMP_FORCE),
-                FALL, new StateData(animJump, 0),
-                HANG, new StateData(animIdle,0),
-                SWING, new StateData(animIdle, 0),
+                FALL, new StateData(animFall, 0),
+                HANG, new StateData(animHang,0),
+                SWING, new StateData(animIdle, -Constants.RUNNING_SPEED),
                 PULL, new StateData(animIdle, 0),
-                CHECKPOINT, new StateData(animIdle, 0),
+                CHECKPOINT, new StateData(animCry, 0),
                 SAVE, new StateData(animIdle, 0)
         );
 
@@ -108,7 +115,7 @@ public class Player1Component extends Component {
         state.changeState(STAND);
 
         state.currentStateProperty().addListener((o, oldState, newState) -> {
-//            System.out.println("new state: " + newState);
+            System.out.println("Player 1 new state: " + newState);
 
             var data = stateData.get(newState);
 
@@ -124,6 +131,18 @@ public class Player1Component extends Component {
         tryMovingState(WALK, -1);
     }
 
+    public void swingLeft() {
+        tryMovingState(SWING, 1);
+    }
+
+    public void swingRight() {
+        tryMovingState(SWING, -1);
+    }
+
+    public void cry() {
+        state.changeState(CHECKPOINT);
+    }
+
     public void stop() {
         if (state.isIn(WALK)) {
             physics.setVelocityX(0);
@@ -133,13 +152,6 @@ public class Player1Component extends Component {
 
     public void stand() {
         state.changeState(STAND);
-    }
-
-    public void stopMidair() {
-        if (state.isIn(SWING)) {
-            physics.setVelocityX(0);
-            state.changeState(HANG);
-        }
     }
 
     public void jump() {
@@ -159,14 +171,64 @@ public class Player1Component extends Component {
     }
 
     private void tryMovingState(EntityState newState, int scale) {
-        if (state.isIn(STAND, WALK, JUMP, FALL, SWING)) {
-            getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
+        if (state.isIn(STAND, WALK, JUMP, FALL)) {
+            linearMovement(newState, scale);
+        } else if(state.isIn(HANG, SWING)) {
+            swingMovement(newState, scale);
+        }
+    }
 
-            physics.setVelocityX(scale * stateData.get(newState).moveSpeed);
-//            physics.setFixtureDef(new FixtureDef().friction(5.0f));
+    private void linearMovement(EntityState newState, int scale) {
+        getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
 
-            if (state.getCurrentState() != newState) {
-                state.changeState(newState);
+        physics.setVelocityX(scale * stateData.get(newState).moveSpeed);
+
+        if (state.getCurrentState() != newState) {
+            state.changeState(newState);
+        }
+    }
+
+    private void swingMovement(EntityState newState, int scale) {
+        getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
+
+        int speed = scale * stateData.get(newState).moveSpeed;
+        physics.applyForceToCenter(new Point2D(speed, 0));
+
+        if (state.getCurrentState() != newState) {
+            state.changeState(newState);
+        }
+    }
+
+    private boolean isHanging() {
+        // Calculate the distance between players
+        double player2Y = player2.getPosition().getY();
+        double player1Y = entity.getPosition().getY();
+        double distanceBetweenPlayers = Math.abs(player2Y - player1Y);
+
+        // Get the rope length from the RopeJoint
+        float ropeLength = Constants.PLAYER_ROPE_DISTANCE;
+
+
+        // Check if the distance is near the rope length and both players are stationary
+        boolean ropeIsFullyExtended = Math.abs(distanceBetweenPlayers - ropeLength) <= 15;  // Tolerance
+
+        // Return true if both conditions are met
+        return ropeIsFullyExtended
+                && !physics.isOnGround()
+                && otherPhysics.isOnGround();
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+
+        if (isHanging()) {
+            state.changeState(HANG);
+            applyDamping(physics, 0.988f);
+        } else {
+            // Handle other states like FALL, JUMP, etc.
+            if (physics.getVelocityY() > 0 && !physics.isOnGround()) {
+                state.changeState(FALL);
             }
         }
     }
@@ -175,4 +237,34 @@ public class Player1Component extends Component {
     public boolean isComponentInjectionRequired() {
         return false;
     }
+
+    public void loadPlayer2(Entity player2) {
+        this.player2 = player2;
+
+        otherState = player2.getComponent(StateComponent.class);
+        otherPhysics = player2.getComponent(PhysicsComponent.class);
+        otherView = player2.getComponent(ViewComponent.class);
+    }
+
+    private void applyDamping(PhysicsComponent physics, float factor) {
+        Vec2 vel = physics.getBody().getLinearVelocity();
+        Vec2 damped = vel.mul(factor);
+        physics.getBody().setLinearVelocity(damped);
+
+//        float angVel = physics.getBody().getAngularVelocity();
+//        physics.getBody().setAngularVelocity(angVel * factor); // reduce spin
+    }
+
 }
+
+
+//            var speed = scale * stateData.get(newState).moveSpeed;
+//            float angle = physics.getBody().getAngle();
+//
+//            float forceX = speed * (float) Math.cos(angle); // X component of the force
+//            float forceY = speed * (float) Math.sin(angle); // Y component of the force
+//
+//            // Apply the force to the entity's center
+//            physics.applyForceToCenter(new Point2D(speed, 0));
+
+// physics.getBody().setLinearDamping(0.5f);
