@@ -7,10 +7,10 @@ import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.example.joeandmarie.config.Constants;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import java.util.Map;
@@ -22,7 +22,7 @@ public class Player1Component extends Component {
     private ViewComponent view;
 
     private final AnimatedTexture texture;
-    private final AnimationChannel animIdle, animMove, animCrouch, animJump, animCry, animFall;
+    private final AnimationChannel animIdle, animMove, animCrouch, animJump, animCry, animFall, animPlant;
 
     private final EntityState STAND = new EntityState("STAND");
     private final EntityState WALK = new EntityState("WALK");
@@ -33,6 +33,8 @@ public class Player1Component extends Component {
     private final EntityState CHECKPOINT = new EntityState("CHECKPOINT");
     private final EntityState SAVE = new EntityState("SAVE");
     private final EntityState HOLD = new EntityState("HOLD");
+
+    public static CheckpointComponent flag;
 
     private final EntityState JUMP = new EntityState("JUMP") {
         @Override
@@ -62,7 +64,13 @@ public class Player1Component extends Component {
             this.channel = channel;
             this.moveSpeed = moveSpeed;
         }
+
+        public int getMoveSpeed() {
+            return moveSpeed;
+        }
+
     }
+
 
     private final Map<EntityState, StateData> stateData;
 
@@ -74,8 +82,7 @@ public class Player1Component extends Component {
         animCrouch = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
         animCry = new AnimationChannel(FXGL.image("joe_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-
-
+        animPlant = new AnimationChannel(FXGL.image("joe_plant_spritesheet.png"), 20, 64, 64, Duration.seconds(2), 0, 18);
 
         stateData = Map.of(
                 STAND, new StateData(animIdle, 0),
@@ -87,7 +94,7 @@ public class Player1Component extends Component {
                 SWING, new StateData(animIdle, 0),
                 PULL, new StateData(animIdle, 0),
                 CHECKPOINT, new StateData(animCry, 0),
-                SAVE, new StateData(animIdle, 0)
+                SAVE, new StateData(animPlant, 0)
         );
 
         texture = new AnimatedTexture(animIdle);
@@ -110,15 +117,19 @@ public class Player1Component extends Component {
         view.addChild(texture);
 
         state.changeState(STAND);
-
         state.currentStateProperty().addListener((o, oldState, newState) -> {
 //            System.out.println("new state: " + newState);
 
             var data = stateData.get(newState);
 
-            texture.loopAnimationChannel(data.channel);
+            if(data.channel == animPlant) {
+                texture.playAnimationChannel(data.channel);
+            } else {
+                texture.loopAnimationChannel(data.channel);
+            }
         });
     }
+
 
     public void moveLeft() {
         tryMovingState(WALK, 1);
@@ -128,9 +139,38 @@ public class Player1Component extends Component {
         tryMovingState(WALK, -1);
     }
 
-    public void cry() {
-        state.changeState(CHECKPOINT);
+    public void plant() {
+        if (!physics.isOnGround()) {
+            return;
+        }
+        state.changeState(SAVE);
+
+        flag = new CheckpointComponent(entity.getPosition());
+
+        FXGL.runOnce(() -> {
+            flag.plantFlag();
+        }, Duration.seconds(.5));
     }
+
+    public void cry() {
+        if (!physics.isOnGround()) {
+            return;
+        }
+
+        state.changeState(CHECKPOINT);
+
+
+        FXGL.runOnce(() -> {
+            if (CheckpointComponent.getFlagEntity() != null) {
+                Point2D pos = new Point2D(CheckpointComponent.getFlagEntity().getPosition().getX()  - 10, CheckpointComponent.getFlagEntity().getPosition().getY());
+                physics.overwritePosition(pos);
+            } else {
+                System.out.println("No flag entity to teleport to!");
+            }
+        }, Duration.seconds(1));
+
+    }
+
 
     public void stop() {
         if (state.isIn(WALK)) {

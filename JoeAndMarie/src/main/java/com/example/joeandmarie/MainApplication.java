@@ -31,6 +31,7 @@ public class MainApplication extends GameApplication {
     private final long idleDelayJoe = 50;
     private long lastMoveTimeMarie = 0;
     private final long idleDelayMarie = 5; // milliseconds
+    private RopeJoint ropeJoint;
 
     private static final double TARGET_FPS = 60;
     private static final double TARGET_TPF = 1.0 / TARGET_FPS;
@@ -237,17 +238,60 @@ public class MainApplication extends GameApplication {
         // Player 1 Controls
         FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
 
-        FXGL.getInput().addAction(new UserAction("Cry1") {
+        FXGL.getInput().addAction(new UserAction("Plant") {
             @Override
             protected void onAction() {
+                getControlP1().plant();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+            }
+        }, KeyCode.F);
+
+        FXGL.getInput().addAction(new UserAction("Cry") {
+            @Override
+            protected void onAction() {
+                if (ropeJoint != null) {
+                    FXGL.getPhysicsWorld().getJBox2DWorld().destroyJoint(ropeJoint);
+                    ropeJoint = null;
+                }
+
                 getControlP1().cry();
                 getControlP2().cry();
             }
 
             @Override
             protected void onActionEnd() {
+
                 getControlP1().stand();
                 getControlP2().stand();
+
+                FXGL.runOnce(() -> {
+                    var physics1 = getPlayer1().getComponent(PhysicsComponent.class);
+                    var physics2 = getPlayer2().getComponent(PhysicsComponent.class);
+
+                    var bodyA = physics1.getBody();
+                    var bodyB = physics2.getBody();
+
+                    // Recreate joint
+                    if (bodyA.isActive() && bodyB.isActive()) {
+                        RopeJointDef newDef = new RopeJointDef();
+                        newDef.setBodyA(bodyA);
+                        newDef.setBodyB(bodyB);
+                        newDef.localAnchorA.set(0, 0);
+                        newDef.localAnchorB.set(0, 0);
+                        newDef.maxLength = 3.0f;
+                        newDef.setBodyCollisionAllowed(false);
+
+                        ropeJoint = (RopeJoint) FXGL.getPhysicsWorld()
+                                .getJBox2DWorld()
+                                .createJoint(newDef);
+                    }
+                }, Duration.seconds(1.15)); // 0.2 is usually enough
+
+
             }
         }, KeyCode.C);
 
@@ -425,7 +469,7 @@ public class MainApplication extends GameApplication {
         ropeDef.maxLength = 3.0f;
         ropeDef.setBodyCollisionAllowed(false);
 
-        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
+        ropeJoint = (RopeJoint) FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
     }
 
     private Player1Component getControlP1() {
@@ -442,11 +486,11 @@ public class MainApplication extends GameApplication {
         launch(args);
     }
 
-    private Entity getPlayer1() {
+    public Entity getPlayer1() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER1);
     }
 
-    private Entity getPlayer2() {
+    public Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
     }
 }

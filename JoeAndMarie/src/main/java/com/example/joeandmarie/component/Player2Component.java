@@ -138,7 +138,20 @@ public class Player2Component extends Component {
     }
 
     public void cry() {
+        if (!physics.isOnGround()) {
+            return;
+        }
+
         state.changeState(CHECKPOINT);
+
+        FXGL.runOnce(() -> {
+            if (CheckpointComponent.getFlagEntity() != null) {
+                Point2D pos = new Point2D(CheckpointComponent.getFlagEntity().getPosition().getX()  + 10, CheckpointComponent.getFlagEntity().getPosition().getY());
+                physics.overwritePosition(pos);
+            } else {
+                System.out.println("No flag entity to teleport to!");
+            }
+        }, Duration.seconds(1));
     }
 
     public void stop() {
