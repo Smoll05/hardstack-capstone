@@ -433,8 +433,6 @@ public class MainApplication extends GameApplication {
         RopeJointDef ropeDef = new RopeJointDef();
         ropeDef.setBodyA(bodyA);
         ropeDef.setBodyB(bodyB);
-        ropeDef.localAnchorA.set(0, 0);
-        ropeDef.localAnchorB.set(0, 0);
         ropeDef.maxLength = 3.0f;
         ropeDef.setBodyCollisionAllowed(false);
 
