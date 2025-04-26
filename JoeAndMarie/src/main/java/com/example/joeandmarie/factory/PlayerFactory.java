@@ -97,7 +97,7 @@ public class PlayerFactory implements EntityFactory {
         physics.setBodyDef(bd);
 
         HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(40, 10));
-        HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 20), BoundingShape.box(10, 40));
+        HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 15), BoundingShape.box(10, 30));
 
         SensorCollisionHandler wallHandler = new SensorCollisionHandler() {
             @Override

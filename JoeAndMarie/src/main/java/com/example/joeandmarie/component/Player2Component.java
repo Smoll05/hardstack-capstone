@@ -165,7 +165,12 @@ public class Player2Component extends Component {
 
     public void hold() {
         state.changeState(HOLD);
-        physics.setVelocityX(stateData.get(HOLD).moveSpeed);
+
+        if(entity.getScaleX() == 1) {
+            physics.setVelocityX(stateData.get(HOLD).moveSpeed);
+        } else {
+            physics.setVelocityX(-1 * stateData.get(HOLD).moveSpeed);
+        }
     }
 
     public void moveLeft() {

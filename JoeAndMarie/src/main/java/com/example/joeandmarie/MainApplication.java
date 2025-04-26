@@ -37,7 +37,7 @@ public class MainApplication extends GameApplication {
     private static final double TARGET_TPF = 1.0 / TARGET_FPS;
 
     private double lastUpdateTime = 0;
-
+    private boolean isPulling = false;
 
 
     @Override
@@ -78,6 +78,8 @@ public class MainApplication extends GameApplication {
         FXGL.spawn("platform", 1000, 700);
 
         FXGL.spawn("platform", 500, 500);
+
+        FXGL.spawn("platform", 650, 600);
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
@@ -257,12 +259,16 @@ public class MainApplication extends GameApplication {
             protected void onAction() {
                 getControlP2().pull();
                 getControlP1().pulled();
+
+                isPulling = true;
             }
 
             @Override
             protected void onActionEnd() {
                 getControlP1().stand();
                 getControlP2().stand();
+
+                isPulling = false;
             }
         }, KeyCode.O);
 
