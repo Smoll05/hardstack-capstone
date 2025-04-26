@@ -52,26 +52,30 @@ public class MainApplication extends GameApplication {
         settings.setWidth(1280);
         settings.setHeight(720);
         settings.setDeveloperMenuEnabled(true);
-        settings.setProfilingEnabled(true);
+//        settings.setProfilingEnabled(true);
     }
 
     @Override
     protected void initGame() {
+        getGameScene().setBackgroundColor(Color.SADDLEBROWN);
+
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
-//        try {
-//            FXGL.setLevelFromMap("test.tmx");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        var viewport = FXGL.getGameScene().getViewport();
+        try {
+            FXGL.setLevelFromMap("test.tmx");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        var viewport = FXGL.getGameScene().getViewport();
 //
 //        int mapWidth = 40 * 32;
 //        int mapHeight = 23 * 32;
-//        viewport.setBounds(0, 0, mapWidth, mapHeight);
-//
+
+        int mapWidth = 1600;
+        int mapHeight = 950;
+
 //        viewport.setZoom(0.8);
 
         Entity player2 = FXGL.spawn("player2", 500, 300);
@@ -80,34 +84,21 @@ public class MainApplication extends GameApplication {
         getControlP1().loadPlayer2(player2);
         getControlP2().loadPlayer1(player1);
 
-        FXGL.spawn("platform", 0, 700);
-        FXGL.spawn("platform", 100, 700);
-        FXGL.spawn("platform", 200, 700);
-        FXGL.spawn("platform", 300, 700);
-        FXGL.spawn("platform", 400, 700);
-        FXGL.spawn("platform", 500, 700);
-        FXGL.spawn("platform", 600, 700);
-        FXGL.spawn("platform", 700, 700);
-        FXGL.spawn("platform", 800, 700);
-        FXGL.spawn("platform", 900, 700);
-        FXGL.spawn("platform", 1000, 700);
-
-        var e = FXGL.spawn("player1", 500, 200);
-        var e2 = FXGL.spawn("player2", 500, 300);
-
-        getGameScene().getViewport().setBounds(0, 0, 50800 - 30, 50100 - 30);
-
-        FXGL.getGameScene().getViewport().unbind();
-
         FXGL.getGameTimer().runAtInterval(() -> {
-            double midX = (e.getX() + e2.getX()) / 2;
-            double midY = (e.getY() + e2.getY()) / 2;
+            double midX = (player1.getX() + player2.getX()) / 2;
+            double midY = (player1.getY() + player2.getY()) / 2;
 
-            // Offset camera to center on midpoint
-            FXGL.getGameScene().getViewport().setX(midX - FXGL.getAppWidth() / 2);
-            FXGL.getGameScene().getViewport().setY(midY - FXGL.getAppHeight() / 2);
+            // Offset to center the camera
+            double cameraX = midX - FXGL.getAppWidth() / 2.0;
+            double cameraY = midY - FXGL.getAppHeight() / 2.0;
+
+            // Clamp cameraX and cameraY to not go out of bounds
+            cameraX = Math.max(0, Math.min(cameraX, mapWidth - FXGL.getAppWidth()));
+            cameraY = Math.max(0, Math.min(cameraY, mapHeight - FXGL.getAppHeight()));
+
+            FXGL.getGameScene().getViewport().setX(cameraX);
+            FXGL.getGameScene().getViewport().setY(cameraY);
         }, Duration.seconds(1.0 / 60));
-
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
@@ -452,6 +443,8 @@ public class MainApplication extends GameApplication {
         ropeDef.setBodyA(bodyA);
         ropeDef.setBodyB(bodyB);
         ropeDef.maxLength = 3.0f;
+        ropeDef.localAnchorA.set(0,0);
+        ropeDef.localAnchorB.set(0,0);
         ropeDef.setBodyCollisionAllowed(false);
 
         FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
