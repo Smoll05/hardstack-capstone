@@ -31,7 +31,7 @@ public class MainApplication extends GameApplication {
     private final long idleDelayJoe = 50;
     private long lastMoveTimeMarie = 0;
     private final long idleDelayMarie = 5; // milliseconds
-    private RopeJoint ropeJoint;
+    public static RopeJoint ropeJoint;
 
     private static final double TARGET_FPS = 60;
     private static final double TARGET_TPF = 1.0 / TARGET_FPS;
@@ -238,6 +238,34 @@ public class MainApplication extends GameApplication {
         // Player 1 Controls
         FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
 
+        FXGL.getInput().addAction(new UserAction("Pull1") {
+            @Override
+            protected void onAction() {
+                getControlP1().pull();
+                getControlP2().pulled();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+                getControlP2().stand();
+            }
+        }, KeyCode.E);
+
+        FXGL.getInput().addAction(new UserAction("Pull2") {
+            @Override
+            protected void onAction() {
+                getControlP2().pull();
+                getControlP1().pulled();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+                getControlP2().stand();
+            }
+        }, KeyCode.O);
+
         FXGL.getInput().addAction(new UserAction("Plant") {
             @Override
             protected void onAction() {
@@ -289,11 +317,43 @@ public class MainApplication extends GameApplication {
                                 .getJBox2DWorld()
                                 .createJoint(newDef);
                     }
-                }, Duration.seconds(1.15)); // 0.2 is usually enough
+                }, Duration.seconds(1.05)); // 0.2 is usually enough
 
 
             }
         }, KeyCode.C);
+
+        FXGL.getInput().addAction(new UserAction("Hold1") {
+            @Override
+            protected void onAction() {
+                if(Player1Component.isTouchingWall) {
+                    getControlP1().hold();
+                } else {
+                    getControlP1().stand();
+                }
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+            }
+        }, KeyCode.Q);
+
+        FXGL.getInput().addAction(new UserAction("Hold2") {
+            @Override
+            protected void onAction() {
+                if(Player2Component.isTouchingWall) {
+                    getControlP2().hold();
+                } else {
+                    getControlP2().stand();
+                }
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP2().stand();
+            }
+        }, KeyCode.P);
 
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
