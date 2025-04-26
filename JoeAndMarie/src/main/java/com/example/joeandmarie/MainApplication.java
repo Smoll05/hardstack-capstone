@@ -2,14 +2,15 @@ package com.example.joeandmarie;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.Body;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
+import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
@@ -36,8 +37,9 @@ public class MainApplication extends GameApplication {
     private static final double TARGET_TPF = 1.0 / TARGET_FPS;
 
     private double lastUpdateTime = 0;
+    private boolean isPulling = false;
 
-
+    private RopeJoint ropeJoint;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -52,6 +54,7 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initGame() {
+        super.initGame();
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
@@ -246,9 +249,29 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initInput() {
-
+        super.initInput();
         // Player 1 Controls
-        FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
+//        FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
+
+        FXGL.getInput().addAction(new UserAction ("Pull1") {
+            @Override
+            protected void onAction() {
+                isPulling = true;
+            }
+
+            @Override
+            protected void onActionEnd() {
+                isPulling = false;
+                ropeJoint.setMaxLength(3);
+            }
+        }, KeyCode.X);
+
+        FXGL.getInput().addAction(new UserAction ("Jump1") {
+            @Override
+            protected void onAction() {
+                getControlP1().jump();
+            }
+        }, KeyCode.W);
 
         FXGL.getInput().addAction(new UserAction("Cry1") {
             @Override
@@ -384,6 +407,42 @@ public class MainApplication extends GameApplication {
         var player2 = getPlayer2();
         var physics2 = player2.getComponent(PhysicsComponent.class);
 
+        Body bodyA = physics1.getBody();
+        Body bodyB = physics2.getBody();
+
+        FXGL.runOnce(() -> {
+
+            RopeJointDef ropeDef = new RopeJointDef();
+            ropeDef.setBodyA(bodyA);
+            ropeDef.setBodyB(bodyB);
+            ropeDef.localAnchorA.set(0, 0);
+            ropeDef.localAnchorB.set(0, 0);
+            ropeDef.maxLength = 3.0f;
+            ropeDef.setBodyCollisionAllowed(false);
+
+            ropeJoint = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
+        }, Duration.seconds(0.1));
+    }
+
+    @Override
+    protected void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+
+        if(isPulling) {
+            float current = ropeJoint.getMaxLength();
+            if (current > 0) {
+                float newLength = current - (float)(1f * tpf);
+                ropeJoint.setMaxLength(Math.max(newLength, 0));
+            }
+        }
+    }
+
+    //        RevoluteJointDef revoluteDef = new RevoluteJointDef();
+//        revoluteDef.initialize(bodyA, bodyB, bodyA.getWorldCenter());
+//        revoluteDef.maxMotorTorque = 100f;
+//        revoluteDef.motorSpeed = 10f;
+//        revoluteDef.setBodyCollisionAllowed(false);
+
 //        RopeJointDef def = new RopeJointDef();
 //        def.localAnchorA.set(0, 0);
 //        def.localAnchorB.set(0, 0);
@@ -395,9 +454,6 @@ public class MainApplication extends GameApplication {
 //
 //        RopeJoint rope = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(def);
 
-        var bodyA = physics1.getBody();
-        var bodyB = physics2.getBody();
-
 //        RevoluteJoint revoluteJoint = new RevoluteJointDef(bodyA, bodyB, new Vec2(0, 0));  // fixedAnchorBody is the body where the rope or bar is attached
 //        revoluteJoint.setMaxMotorTorque(100f); // Limit the motor torque to control swinging force
 //        revoluteJoint.setMotorSpeed(10f); // Set motor speed for rotating around the fixed point
@@ -406,7 +462,7 @@ public class MainApplication extends GameApplication {
 //        def.initialize(bodyA, bodyB, bodyA.getWorldCenter(), bodyB.getWorldCenter());
 //        def.length = 3.0f;
 //        def.setBodyCollisionAllowed(false);
-////        def.collideConnected = false;
+    ////        def.collideConnected = false;
 
 //        RevoluteJointDef def = new RevoluteJointDef();
 //        def.initialize(bodyA, bodyB, bodyA.getWorldCenter());
@@ -414,30 +470,13 @@ public class MainApplication extends GameApplication {
 //        def.setBodyCollisionAllowed(false);
 
 
-        // THIS IS THE BODY
-
-//        RevoluteJointDef jointDef = new RevoluteJointDef();
-//        jointDef.initialize(bodyA, bodyB, bodyA.getWorldCenter());
-//        jointDef.maxMotorTorque = 100f;
-//        jointDef.motorSpeed = 10f;
-//        jointDef.setBodyCollisionAllowed(false);
-//
-//        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(jointDef);
+    // THIS IS THE BODY
 //
 
 
-        // 1. Create a RopeJoint to limit the maximum rope length
+    // 1. Create a RopeJoint to limit the maximum rope length
 
 //        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
-
-        RopeJointDef ropeDef = new RopeJointDef();
-        ropeDef.setBodyA(bodyA);
-        ropeDef.setBodyB(bodyB);
-        ropeDef.maxLength = 3.0f;
-        ropeDef.setBodyCollisionAllowed(false);
-
-        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
-    }
 
     private Player1Component getControlP1() {
         return getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))
