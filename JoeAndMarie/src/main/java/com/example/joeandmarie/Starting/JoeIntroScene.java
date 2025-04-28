@@ -52,21 +52,21 @@ public class JoeIntroScene {
             var root = getRoot();
 
             // Load and play video first
-            String videoPath = "/assets/Video/undeground.mp4";
-            var mediaURL = getClass().getResource(videoPath);
+//            String videoPath = "/assets/video/undeground.mp4";
+//            var mediaURL = getClass().getResource(videoPath);
 
-            if (mediaURL == null) {
-                System.err.println("Video file not found: " + videoPath);
-                return;
-            }
+//            if (mediaURL == null) {
+//                System.err.println("Video file not found: " + videoPath);
+//                return;
+//            }
 
-            var media = new Media(mediaURL.toExternalForm());
-            var mediaPlayer = new MediaPlayer(media);
-            var mediaView = new MediaView(mediaPlayer);
+//            var media = new Media(mediaURL.toExternalForm());
+//            var mediaPlayer = new MediaPlayer(media);
+//            var mediaView = new MediaView(mediaPlayer);
 
-            mediaView.setFitWidth(FXGL.getAppWidth());
-            mediaView.setFitHeight(FXGL.getAppHeight());
-            mediaView.setOpacity(0); // Start transparent
+//            mediaView.setFitWidth(FXGL.getAppWidth());
+//            mediaView.setFitHeight(FXGL.getAppHeight());
+//            mediaView.setOpacity(0); // Start transparent
 
             // Load image from FXGL assets
             var titleImage = FXGL.texture("Titles.png");
@@ -102,12 +102,12 @@ public class JoeIntroScene {
             animatedJoe.setTranslateY(progressBar.getTranslateY() - 64 - 10); // 10px above
 
             // Add all visual elements to root
-            root.getChildren().addAll(mediaView, titleImage, progressBar, animatedJoe);
+//            root.getChildren().addAll(mediaView, titleImage, progressBar, animatedJoe);
 
             // Fade-in animation for video
-            var fadeInVideo = new FadeTransition(Duration.seconds(0.5), mediaView);
-            fadeInVideo.setFromValue(0);
-            fadeInVideo.setToValue(1);
+//            var fadeInVideo = new FadeTransition(Duration.seconds(0.5), mediaView);
+//            fadeInVideo.setFromValue(0);
+//            fadeInVideo.setToValue(1);
 
             // Fade-in for title image
             var fadeInImage = new FadeTransition(Duration.seconds(2), titleImage);
@@ -116,42 +116,42 @@ public class JoeIntroScene {
             fadeInImage.setDelay(Duration.seconds(1));
 
             // Fade-out animations
-            var fadeOutVideo = new FadeTransition(Duration.seconds(1.5), mediaView);
-            fadeOutVideo.setFromValue(1);
-            fadeOutVideo.setToValue(0);
+//            var fadeOutVideo = new FadeTransition(Duration.seconds(1.5), mediaView);
+//            fadeOutVideo.setFromValue(1);
+//            fadeOutVideo.setToValue(0);
 
             var fadeOutImage = new FadeTransition(Duration.seconds(1.5), titleImage);
             fadeOutImage.setFromValue(1);
             fadeOutImage.setToValue(0);
 
-            mediaPlayer.setOnReady(() -> {
-                Duration totalDuration = media.getDuration();
+//            mediaPlayer.setOnReady(() -> {
+//                Duration totalDuration = media.getDuration();
+//
+//                // Progress bar updates
+//                mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+//                    double progress = newTime.toMillis() / totalDuration.toMillis();
+//                    progressBar.setProgress(progress);
+//
+//                    // Move Joe left to right based on progress
+//                    animatedJoe.setTranslateX((FXGL.getAppWidth() - barWidth) / 2 + progress * (barWidth - 64));
+//                });
+//
+//                // Fade out near the end
+//                Duration fadeOutStart = totalDuration.subtract(Duration.seconds(5));
+//                FXGL.getGameTimer().runOnceAfter(() -> {
+//                    fadeOutVideo.play();
+//                    fadeOutImage.play();
+//                }, fadeOutStart);
+//            });
 
-                // Progress bar updates
-                mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
-                    double progress = newTime.toMillis() / totalDuration.toMillis();
-                    progressBar.setProgress(progress);
+//            mediaPlayer.setOnEndOfMedia(() -> {
+//                root.getChildren().removeAll(mediaView, titleImage, progressBar, animatedJoe);
+//                finishIntro();
+//            });
 
-                    // Move Joe left to right based on progress
-                    animatedJoe.setTranslateX((FXGL.getAppWidth() - barWidth) / 2 + progress * (barWidth - 64));
-                });
-
-                // Fade out near the end
-                Duration fadeOutStart = totalDuration.subtract(Duration.seconds(5));
-                FXGL.getGameTimer().runOnceAfter(() -> {
-                    fadeOutVideo.play();
-                    fadeOutImage.play();
-                }, fadeOutStart);
-            });
-
-            mediaPlayer.setOnEndOfMedia(() -> {
-                root.getChildren().removeAll(mediaView, titleImage, progressBar, animatedJoe);
-                finishIntro();
-            });
-
-            fadeInVideo.play();
-            fadeInImage.play();
-            mediaPlayer.play();
+//            fadeInVideo.play();
+//            fadeInImage.play();
+//            mediaPlayer.play();
         }
 
         @Override

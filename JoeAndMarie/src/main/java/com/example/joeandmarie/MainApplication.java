@@ -13,14 +13,13 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
+import com.example.joeandmarie.Starting.JoeIntroScene;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
-import com.example.joeandmarie.Starting.JoeIntroScene;
-import com.example.joeandmarie.Starting.JoeMainMenu;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -51,10 +50,10 @@ public class MainApplication extends GameApplication {
 
         // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
-            @Override
-            public IntroScene newIntro() {
-                return new JoeIntroScene.MyIntroScene();
-            }
+//            @Override
+//            public IntroScene newIntro() {
+//                return new JoeIntroScene.MyIntroScene();
+//            }
 
             @Override
             public FXGLMenu newMainMenu() {

@@ -13,13 +13,18 @@ module com.example.joeandmarie {
     opens assets.textures;
     opens assets.sounds;
     opens assets.levels;
+
     exports com.example.joeandmarie;
+
     exports com.example.joeandmarie.entity;
     opens com.example.joeandmarie.entity to javafx.fxml;
-   exports com.example.joeandmarie.component;
+
+    exports com.example.joeandmarie.component;
     opens com.example.joeandmarie.component to javafx.fxml;
+
     exports com.example.joeandmarie.factory;
     opens com.example.joeandmarie.factory to javafx.fxml;
+
     exports com.example.joeandmarie.Starting;
     opens com.example.joeandmarie.Starting to javafx.fxml;
 }
