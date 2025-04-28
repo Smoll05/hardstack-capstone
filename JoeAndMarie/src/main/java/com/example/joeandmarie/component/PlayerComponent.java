@@ -79,7 +79,7 @@ public abstract class PlayerComponent extends Component {
 
         state.changeState(STAND);
 
-        state.currentStateProperty().addListener((o, oldState, newState) -> {
+        state.currentStateProperty().addListener((_, _, newState) -> {
             var data = stateData.get(newState);
             texture.loopAnimationChannel(data.channel);
         });
