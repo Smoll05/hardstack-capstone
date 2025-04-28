@@ -3,6 +3,10 @@ package com.example.joeandmarie;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.math.Vec2;
+import com.almasb.fxgl.app.MenuItem;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.IntroScene;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
@@ -15,18 +19,15 @@ import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
+import com.example.joeandmarie.Starting.JoeIntroScene;
+import com.example.joeandmarie.Starting.JoeMainMenu;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
-import static com.almasb.fxgl.dsl.FXGL.getGameScene;
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import java.util.EnumSet;
 
 public class MainApplication extends GameApplication {
 
@@ -40,17 +41,31 @@ public class MainApplication extends GameApplication {
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Joe and Marie");
-//        settings.setFullScreenAllowed(true);
-//        settings.setFullScreenFromStart(true);
+        settings.setVersion("1.0");
         settings.setWidth(1280);
         settings.setHeight(720);
-        settings.setDeveloperMenuEnabled(true);
-        settings.setProfilingEnabled(true);
+        settings.setFullScreenAllowed(true);
+        settings.setMainMenuEnabled(true);
+        settings.setIntroEnabled(true);
+        settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
+
+        // Attach your custom menu
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public IntroScene newIntro() {
+                return new JoeIntroScene.MyIntroScene();
+            }
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new JoeMainMenu();
+            }
+        });
     }
+
 
     @Override
     protected void initGame() {
-        getGameScene().setBackgroundColor(Color.SADDLEBROWN);
+        FXGL.getGameScene().setBackgroundColor(Color.SADDLEBROWN);
 
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
@@ -99,15 +114,13 @@ public class MainApplication extends GameApplication {
             nameTag1 = new Text("Joe");
             nameTag1.setFont(Font.font(14));
             nameTag1.setFill(Color.BLACK);
-
             nameTag1.setTranslateX(-nameTag1.getLayoutBounds().getWidth() / 2);
             nameTag1.setTranslateY(-20);
 
             nameTag2 = new Text("Marie");
             nameTag2.setFont(Font.font(14));
             nameTag2.setFill(Color.BLACK);
-
-            nameTag2.setTranslateX(-nameTag1.getLayoutBounds().getWidth() / 2);
+            nameTag2.setTranslateX(-nameTag2.getLayoutBounds().getWidth() / 2);
             nameTag2.setTranslateY(-20);
 
             getPlayer1().getViewComponent().addChild(nameTag1);
@@ -116,6 +129,8 @@ public class MainApplication extends GameApplication {
     }
 
     @Override
+    protected void initPhysics() {
+    }
     protected void initInput() {
         super.initInput();
         // Player 1 Controls
@@ -334,4 +349,3 @@ public class MainApplication extends GameApplication {
     private Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
     }
-}

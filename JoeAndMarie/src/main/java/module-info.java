@@ -4,8 +4,12 @@ module com.example.joeandmarie {
 
     requires com.almasb.fxgl.all;
     requires jdk.unsupported.desktop;
+    requires java.desktop;
+    requires javafx.media;
 
-    opens com.example.joeandmarie to javafx.fxml;
+    opens com.example.joeandmarie to javafx.fxml;  // Allows FXMLLoader to access the main package
+    opens com.example.joeandmarie.Controller to javafx.fxml;  // Add this line to open the Controller package
+
     opens assets.textures;
     opens assets.sounds;
     opens assets.levels;
@@ -16,4 +20,6 @@ module com.example.joeandmarie {
     opens com.example.joeandmarie.component to javafx.fxml;
     exports com.example.joeandmarie.factory;
     opens com.example.joeandmarie.factory to javafx.fxml;
+    exports com.example.joeandmarie.Starting;
+    opens com.example.joeandmarie.Starting to javafx.fxml;
 }
