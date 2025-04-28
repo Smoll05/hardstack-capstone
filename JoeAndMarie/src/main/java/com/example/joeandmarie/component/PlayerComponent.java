@@ -2,8 +2,6 @@ package com.example.joeandmarie.component;
 
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.math.Vec2;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.EntityState;
@@ -13,7 +11,6 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.example.joeandmarie.config.Constants;
 import javafx.geometry.Point2D;
-import javafx.util.Duration;
 
 import java.util.Map;
 import java.util.TimerTask;
@@ -45,16 +42,6 @@ public abstract class PlayerComponent extends Component {
     final EntityState SAVE = new EntityState("SAVE");
     final EntityState HOLD = new EntityState("HOLD");
     final EntityState CROUCH = new EntityState("CROUCH");
-
-//    final EntityState SWING = new EntityState("SWING") {
-//        @Override
-//        protected  void onUpdate(double tpf) {
-//            if(physics.getVelocityX()) {
-//
-//            }
-//        }
-//    }
-
     final EntityState SWING = new EntityState("SWING");
 
     final EntityState JUMP = new EntityState("JUMP") {
@@ -119,8 +106,6 @@ public abstract class PlayerComponent extends Component {
 //            state.changeState(HANG);
 //        }
 //    }
-
-
 
     public void stand() {
         state.changeState(STAND);
