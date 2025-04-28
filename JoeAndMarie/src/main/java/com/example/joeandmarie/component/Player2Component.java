@@ -240,7 +240,7 @@ public class Player2Component extends Component {
     @Override
     public void onUpdate(double tpf) {
         super.onUpdate(tpf);
-        if(physics.getVelocityY() > 0) {
+        if(physics.getVelocityY() > 3) {
             state.changeState(FALL);
         }
     }

@@ -254,24 +254,6 @@ public class MainApplication extends GameApplication {
             }
         }, KeyCode.E);
 
-        FXGL.getInput().addAction(new UserAction("Pull2") {
-            @Override
-            protected void onAction() {
-                getControlP2().pull();
-                getControlP1().pulled();
-
-                isPulling = true;
-            }
-
-            @Override
-            protected void onActionEnd() {
-                getControlP1().stand();
-                getControlP2().stand();
-
-                isPulling = false;
-            }
-        }, KeyCode.O);
-
         FXGL.getInput().addAction(new UserAction("Plant") {
             @Override
             protected void onAction() {
@@ -345,26 +327,14 @@ public class MainApplication extends GameApplication {
             }
         }, KeyCode.Q);
 
-        FXGL.getInput().addAction(new UserAction("Hold2") {
-            @Override
-            protected void onAction() {
-                if(Player2Component.isTouchingWall) {
-                    getControlP2().hold();
-                } else {
-                    getControlP2().stand();
-                }
-            }
-
-            @Override
-            protected void onActionEnd() {
-                getControlP2().stand();
-            }
-        }, KeyCode.P);
-
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {
-                getControlP1().moveLeft();
+                if(Player1Component.isTouchingWall) {
+                    getControlP1().stand();
+                } else {
+                    getControlP1().moveLeft();
+                }
             }
 
             @Override
@@ -376,7 +346,11 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right1") {
             @Override
             protected void onAction() {
-                getControlP1().moveRight();
+                if(Player1Component.isTouchingWall) {
+                    getControlP1().stand();
+                } else {
+                    getControlP1().moveRight();
+                }
             }
 
             @Override
@@ -403,7 +377,11 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left2") {
             @Override
             protected void onAction() {
-                getControlP2().moveLeft();
+                if(Player2Component.isTouchingWall) {
+                    getControlP2().stand();
+                } else {
+                    getControlP2().moveLeft();
+                }
             }
 
             @Override
@@ -415,7 +393,11 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right2") {
             @Override
             protected void onAction() {
-                getControlP2().moveRight();
+                if(Player2Component.isTouchingWall) {
+                    getControlP2().stand();
+                } else {
+                    getControlP2().moveRight();
+                }
             }
 
             @Override
@@ -435,6 +417,40 @@ public class MainApplication extends GameApplication {
                 getControlP2().stand();
             }
         }, KeyCode.DOWN);
+
+        FXGL.getInput().addAction(new UserAction("Pull2") {
+            @Override
+            protected void onAction() {
+                getControlP2().pull();
+                getControlP1().pulled();
+
+                isPulling = true;
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+                getControlP2().stand();
+
+                isPulling = false;
+            }
+        }, KeyCode.O);
+
+        FXGL.getInput().addAction(new UserAction("Hold2") {
+            @Override
+            protected void onAction() {
+                if(Player2Component.isTouchingWall) {
+                    getControlP2().hold();
+                } else {
+                    getControlP2().stand();
+                }
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP2().stand();
+            }
+        }, KeyCode.P);
     }
 
     //    @Override
