@@ -55,6 +55,7 @@ public class MainApplication extends GameApplication {
             public IntroScene newIntro() {
                 return new JoeIntroScene.MyIntroScene();
             }
+
             @Override
             public FXGLMenu newMainMenu() {
                 return new JoeMainMenu();
@@ -128,15 +129,12 @@ public class MainApplication extends GameApplication {
         }, Duration.seconds(0.1));
     }
 
-    @Override
-    protected void initPhysics() {
-    }
     protected void initInput() {
         super.initInput();
         // Player 1 Controls
 //        FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
 
-        FXGL.getInput().addAction(new UserAction ("Pull1") {
+        FXGL.getInput().addAction(new UserAction("Pull1") {
             @Override
             protected void onAction() {
                 isPulling = true;
@@ -149,7 +147,7 @@ public class MainApplication extends GameApplication {
             }
         }, KeyCode.X);
 
-        FXGL.getInput().addAction(new UserAction ("Jump1") {
+        FXGL.getInput().addAction(new UserAction("Jump1") {
             @Override
             protected void onAction() {
                 getControlP1().jump();
@@ -278,10 +276,10 @@ public class MainApplication extends GameApplication {
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
 
-        if(isPulling) {
+        if (isPulling) {
             float current = ropeJoint.getMaxLength();
             if (current > 0) {
-                float newLength = current - (float)(1f * tpf);
+                float newLength = current - (float) (1f * tpf);
                 ropeJoint.setMaxLength(Math.max(newLength, 0));
             }
         }
@@ -312,7 +310,8 @@ public class MainApplication extends GameApplication {
 //        def.initialize(bodyA, bodyB, bodyA.getWorldCenter(), bodyB.getWorldCenter());
 //        def.length = 3.0f;
 //        def.setBodyCollisionAllowed(false);
-    ////        def.collideConnected = false;
+
+    /// /        def.collideConnected = false;
 
 //        RevoluteJointDef def = new RevoluteJointDef();
 //        def.initialize(bodyA, bodyB, bodyA.getWorldCenter());
@@ -327,14 +326,13 @@ public class MainApplication extends GameApplication {
     // 1. Create a RopeJoint to limit the maximum rope length
 
 //        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
-
     private Player1Component getControlP1() {
-        return getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))
+        return FXGL.getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))
                 .getComponent(Player1Component.class);
     }
 
     private Player2Component getControlP2() {
-        return getGameWorld().getSingleton(e -> e.hasComponent(Player2Component.class))
+        return FXGL.getGameWorld().getSingleton(e -> e.hasComponent(Player2Component.class))
                 .getComponent(Player2Component.class);
     }
 
@@ -349,3 +347,4 @@ public class MainApplication extends GameApplication {
     private Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
     }
+}
