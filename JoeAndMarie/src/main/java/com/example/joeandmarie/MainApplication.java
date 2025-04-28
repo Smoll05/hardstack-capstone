@@ -31,16 +31,6 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 public class MainApplication extends GameApplication {
 
     Text nameTag1, nameTag2;
-    boolean isMoving = false;
-    boolean leftDown = false;
-    boolean rightDown = false;
-    private long lastMoveTimeJoe = 0;
-    private final long idleDelayJoe = 50;
-    private long lastMoveTimeMarie = 0;
-    private final long idleDelayMarie = 5; // milliseconds
-
-    private static final double TARGET_FPS = 60;
-    private static final double TARGET_TPF = 1.0 / TARGET_FPS;
 
     private double lastUpdateTime = 0;
     private boolean isPulling = false;
@@ -124,137 +114,6 @@ public class MainApplication extends GameApplication {
             getPlayer2().getViewComponent().addChild(nameTag2);
         }, Duration.seconds(0.1));
     }
-
-    private boolean inputInitializedJoe = false;
-    private boolean inputInitializedMarie = false;
-
-//    @Override
-//    protected void onUpdate(double tpf) {
-//        var player = getPlayer1();
-//        var pc = player.getComponent(PlayerComponent.class);
-//        var physics = player.getComponent(PhysicsComponent.class);
-//
-//        var player2 = getPlayer2();
-//        var pc2 = player2.getComponent(PlayerComponent.class);
-//        var physics2 = player2.getComponent(PhysicsComponent.class);
-//
-//        long currentTime = System.currentTimeMillis();
-//
-//        if (!inputInitializedJoe && FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER1).size() > 0
-//                && !inputInitializedMarie && FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER2).size() > 0) {
-//            setupInput();
-//            inputInitializedJoe = true;
-//            inputInitializedMarie = true;
-//        }
-//
-//        if (inputInitializedJoe) {
-//            if (physics.getVelocityX() == 0 && currentTime - lastMoveTimeJoe > idleDelayJoe) {
-//                pc.idle();
-//            }
-//        }
-//
-//        if (inputInitializedMarie) {
-//            if (physics2.getVelocityX() == 0 && currentTime - lastMoveTimeMarie > idleDelayMarie) {
-//                pc2.idle();
-//            }
-//        }
-//    }
-//
-//
-//    private void setupInput() {
-//        var input = FXGL.getInput();
-//        var player = getPlayer1();
-//        var pc = player.getComponent(PlayerComponent.class);
-//        var physics = player.getComponent(PhysicsComponent.class);
-//
-//        var player2 = getPlayer2();
-//        var pc2 = player2.getComponent(PlayerComponent.class);
-//        var physics2 = player2.getComponent(PhysicsComponent.class);
-//
-//        DistanceJointDef def = new DistanceJointDef();
-//        def.setBodyA(physics.getBody());
-//        def.setBodyB(physics2.getBody());
-//        def.localAnchorA.set(0, 0);
-//        def.localAnchorB.set(0, 0);
-//        def.length = 6f;
-//        def.frequencyHz = 1.5f;
-//        def.dampingRatio = 0.6f;
-//        def.setBodyCollisionAllowed(false);
-//
-//        DistanceJoint rope = FXGL.getPhysicsWorld()
-//                        .getJBox2DWorld().createJoint(def);
-//
-//        rope.setLength(4f);
-//        rope.setDampingRatio(0.8f);
-//
-//        RopeJointDef def = new RopeJointDef();
-//        def.localAnchorA.set(0, 0);
-//        def.localAnchorB.set(0, 0);
-//        def.maxLength = 5.0f;
-//        def.setBodyCollisionAllowed(false);
-//
-//        def.setBodyA(physics.getBody());
-//        def.setBodyB(physics2.getBody());
-//
-//        RopeJoint rope = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(def);
-//
-//        FXGL.onKeyDown(KeyCode.W, () -> {
-////            Checking if on the ground
-//            if (Math.abs(physics.getVelocityY()) < 0.1) {
-//                physics.setVelocityY(-Constants.JUMP_FORCE);
-//                lastMoveTimeJoe = System.currentTimeMillis();
-//            }
-//        });
-//
-//        FXGL.onKey(KeyCode.A, () -> {
-//            physics.setVelocityX(-Constants.RUNNING_SPEED);
-//            pc.moveLeft();
-//            lastMoveTimeJoe = System.currentTimeMillis();
-//        });
-//
-//        FXGL.onKey(KeyCode.D, () -> {
-//            physics.setVelocityX(Constants.RUNNING_SPEED);
-//            pc.moveRight();
-//            lastMoveTimeJoe = System.currentTimeMillis();
-//        });
-//
-//        FXGL.onKey(KeyCode.S, () -> {
-//            if (Math.abs(physics.getVelocityY()) < 0.1) {
-//                pc.crouch();
-//                physics.setVelocityX(0);
-//                lastMoveTimeJoe = System.currentTimeMillis();
-//            }
-//        });
-//
-//        FXGL.onKeyDown(KeyCode.UP, () -> {
-////            Checking if on the ground
-//            if (Math.abs(physics2.getVelocityY()) < 0.1) {
-//                physics2.setVelocityY(-400);
-//                lastMoveTimeMarie = System.currentTimeMillis();
-//            }
-//        });
-//
-//        FXGL.onKey(KeyCode.LEFT, () -> {
-//            physics2.setVelocityX(-Constants.RUNNING_SPEED);
-//            pc2.moveLeft();
-//            lastMoveTimeMarie = System.currentTimeMillis();
-//        });
-//
-//        FXGL.onKey(KeyCode.RIGHT, () -> {
-//            physics2.setVelocityX(Constants.RUNNING_SPEED);
-//            pc2.moveRight();
-//            lastMoveTimeMarie = System.currentTimeMillis();
-//        });
-//
-//        FXGL.onKey(KeyCode.DOWN, () -> {
-//            if (Math.abs(physics2.getVelocityY()) < 0.1) {
-//                pc2.crouch();
-//                physics2.setVelocityX(0);
-//                lastMoveTimeMarie = System.currentTimeMillis();
-//            }
-//        });
-//
-//    }
 
     @Override
     protected void initInput() {
@@ -371,39 +230,6 @@ public class MainApplication extends GameApplication {
             }
         }, KeyCode.DOWN);
     }
-
-    //    @Override
-//    protected void initInput() {
-//        var player = getPlayer1();
-//        var pc = player.getComponent(PlayerComponent.class);
-//        var physics = player.getComponent(PhysicsComponent.class);
-//
-//        final boolean[] moving = {false};
-//
-//        FXGL.onKeyDown(KeyCode.W, () -> {
-//            physics.setVelocityY(-400); // Jump
-//        });
-//
-//        FXGL.onKey(KeyCode.A, () -> {
-//            physics.setVelocityX(-150);
-//            pc.moveLeft();
-//            moving[0] = true;
-//        });
-//
-//        FXGL.onKey(KeyCode.D, () -> {
-//            physics.setVelocityX(150);
-//            pc.moveRight();
-//            moving[0] = true;
-//        });
-//
-//     //   FXGL.onKeyDown(KeyCode.S, () -> {
-//            pc.crouch();
-//        });
-//        if (!moving[0]) {
-//            physics.setVelocityX(0);
-//            pc.idle();
-//        }
-//    }
 
 
     @Override

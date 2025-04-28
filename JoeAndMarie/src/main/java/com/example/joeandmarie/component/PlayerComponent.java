@@ -98,14 +98,14 @@ public abstract class PlayerComponent extends Component {
         state.changeState(CHECKPOINT);
     }
 
-//    public void stop() {
-//        if (state.isIn(WALK)) {
-//            physics.setVelocityX(0);
-//            state.changeState(STAND);
-//        } else if(state.isIn(SWING)) {
-//            state.changeState(HANG);
-//        }
-//    }
+    public void stop() {
+        if (state.isIn(WALK)) {
+            physics.setVelocityX(0);
+            state.changeState(STAND);
+        } else if(state.isIn(SWING)) {
+            state.changeState(HANG);
+        }
+    }
 
     public void stand() {
         state.changeState(STAND);
