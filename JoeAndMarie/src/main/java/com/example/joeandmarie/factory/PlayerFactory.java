@@ -29,12 +29,12 @@ public class PlayerFactory implements EntityFactory {
     public Entity newPlayer1(SpawnData data) {
 
         BodyDef bd = new BodyDef();
-        bd.setFixedRotation(true); // Does not rotate the entity
+        bd.setFixedRotation(true);
         bd.setType(BodyType.DYNAMIC);
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(0.25f));
+        physics.setFixtureDef(new FixtureDef().friction(5f).density(10f));
         physics.setBodyDef(bd);
 
         HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(40, 10));
@@ -65,7 +65,7 @@ public class PlayerFactory implements EntityFactory {
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(0.25f));
+        physics.setFixtureDef(new FixtureDef().friction(5f).density(10f));
         physics.setBodyDef(bd);
 
         HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(40, 10));
