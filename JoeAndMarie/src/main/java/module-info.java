@@ -3,7 +3,7 @@ module com.example.joeandmarie {
     requires javafx.fxml;
 
     requires com.almasb.fxgl.all;
-    requires jdk.unsupported.desktop;
+
     requires java.desktop;
     requires javafx.media;
 

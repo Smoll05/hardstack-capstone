@@ -18,6 +18,7 @@ public class Player1Component extends PlayerComponent {
 
     public Player1Component() {
         super();
+
         // Create animations for idle, move, and crouch
         animIdle = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animMove = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
