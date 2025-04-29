@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<Pane prefHeight="720.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.example.joeandmarie.Controller.JoeMainMenuController">
+    <!-- Background Image -->
+    <ImageView fx:id="bgImage" fitHeight="720.0" fitWidth="1280.0" />
+
+    <!-- Menu Box -->
+    <VBox fx:id="menuBox" alignment="CENTER" spacing="10.0" translateX="980.0" translateY="420.0">
+        <!-- Menu Items -->
+        <StackPane fx:id="coopCampaign" onMouseClicked="#handleCoopCampaignClick">
+            <Rectangle fill="linear-gradient(to right, rgba(255,255,255,0.5), rgba(0,0,0,0.5))" height="30" width="250" />
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <Rectangle height="30" width="5" />
+                <Text text="CO-OP Campaign" />
+            </HBox>
+        </StackPane>
+
+        <StackPane fx:id="multiplayer" onMouseClicked="#handleMultiplayerClick">
+            <Rectangle fill="linear-gradient(to right, rgba(255,255,255,0.5), rgba(0,0,0,0.5))" height="30" width="250" />
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <Rectangle height="30" width="5" />
+                <Text text="Multiplayer" />
+            </HBox>
+        </StackPane>
+
+        <StackPane fx:id="collection" onMouseClicked="#handleCollectionClick">
+            <Rectangle fill="linear-gradient(to right, rgba(255,255,255,0.5), rgba(0,0,0,0.5))" height="30" width="250" />
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <Rectangle height="30" width="5" />
+                <Text text="Collection" />
+            </HBox>
+        </StackPane>
+
+        <StackPane fx:id="settings" onMouseClicked="#handleSettingsClick">
+            <Rectangle fill="linear-gradient(to right, rgba(255,255,255,0.5), rgba(0,0,0,0.5))" height="30" width="250" />
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <Rectangle height="30" width="5" />
+                <Text text="Settings" />
+            </HBox>
+        </StackPane>
+
+        <StackPane fx:id="quit" onMouseClicked="#handleQuitClick">
+            <Rectangle fill="linear-gradient(to right, rgba(255,255,255,0.5), rgba(0,0,0,0.5))" height="30" width="250" />
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <Rectangle height="30" width="5" />
+                <Text fill="#0a0a0a" text="Quit" />
+            </HBox>
+        </StackPane>
+    </VBox>
+</Pane>

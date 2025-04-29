@@ -7,18 +7,21 @@ import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.config.Constants;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Player1Component extends PlayerComponent {
 
     Entity player2;
+    public static CheckpointComponent flag;
 
     public Player1Component() {
         super();
-        // Create animations for idle, move, and crouch
         animIdle = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animMove = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
         animJump = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
@@ -28,19 +31,24 @@ public class Player1Component extends PlayerComponent {
         animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animSwing = new AnimationChannel(FXGL.image("joe_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animPull = new AnimationChannel(FXGL.image("joe_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animPulled = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animPlant = new AnimationChannel(FXGL.image("joe_plant_spritesheet.png"), 20, 64, 64, Duration.seconds(2), 0, 18);
+        animSplat = new AnimationChannel(FXGL.image("joe_hapla_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
+        animHold = new AnimationChannel(FXGL.image("joe_holding_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
 
-        stateData = Map.of(
-                STAND, new Player1Component.StateData(animIdle, 0),
-                WALK, new Player1Component.StateData(animMove, -Constants.RUNNING_SPEED),
-                CROUCH, new Player1Component.StateData(animCrouch, 0),
-                JUMP, new Player1Component.StateData(animJump, Constants.JUMP_FORCE),
-                FALL, new Player1Component.StateData(animFall, 0),
-                HANG, new Player1Component.StateData(animHang,0),
-                SWING, new Player1Component.StateData(animSwing, -Constants.SWING_FORCE),
-                PULL, new Player1Component.StateData(animPull, 0),
-                CHECKPOINT, new Player1Component.StateData(animIdle, 0),
-                SAVE, new Player1Component.StateData(animIdle, 0)
-        );
+        stateData.put(STAND, new StateData(animIdle, 0));
+        stateData.put(WALK, new StateData(animMove,  -Constants.RUNNING_SPEED));
+        stateData.put(CROUCH, new StateData(animCrouch, 0));
+        stateData.put(JUMP, new StateData(animJump,  Constants.JUMP_FORCE));
+        stateData.put(FALL, new StateData(animIdle, 0));
+        stateData.put(HANG, new StateData(animIdle, 0));
+        stateData.put(SWING, new StateData(animIdle, -Constants.SWING_FORCE));
+        stateData.put(PULL, new StateData(animPull, 0));
+        stateData.put(PULLED, new StateData(animPulled, 0));
+        stateData.put(CHECKPOINT, new StateData(animCry, 0));
+        stateData.put(SAVE, new StateData(animPlant, 0));
+        stateData.put(SPLAT, new StateData(animSplat, 0));
+        stateData.put(HOLD, new StateData(animHold, -Constants.RUNNING_SPEED));
 
         texture = new AnimatedTexture(animIdle);
         texture.loop();
@@ -69,6 +77,20 @@ public class Player1Component extends PlayerComponent {
         otherView = player2.getComponent(ViewComponent.class);
     }
 
+    public void plant() {
+        if (!physics.isOnGround()) {
+            return;
+        }
+        state.changeState(SAVE);
+
+        flag = new CheckpointComponent(entity.getPosition());
+
+        FXGL.runOnce(() -> {
+            flag.plantFlag();
+        }, Duration.seconds(.5));
+    }
+
+
     boolean isHanging() {
         // Calculate the distance between players
         double player2Y = player2.getPosition().getY();
@@ -89,29 +111,6 @@ public class Player1Component extends PlayerComponent {
                 && !physics.isOnGround()
                 && otherPhysics.isOnGround();
     }
-
-//    @Override
-//    public void onUpdate(double tpf) {
-//        super.onUpdate(tpf);
-//
-//        if(state.isIn(SWING)) {
-//            if(physics.isOnGround()) {
-//                state.changeState(STAND);
-//            } else {
-//                return;
-//            }
-//        }
-//
-//        if (isHanging()) {
-//            state.changeState(HANG);
-//            applyDamping(physics, 0.988f);
-//        } else {
-//            // Handle other states like FALL, JUMP, etc.
-//            if (physics.getVelocityY() > 0 && !physics.isOnGround()) {
-//                state.changeState(FALL);
-//            }
-//        }
-//    }
 
     @Override
     public void onUpdate(double tpf) {
@@ -138,4 +137,8 @@ public class Player1Component extends PlayerComponent {
         }
     }
 
+    @Override
+    public boolean isComponentInjectionRequired() {
+        return false;
+    }
 }
