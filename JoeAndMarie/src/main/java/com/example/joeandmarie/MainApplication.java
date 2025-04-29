@@ -13,10 +13,8 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
-import com.example.joeandmarie.Starting.JoeIntroScene;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
-import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
@@ -218,7 +216,7 @@ public class MainApplication extends GameApplication {
                         newDef.maxLength = 3.0f;
                         newDef.setBodyCollisionAllowed(false);
 
-                        ropeJoint = (RopeJoint) FXGL.getPhysicsWorld()
+                        ropeJoint = FXGL.getPhysicsWorld()
                                 .getJBox2DWorld()
                                 .createJoint(newDef);
                     }

@@ -40,9 +40,9 @@ public class Player1Component extends PlayerComponent {
         stateData.put(WALK, new StateData(animMove,  -Constants.RUNNING_SPEED));
         stateData.put(CROUCH, new StateData(animCrouch, 0));
         stateData.put(JUMP, new StateData(animJump,  Constants.JUMP_FORCE));
-        stateData.put(FALL, new StateData(animIdle, 0));
-        stateData.put(HANG, new StateData(animIdle, 0));
-        stateData.put(SWING, new StateData(animIdle, -Constants.SWING_FORCE));
+        stateData.put(FALL, new StateData(animFall, 0));
+        stateData.put(HANG, new StateData(animHang, 0));
+        stateData.put(SWING, new StateData(animSwing, -Constants.SWING_FORCE));
         stateData.put(PULL, new StateData(animPull, 0));
         stateData.put(PULLED, new StateData(animPulled, 0));
         stateData.put(CHECKPOINT, new StateData(animCry, 0));
