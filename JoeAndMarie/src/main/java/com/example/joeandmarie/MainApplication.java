@@ -131,21 +131,6 @@ public class MainApplication extends GameApplication {
 
     protected void initInput() {
         super.initInput();
-        // Player 1 Controls
-//        FXGL.onKey(KeyCode.W, () -> getControlP1().jump());
-
-        FXGL.getInput().addAction(new UserAction("Pull1") {
-            @Override
-            protected void onAction() {
-                isPulling = true;
-            }
-
-            @Override
-            protected void onActionEnd() {
-                isPulling = false;
-                ropeJoint.setMaxLength(3);
-            }
-        }, KeyCode.X);
 
         FXGL.getInput().addAction(new UserAction("Jump1") {
             @Override

@@ -17,7 +17,7 @@ public class Player2Component extends PlayerComponent {
     Entity player1;
 
     public Player2Component() {
-        // Create animations for idle, move, and crouch
+        super();
 
         animIdle = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animMove = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
@@ -33,19 +33,6 @@ public class Player2Component extends PlayerComponent {
         animPull = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
         animPulled = new AnimationChannel(FXGL.image("marie_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
 
-
-        stateData = Map.of(
-                STAND, new StateData(animIdle, 0),
-                WALK, new StateData(animMove, -Constants.RUNNING_SPEED),
-                CROUCH, new StateData(animCrouch, 0),
-                JUMP, new StateData(animJump, Constants.JUMP_FORCE),
-                FALL, new StateData(animFall, 0),
-                HANG, new StateData(animHang, 0),
-                SWING, new StateData(animSwing, -Constants.RUNNING_SPEED),
-                PULL, new StateData(animPull, 0),
-                CHECKPOINT, new StateData(animCry, 0),
-                SAVE, new StateData(animIdle, 0)
-        );
         stateData.put(STAND, new StateData(animIdle, 0));
         stateData.put(WALK, new StateData(animMove,  -Constants.RUNNING_SPEED));
         stateData.put(CROUCH, new StateData(animCrouch, 0));
@@ -85,43 +72,6 @@ public class Player2Component extends PlayerComponent {
         otherState = player1.getComponent(StateComponent.class);
         otherPhysics = player1.getComponent(PhysicsComponent.class);
         otherView = player1.getComponent(ViewComponent.class);
-
-        view.addChild(texture);
-
-        state.changeState(STAND);
-
-        state.currentStateProperty().addListener((o, oldState, newState) -> {
-            System.out.println("new state: " + newState);
-
-            var data = stateData.get(newState);
-
-            texture.loopAnimationChannel(data.channel);
-        });
-    }
-
-    public void pull() {
-        if (!physics.isOnGround()) {
-            return;
-        }
-        state.changeState(PULL);
-    }
-
-    public void pulled() {
-        state.changeState(PULLED);
-    }
-
-    public void hold() {
-        state.changeState(HOLD);
-
-        if(entity.getScaleX() == 1) {
-            physics.setVelocityX(stateData.get(HOLD).moveSpeed);
-        } else {
-            physics.setVelocityX(-1 * stateData.get(HOLD).moveSpeed);
-        }
-    }
-
-    public void moveLeft() {
-        tryMovingState(WALK, 1);
     }
 
     boolean isHanging() {
@@ -132,22 +82,6 @@ public class Player2Component extends PlayerComponent {
 
         // Get the rope length from the RopeJoint
         float ropeLength = Constants.PLAYER_ROPE_DISTANCE;
-    public void cry() {
-        if (!physics.isOnGround()) {
-            return;
-        }
-
-        state.changeState(CHECKPOINT);
-
-        FXGL.runOnce(() -> {
-            if (CheckpointComponent.getFlagEntity() != null) {
-                Point2D pos = new Point2D(CheckpointComponent.getFlagEntity().getPosition().getX()  + 20, CheckpointComponent.getFlagEntity().getPosition().getY() + 23);
-                physics.overwritePosition(pos);
-            } else {
-                System.out.println("No flag entity to teleport to!");
-            }
-        }, Duration.seconds(1));
-    }
 
         // Check if the distance is near the rope length and both players are stationary
         boolean ropeIsFullyExtended = Math.abs(distanceBetweenPlayers - ropeLength) <= 20;  // Tolerance
