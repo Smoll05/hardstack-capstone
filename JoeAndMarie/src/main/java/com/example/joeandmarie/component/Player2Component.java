@@ -17,7 +17,7 @@ public class Player2Component extends PlayerComponent {
     Entity player1;
 
     public Player2Component() {
-        // Create animations for idle, move, and crouch
+        super();
 
         animIdle = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animMove = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
@@ -28,20 +28,24 @@ public class Player2Component extends PlayerComponent {
         animFall = new AnimationChannel(FXGL.image("marie_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animSwing = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animPull = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animSplat = new AnimationChannel(FXGL.image("marie_hapla_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
+        animHold = new AnimationChannel(FXGL.image("marie_holding_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animPull = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animPulled = new AnimationChannel(FXGL.image("marie_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
 
-
-        stateData = Map.of(
-                STAND, new StateData(animIdle, 0),
-                WALK, new StateData(animMove, -Constants.RUNNING_SPEED),
-                CROUCH, new StateData(animCrouch, 0),
-                JUMP, new StateData(animJump, Constants.JUMP_FORCE),
-                FALL, new StateData(animFall, 0),
-                HANG, new StateData(animHang, 0),
-                SWING, new StateData(animSwing, -Constants.RUNNING_SPEED),
-                PULL, new StateData(animPull, 0),
-                CHECKPOINT, new StateData(animCry, 0),
-                SAVE, new StateData(animIdle, 0)
-        );
+        stateData.put(STAND, new StateData(animIdle, 0));
+        stateData.put(WALK, new StateData(animMove,  -Constants.RUNNING_SPEED));
+        stateData.put(CROUCH, new StateData(animCrouch, 0));
+        stateData.put(JUMP, new StateData(animJump,  Constants.JUMP_FORCE));
+        stateData.put(FALL, new StateData(animFall, 0));
+        stateData.put(HANG, new StateData(animHang, 0));
+        stateData.put(SWING, new StateData(animSwing, -Constants.SWING_FORCE));
+        stateData.put(PULL, new StateData(animPull, 0));
+        stateData.put(PULLED, new StateData(animPulled, 0));
+        stateData.put(CHECKPOINT, new StateData(animCry, 0));
+        stateData.put(SAVE, new StateData(animPlant, 0));
+        stateData.put(SPLAT, new StateData(animSplat, 0));
+        stateData.put(HOLD, new StateData(animHold, -Constants.RUNNING_SPEED));
 
         texture = new AnimatedTexture(animIdle);
         texture.loop();
