@@ -45,6 +45,8 @@ public class MainApplication extends GameApplication {
         settings.setMainMenuEnabled(true);
         settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
+        settings.setDeveloperMenuEnabled(true);
+        settings.setProfilingEnabled(true);
 
         // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
