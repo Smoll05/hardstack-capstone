@@ -38,8 +38,8 @@ public class PlayerFactory implements EntityFactory {
         physics.setFixtureDef(new FixtureDef().friction(5f).density(10f));
         physics.setBodyDef(bd);
 
-        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(40, 10));
-        HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 20), BoundingShape.box(10, 40));
+        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(30, 10));
+        HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 30), BoundingShape.box(10, 30));
 
         SensorCollisionHandler wallHandler = new SensorCollisionHandler() {
             @Override
@@ -65,17 +65,17 @@ public class PlayerFactory implements EntityFactory {
         physics.addGroundSensor(groundSensor);
         physics.addSensor(wallSensor, wallHandler);
 
-        Rectangle debugBox = new Rectangle(40, 10, Color.RED);
+        Rectangle debugBox = new Rectangle(30, 10, Color.RED);
         debugBox.setTranslateX(groundSensor.getBounds().getMinX());
         debugBox.setTranslateY(groundSensor.getBounds().getMinY());
 
-        Rectangle debugWallBox= new Rectangle(10, 40, Color.BLUE);
+        Rectangle debugWallBox= new Rectangle(10, 30, Color.BLUE);
         debugWallBox.setTranslateX(wallSensor.getBounds().getMinX());
         debugWallBox.setTranslateY(wallSensor.getBounds().getMinY());
 
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER1)
-                .bbox(new HitBox("BODY", new Point2D(0, 23), BoundingShape.box(40,40)))
+                .bbox(new HitBox("BODY", new Point2D(0, 23), BoundingShape.circle(20)))
                 .with(new CollidableComponent(true))
                 .view(new Group(debugBox, debugWallBox))
                 .with(new StateComponent())
@@ -96,8 +96,8 @@ public class PlayerFactory implements EntityFactory {
         physics.setFixtureDef(new FixtureDef().friction(5f).density(10f));
         physics.setBodyDef(bd);
 
-        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(40, 10));
-        HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 15), BoundingShape.box(10, 30));
+        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(30, 10));
+        HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 30), BoundingShape.box(10, 30));
 
         SensorCollisionHandler wallHandler = new SensorCollisionHandler() {
             @Override
@@ -123,17 +123,17 @@ public class PlayerFactory implements EntityFactory {
         physics.addGroundSensor(groundSensor);
         physics.addSensor(wallSensor, wallHandler);
 
-        Rectangle debugBox = new Rectangle(40, 10, Color.RED);
+        Rectangle debugBox = new Rectangle(30, 10, Color.RED);
         debugBox.setTranslateX(groundSensor.getBounds().getMinX());
         debugBox.setTranslateY(groundSensor.getBounds().getMinY());
 
-        Rectangle debugWallBox= new Rectangle(10, 40, Color.BLUE);
+        Rectangle debugWallBox= new Rectangle(10, 30, Color.BLUE);
         debugWallBox.setTranslateX(wallSensor.getBounds().getMinX());
         debugWallBox.setTranslateY(wallSensor.getBounds().getMinY());
 
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER2)
-                .bbox(new HitBox("BODY", new Point2D(0, 23), BoundingShape.box(40,40)))
+                .bbox(new HitBox("BODY", new Point2D(0, 23), BoundingShape.circle(20)))
                 .with(new CollidableComponent(true))
                 .view(new Group(debugBox, debugWallBox))
                 .with(new StateComponent())

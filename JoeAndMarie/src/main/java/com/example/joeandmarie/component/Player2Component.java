@@ -25,7 +25,7 @@ public class Player2Component extends PlayerComponent {
         animCrouch = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
         animHang = new AnimationChannel(FXGL.image("marie_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animCry = new AnimationChannel(FXGL.image("marie_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animFall = new AnimationChannel(FXGL.image("marie_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animFall = new AnimationChannel(FXGL.image("marie_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
         animSwing = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animPull = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animSplat = new AnimationChannel(FXGL.image("marie_hapla_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
@@ -39,7 +39,7 @@ public class Player2Component extends PlayerComponent {
         stateData.put(JUMP, new StateData(animJump,  Constants.JUMP_FORCE));
         stateData.put(FALL, new StateData(animFall, 0));
         stateData.put(HANG, new StateData(animHang, 0));
-        stateData.put(SWING, new StateData(animSwing, -Constants.SWING_FORCE));
+        stateData.put(SWING, new StateData(animMove, -Constants.SWING_FORCE));
         stateData.put(PULL, new StateData(animPull, 0));
         stateData.put(PULLED, new StateData(animPulled, 0));
         stateData.put(CHECKPOINT, new StateData(animCry, 0));
@@ -49,12 +49,6 @@ public class Player2Component extends PlayerComponent {
 
         texture = new AnimatedTexture(animIdle);
         texture.loop();
-
-        texture.setOnCycleFinished(() -> {
-            if (texture.getAnimationChannel() == animJump) {
-                state.changeState(FALL);
-            }
-        });
     }
 
     @Override
@@ -108,11 +102,13 @@ public class Player2Component extends PlayerComponent {
         }
 
         if (isHanging()) {
-            state.changeState(HANG);
+            if (!state.isIn(HANG)) {
+                state.changeState(HANG);
+            }
             applyDamping(physics, 0.988f);
         } else {
             // Handle other states like FALL, JUMP, etc.
-            if (physics.getVelocityY() > 0 && !physics.isOnGround()) {
+            if (physics.getVelocityY() > 750 && !physics.isOnGround()) {
                 state.changeState(FALL);
             }
         }

@@ -2,10 +2,8 @@ package com.example.joeandmarie;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.IntroScene;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -30,10 +28,13 @@ public class MainApplication extends GameApplication {
 
     Text nameTag1, nameTag2;
 
-    private double lastUpdateTime = 0;
     private boolean isPulling = false;
+    private float ropeFinalLength = 3.0f;
 
     private RopeJoint ropeJoint;
+    private DistanceJoint distanceJoint = null;
+
+    private boolean isSwinging;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -43,7 +44,7 @@ public class MainApplication extends GameApplication {
         settings.setHeight(720);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
-        settings.setIntroEnabled(true);
+//        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         settings.setDeveloperMenuEnabled(true);
         settings.setProfilingEnabled(true);
@@ -65,13 +66,13 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        FXGL.getGameScene().setBackgroundColor(Color.SADDLEBROWN);
+        FXGL.getGameScene().setBackgroundColor(Color.ALICEBLUE);
 
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
         try {
-            FXGL.setLevelFromMap("test.tmx");
+            FXGL.setLevelFromMap("test2.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -153,24 +154,6 @@ public class MainApplication extends GameApplication {
             }
         }, KeyCode.E);
 
-        FXGL.getInput().addAction(new UserAction("Pull2") {
-            @Override
-            protected void onAction() {
-                getControlP2().pull();
-                getControlP1().pulled();
-
-                isPulling = true;
-            }
-
-            @Override
-            protected void onActionEnd() {
-                getControlP1().stand();
-                getControlP2().stand();
-
-                isPulling = false;
-            }
-        }, KeyCode.O);
-
         FXGL.getInput().addAction(new UserAction("Plant") {
             @Override
             protected void onAction() {
@@ -186,45 +169,14 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Cry") {
             @Override
             protected void onAction() {
-                if (ropeJoint != null) {
-                    FXGL.getPhysicsWorld().getJBox2DWorld().destroyJoint(ropeJoint);
-                    ropeJoint = null;
-                }
-
                 getControlP1().cry();
                 getControlP2().cry();
             }
 
             @Override
             protected void onActionEnd() {
-
                 getControlP1().stand();
                 getControlP2().stand();
-
-                FXGL.runOnce(() -> {
-                    var physics1 = getPlayer1().getComponent(PhysicsComponent.class);
-                    var physics2 = getPlayer2().getComponent(PhysicsComponent.class);
-
-                    var bodyA = physics1.getBody();
-                    var bodyB = physics2.getBody();
-
-                    // Recreate joint
-                    if (bodyA.isActive() && bodyB.isActive()) {
-                        RopeJointDef newDef = new RopeJointDef();
-                        newDef.setBodyA(bodyA);
-                        newDef.setBodyB(bodyB);
-                        newDef.localAnchorA.set(0, 0);
-                        newDef.localAnchorB.set(0, 0);
-                        newDef.maxLength = 3.0f;
-                        newDef.setBodyCollisionAllowed(false);
-
-                        ropeJoint = FXGL.getPhysicsWorld()
-                                .getJBox2DWorld()
-                                .createJoint(newDef);
-                    }
-                }, Duration.seconds(1.05)); // 0.2 is usually enough
-
-
             }
         }, KeyCode.C);
 
@@ -243,22 +195,6 @@ public class MainApplication extends GameApplication {
                 getControlP1().stand();
             }
         }, KeyCode.Q);
-
-        FXGL.getInput().addAction(new UserAction("Hold2") {
-            @Override
-            protected void onAction() {
-                if(Player2Component.isTouchingWall) {
-                    getControlP2().hold();
-                } else {
-                    getControlP2().stand();
-                }
-            }
-
-            @Override
-            protected void onActionEnd() {
-                getControlP2().stand();
-            }
-        }, KeyCode.P);
 
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
@@ -334,6 +270,40 @@ public class MainApplication extends GameApplication {
                 getControlP2().stand();
             }
         }, KeyCode.DOWN);
+
+        FXGL.getInput().addAction(new UserAction("Hold2") {
+            @Override
+            protected void onAction() {
+                if(Player2Component.isTouchingWall) {
+                    getControlP2().hold();
+                } else {
+                    getControlP2().stand();
+                }
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP2().stand();
+            }
+        }, KeyCode.P);
+
+        FXGL.getInput().addAction(new UserAction("Pull2") {
+            @Override
+            protected void onAction() {
+                getControlP2().pull();
+                getControlP1().pulled();
+
+                isPulling = true;
+            }
+
+            @Override
+            protected void onActionEnd() {
+                getControlP1().stand();
+                getControlP2().stand();
+
+                isPulling = false;
+            }
+        }, KeyCode.O);
     }
 
 
@@ -374,7 +344,64 @@ public class MainApplication extends GameApplication {
                 float newLength = current - (float) (1f * tpf);
                 ropeJoint.setMaxLength(Math.max(newLength, 0));
             }
+        } else { // return to original rope length
+            if(ropeJoint != null) {
+                float current = ropeJoint.getMaxLength();
+                if (current < ropeFinalLength) {
+                    float newLength = current + (float) (2f * tpf);
+                    ropeJoint.setMaxLength(Math.min(newLength, ropeFinalLength));
+                }
+            }
         }
+
+        // Check if a player starts swinging to create and delete distance joint once
+        boolean isSwingActive = getControlP1().getState().isIn(getControlP1().getSWING()) ||
+                getControlP2().getState().isIn(getControlP2().getSWING());
+
+        if (isSwingActive && !isSwinging) {
+            isSwinging = true;
+            createDistanceJoint();
+        }
+        // Check for swing end
+        else if (!isSwingActive && isSwinging) {
+            isSwinging = false;
+            deleteDistanceJoint();
+        }
+    }
+
+    public void deleteDistanceJoint() {
+        FXGL.getPhysicsWorld().getJBox2DWorld().destroyJoint(distanceJoint);
+        distanceJoint = null;
+
+        System.out.println("DELETED DISTANCE JOINT");
+    }
+
+    public void createDistanceJoint() {
+        var player1 = getPlayer1();
+        var physics1 = player1.getComponent(PhysicsComponent.class);
+
+        var player2 = getPlayer2();
+        var physics2 = player2.getComponent(PhysicsComponent.class);
+
+        Body bodyA = physics1.getBody();
+        Body bodyB = physics2.getBody();
+
+        FXGL.runOnce(() -> {
+
+            DistanceJointDef distanceDef = new DistanceJointDef();
+            distanceDef.setBodyA(bodyA);
+            distanceDef.setBodyB(bodyB);
+            distanceDef.localAnchorA.set(0, 0);
+            distanceDef.localAnchorB.set(0, 0);
+            distanceDef.length = ropeJoint.getMaxLength(); // Use the stored rope length
+            distanceDef.frequencyHz = 0.0f;  // Make it stiff.  Adjust as needed.
+            distanceDef.dampingRatio = 1.0f; //  Damping for stability.
+            distanceDef.setBodyCollisionAllowed(false);
+
+            distanceJoint = (DistanceJoint) FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(distanceDef);
+        }, Duration.seconds(0.1));
+
+        System.out.println("CREATED DISTANCE JOINT");
     }
 
     //        RevoluteJointDef revoluteDef = new RevoluteJointDef();

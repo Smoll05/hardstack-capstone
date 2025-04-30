@@ -5,6 +5,9 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.Body;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJoint;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJointDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.example.joeandmarie.MainApplication;
@@ -28,7 +31,7 @@ public class Player1Component extends PlayerComponent {
         animCrouch = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
         animHang = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animCry = new AnimationChannel(FXGL.image("joe_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
         animSwing = new AnimationChannel(FXGL.image("joe_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animPull = new AnimationChannel(FXGL.image("joe_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animPulled = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
@@ -42,7 +45,7 @@ public class Player1Component extends PlayerComponent {
         stateData.put(JUMP, new StateData(animJump,  Constants.JUMP_FORCE));
         stateData.put(FALL, new StateData(animFall, 0));
         stateData.put(HANG, new StateData(animHang, 0));
-        stateData.put(SWING, new StateData(animSwing, -Constants.SWING_FORCE));
+        stateData.put(SWING, new StateData(animMove, -Constants.SWING_FORCE));
         stateData.put(PULL, new StateData(animPull, 0));
         stateData.put(PULLED, new StateData(animPulled, 0));
         stateData.put(CHECKPOINT, new StateData(animCry, 0));
@@ -53,11 +56,11 @@ public class Player1Component extends PlayerComponent {
         texture = new AnimatedTexture(animIdle);
         texture.loop();
 
-        texture.setOnCycleFinished(() -> {
-            if (texture.getAnimationChannel() == animJump) {
-                state.changeState(FALL);
-            }
-        });
+//        texture.setOnCycleFinished(() -> {
+//            if (texture.getAnimationChannel() == animJump) {
+//                state.changeState(FALL);
+//            }
+//        }); // Commented out to avoid constant falling state
     }
 
     @Override
@@ -132,7 +135,7 @@ public class Player1Component extends PlayerComponent {
             return;
         }
 
-        if (physics.getVelocityY() > 0 && !physics.isOnGround()) {
+        if (physics.getVelocityY() > 750 && !physics.isOnGround()) { // changed min velocity for falling detection
             state.changeState(FALL);
         }
     }
