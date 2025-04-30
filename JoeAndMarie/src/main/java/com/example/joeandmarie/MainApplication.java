@@ -145,12 +145,16 @@ public class MainApplication extends GameApplication {
             protected void onAction() {
                 getControlP1().pull();
                 getControlP2().pulled();
+
+                isPulling = true;
             }
 
             @Override
             protected void onActionEnd() {
                 getControlP1().stand();
                 getControlP2().stand();
+
+                isPulling = false;
             }
         }, KeyCode.E);
 
@@ -356,15 +360,24 @@ public class MainApplication extends GameApplication {
 
         // Check if a player starts swinging to create and delete distance joint once
         boolean isSwingActive = getControlP1().getState().isIn(getControlP1().getSWING()) ||
-                getControlP2().getState().isIn(getControlP2().getSWING());
+                getControlP2().getState().isIn(getControlP2().getSWING()) || getControlP1().getState().isIn(getControlP1().getHANG()) ||
+                getControlP2().getState().isIn(getControlP2().getHANG());
 
         if (isSwingActive && !isSwinging) {
             isSwinging = true;
-            createDistanceJoint();
+            if(distanceJoint == null) {
+                createDistanceJoint();
+            }
         }
         // Check for swing end
         else if (!isSwingActive && isSwinging) {
             isSwinging = false;
+            if(distanceJoint != null) {
+                deleteDistanceJoint();
+            }
+        }
+
+        if(distanceJoint != null && !isSwingActive) {
             deleteDistanceJoint();
         }
     }

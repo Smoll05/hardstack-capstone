@@ -98,6 +98,10 @@ public abstract class PlayerComponent extends Component {
         return SWING;
     }
 
+    public EntityState getHANG() {
+        return HANG;
+    }
+
     @Override
     public void onAdded() {
 
@@ -129,7 +133,7 @@ public abstract class PlayerComponent extends Component {
             physics.setVelocityX(0);
             state.changeState(STAND);
         } else if(state.isIn(SWING)) {
-            state.changeState(HANG);
+//            state.changeState(HANG); // Commented out as to not modify VelocityX on release from swing
         }
     }
 

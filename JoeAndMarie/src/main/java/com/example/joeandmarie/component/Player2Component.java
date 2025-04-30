@@ -45,7 +45,7 @@ public class Player2Component extends PlayerComponent {
         stateData.put(CHECKPOINT, new StateData(animCry, 0));
         stateData.put(SAVE, new StateData(animPlant, 0));
         stateData.put(SPLAT, new StateData(animSplat, 0));
-        stateData.put(HOLD, new StateData(animHold, -Constants.RUNNING_SPEED));
+        stateData.put(HOLD, new StateData(animHold, -Constants.HOLD_FORCE));
 
         texture = new AnimatedTexture(animIdle);
         texture.loop();
