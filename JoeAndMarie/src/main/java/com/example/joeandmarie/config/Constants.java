@@ -8,4 +8,5 @@ public class Constants {
     public static final int SWING_FORCE = 400;
     public static final int ROPE_LENGTH = 3;
     public static final int PLAYER_ROPE_DISTANCE = 150;
+    public static final int HOLD_FORCE = 1000;
 }

@@ -8,15 +8,19 @@ import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.Body;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJoint;
+import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJointDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.config.Constants;
+import com.sun.tools.javac.Main;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimerTask;
 
 public abstract class PlayerComponent extends Component {
 
@@ -37,23 +41,35 @@ public abstract class PlayerComponent extends Component {
 
     public static boolean isTouchingWall = false;
 
-
     final EntityState STAND = new EntityState("STAND");
     final EntityState WALK = new EntityState("WALK");
-    final EntityState HANG = new EntityState("HANG");
     final EntityState PULL = new EntityState("PULL");
-    final EntityState PULLED = new EntityState("SWING");
+    final EntityState PULLED = new EntityState("PULLED");
     final EntityState CHECKPOINT = new EntityState("CHECKPOINT");
     final EntityState SAVE = new EntityState("SAVE");
     final EntityState HOLD = new EntityState("HOLD");
-    final EntityState CROUCH = new EntityState("CROUCH");
+    final EntityState CROUCH = new EntityState("CROUCH") {
+        @Override
+        protected void onUpdate(double tpf) {
+            physics.setVelocityX(0);
+            physics.setVelocityY(1000);
+        }
+    };
     final EntityState SWING = new EntityState("SWING");
-    final EntityState SPLAT = new EntityState("SWING");
+    final EntityState SPLAT = new EntityState("SPLAT");
+    final EntityState HANG = new EntityState("HANG") {
+        @Override
+        protected void onUpdate(double tpf) {
+            if(physics.isOnGround()) {
+                state.changeState(STAND);
+            }
+        }
+    };
 
     final EntityState JUMP = new EntityState("JUMP") {
         @Override
         protected void onUpdate(double tpf) {
-            if(physics.getVelocityY() > 0) {
+            if(physics.getVelocityY() > 750) {
                 state.changeState(FALL);
             }
         }
@@ -65,7 +81,7 @@ public abstract class PlayerComponent extends Component {
             super.onUpdate(tpf);
             if (physics.isOnGround()) {
                 physics.setVelocityX(0);
-                state.changeState(STAND);
+                state.changeState(SPLAT);
             }
         }
     };
@@ -73,6 +89,18 @@ public abstract class PlayerComponent extends Component {
     record StateData(AnimationChannel channel, int moveSpeed) { }
 
     Map<EntityState, Player1Component.StateData> stateData = new HashMap<>();
+
+    public StateComponent getState() {
+        return state;
+    }
+
+    public EntityState getSWING() {
+        return SWING;
+    }
+
+    public EntityState getHANG() {
+        return HANG;
+    }
 
     @Override
     public void onAdded() {
@@ -105,7 +133,7 @@ public abstract class PlayerComponent extends Component {
             physics.setVelocityX(0);
             state.changeState(STAND);
         } else if(state.isIn(SWING)) {
-            state.changeState(HANG);
+//            state.changeState(HANG); // Commented out as to not modify VelocityX on release from swing
         }
     }
 
@@ -179,10 +207,14 @@ public abstract class PlayerComponent extends Component {
 
         state.changeState(CHECKPOINT);
 
-
         FXGL.runOnce(() -> {
             if (CheckpointComponent.getFlagEntity() != null) {
-                Point2D pos = new Point2D(CheckpointComponent.getFlagEntity().getPosition().getX()  - 20, CheckpointComponent.getFlagEntity().getPosition().getY() + 23);
+                double x = CheckpointComponent.getFlagEntity().getPosition().getX();
+                double y = CheckpointComponent.getFlagEntity().getPosition().getY() + 23;
+
+                x += this instanceof Player1Component ? -20 : 20;
+
+                Point2D pos = new Point2D(x, y);
                 physics.overwritePosition(pos);
             } else {
                 System.out.println("No flag entity to teleport to!");
@@ -211,9 +243,28 @@ public abstract class PlayerComponent extends Component {
 
     void swingMovement(EntityState newState, int scale) {
         getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
+        Point2D previousVelocity = physics.getLinearVelocity();
 
-        int speed = scale * stateData.get(newState).moveSpeed;
-        physics.applyForceToCenter(new Point2D(speed, 0));
+        Point2D tangentialForce;
+        if (scale == -1) { // Counter-clockwise
+            tangentialForce = new Point2D(entity.getY(), entity.getX()).normalize();
+        } else { // Clockwise
+            tangentialForce = new Point2D(entity.getY(), -entity.getX()).normalize();
+        }
+
+        int swingSpeed = scale * stateData.get(newState).moveSpeed * 10;
+        tangentialForce = tangentialForce.multiply(swingSpeed);
+        physics.applyForceToCenter(tangentialForce);
+
+        Point2D currentVelocity = physics.getLinearVelocity();
+
+        if (currentVelocity.magnitude() < previousVelocity.magnitude()) {
+            // Apply a small force in the direction of the current velocity to boost it.
+            physics.applyForceToCenter(currentVelocity.normalize().multiply(swingSpeed * 0.75f)); // Adjust 0.5f as needed
+        }
+
+//        int speed = scale * stateData.get(newState).moveSpeed;
+//        physics.applyForceToCenter(new Point2D(speed*2, 0));
 
         if (state.getCurrentState() != newState) {
             state.changeState(newState);
