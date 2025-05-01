@@ -35,6 +35,7 @@ public class MainApplication extends GameApplication {
     private DistanceJoint distanceJoint = null;
 
     private boolean isSwinging;
+    private boolean isCrouching = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -143,10 +144,10 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Pull1") {
             @Override
             protected void onAction() {
-                getControlP1().pull();
-                getControlP2().pulled();
-
-                isPulling = true;
+                if(getControlP1().pull()) {
+                    getControlP2().pulled();
+                    isPulling = true;
+                }
             }
 
             @Override
@@ -228,11 +229,13 @@ public class MainApplication extends GameApplication {
             @Override
             protected void onAction() {
                 getControlP1().crouch();
+                isCrouching = true;
             }
 
             @Override
             protected void onActionEnd() {
                 getControlP1().stand();
+                isCrouching = false;
             }
         }, KeyCode.S);
 
@@ -263,15 +266,17 @@ public class MainApplication extends GameApplication {
             }
         }, KeyCode.RIGHT);
 
-        FXGL.getInput().addAction(new UserAction("Crouch3") {
+        FXGL.getInput().addAction(new UserAction("Crouch2") {
             @Override
             protected void onAction() {
                 getControlP2().crouch();
+                isCrouching = true;
             }
 
             @Override
             protected void onActionEnd() {
                 getControlP2().stand();
+                isCrouching = false;
             }
         }, KeyCode.DOWN);
 
@@ -294,10 +299,10 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Pull2") {
             @Override
             protected void onAction() {
-                getControlP2().pull();
-                getControlP1().pulled();
-
-                isPulling = true;
+                if(getControlP2().pull()) {
+                    getControlP1().pulled();
+                    isPulling = true;
+                }
             }
 
             @Override
@@ -360,17 +365,16 @@ public class MainApplication extends GameApplication {
 
         // Check if a player starts swinging to create and delete distance joint once
         boolean isSwingActive = getControlP1().getState().isIn(getControlP1().getSWING()) ||
-                getControlP2().getState().isIn(getControlP2().getSWING()) || getControlP1().getState().isIn(getControlP1().getHANG()) ||
-                getControlP2().getState().isIn(getControlP2().getHANG());
+                getControlP2().getState().isIn(getControlP2().getSWING());
 
-        if (isSwingActive && !isSwinging) {
+        if (isSwingActive && !isSwinging && isCrouching) {
             isSwinging = true;
             if(distanceJoint == null) {
                 createDistanceJoint();
             }
         }
         // Check for swing end
-        else if (!isSwingActive && isSwinging) {
+        else if (!isSwingActive && isSwinging && !isCrouching) {
             isSwinging = false;
             if(distanceJoint != null) {
                 deleteDistanceJoint();

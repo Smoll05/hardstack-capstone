@@ -52,7 +52,7 @@ public abstract class PlayerComponent extends Component {
         @Override
         protected void onUpdate(double tpf) {
             physics.setVelocityX(0);
-            physics.setVelocityY(1000);
+            physics.setVelocityY(1000); // to be improved, when other character is hanging, crouching would cause it to spring up
         }
     };
     final EntityState SWING = new EntityState("SWING");
@@ -71,6 +71,9 @@ public abstract class PlayerComponent extends Component {
         protected void onUpdate(double tpf) {
             if(physics.getVelocityY() > 750) {
                 state.changeState(FALL);
+            }
+            if (physics.getVelocityY() == 0) {
+                state.changeState(STAND);
             }
         }
     };
@@ -96,10 +99,6 @@ public abstract class PlayerComponent extends Component {
 
     public EntityState getSWING() {
         return SWING;
-    }
-
-    public EntityState getHANG() {
-        return HANG;
     }
 
     @Override
@@ -150,11 +149,13 @@ public abstract class PlayerComponent extends Component {
         state.changeState(JUMP);
     }
 
-    public void pull() {
+    public boolean pull() {
         if (!physics.isOnGround()) {
-            return;
+            return false;
         }
+
         state.changeState(PULL);
+        return true;
     }
 
     public void pulled() {
@@ -212,7 +213,7 @@ public abstract class PlayerComponent extends Component {
                 double x = CheckpointComponent.getFlagEntity().getPosition().getX();
                 double y = CheckpointComponent.getFlagEntity().getPosition().getY() + 23;
 
-                x += this instanceof Player1Component ? -20 : 20;
+                x += this instanceof Player1Component ? -15 : 15;
 
                 Point2D pos = new Point2D(x, y);
                 physics.overwritePosition(pos);
@@ -224,7 +225,7 @@ public abstract class PlayerComponent extends Component {
     }
 
     void tryMovingState(int scale) {
-        if (state.isIn(STAND, WALK, JUMP, FALL)) {
+        if (state.isIn(STAND, WALK, JUMP, FALL, SPLAT)) {
             linearMovement(WALK, scale);
         } else if(state.isIn(HANG, SWING)) {
             swingMovement(SWING, scale);
@@ -252,7 +253,7 @@ public abstract class PlayerComponent extends Component {
             tangentialForce = new Point2D(entity.getY(), -entity.getX()).normalize();
         }
 
-        int swingSpeed = scale * stateData.get(newState).moveSpeed * 10;
+        int swingSpeed = scale * stateData.get(newState).moveSpeed * 5;
         tangentialForce = tangentialForce.multiply(swingSpeed);
         physics.applyForceToCenter(tangentialForce);
 

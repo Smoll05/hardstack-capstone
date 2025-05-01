@@ -25,10 +25,10 @@ public class Player1Component extends PlayerComponent {
 
     public Player1Component() {
         super();
-        animIdle = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animMove = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
-        animJump = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
-        animCrouch = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
+        animIdle = new AnimationChannel(FXGL.image("joe_idle_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animMove = new AnimationChannel(FXGL.image("joe_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animJump = new AnimationChannel(FXGL.image("joe_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animCrouch = new AnimationChannel(FXGL.image("joe_crouch_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animHang = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animCry = new AnimationChannel(FXGL.image("joe_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
@@ -81,7 +81,7 @@ public class Player1Component extends PlayerComponent {
     }
 
     public void plant() {
-        if (!physics.isOnGround()) {
+        if (!physics.isOnGround() || !otherPhysics.isOnGround()) {
             return;
         }
         state.changeState(SAVE);

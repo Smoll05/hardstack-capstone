@@ -19,10 +19,10 @@ public class Player2Component extends PlayerComponent {
     public Player2Component() {
         super();
 
-        animIdle = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animMove = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
-        animJump = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.5), 8, 13);
-        animCrouch = new AnimationChannel(FXGL.image("marie_spritesheet_upscaled.png"), 8, 64, 64, Duration.seconds(0.75), 16, 23);
+        animIdle = new AnimationChannel(FXGL.image("marie_idle_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animMove = new AnimationChannel(FXGL.image("marie_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animJump = new AnimationChannel(FXGL.image("marie_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animCrouch = new AnimationChannel(FXGL.image("marie_crouch_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animHang = new AnimationChannel(FXGL.image("marie_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animCry = new AnimationChannel(FXGL.image("marie_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
         animFall = new AnimationChannel(FXGL.image("marie_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
