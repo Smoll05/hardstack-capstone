@@ -35,10 +35,10 @@ public class PlayerFactory implements EntityFactory {
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(10f));
+        physics.setFixtureDef(new FixtureDef().friction(5f).density(3f));
         physics.setBodyDef(bd);
 
-        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(30, 10));
+        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(5, 60), BoundingShape.box(30, 10));
         HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 30), BoundingShape.box(10, 30));
 
         SensorCollisionHandler wallHandler = new SensorCollisionHandler() {
@@ -93,10 +93,10 @@ public class PlayerFactory implements EntityFactory {
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(10f));
+        physics.setFixtureDef(new FixtureDef().friction(5f).density(3f));
         physics.setBodyDef(bd);
 
-        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(0, 64 - 5), BoundingShape.box(30, 10));
+        HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(5, 60), BoundingShape.box(30, 10));
         HitBox wallSensor = new HitBox("WALL_SENSOR", new Point2D(0, 30), BoundingShape.box(10, 30));
 
         SensorCollisionHandler wallHandler = new SensorCollisionHandler() {

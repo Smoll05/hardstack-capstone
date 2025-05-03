@@ -68,7 +68,7 @@ public class Player1Component extends PlayerComponent {
         super.onAdded();
 
         state.currentStateProperty().addListener((o, oldState, newState) -> {
-            System.out.println("Player 1 new state: " + newState);
+//            System.out.println("Player 1 new state: " + newState);
         });
     }
 
@@ -99,6 +99,8 @@ public class Player1Component extends PlayerComponent {
         double player2Y = player2.getPosition().getY();
         double player1Y = getEntity().getPosition().getY();
         double distanceBetweenPlayers = Math.abs(player2Y - player1Y);
+
+        System.out.println(distanceBetweenPlayers);
 
         // Get the rope length from the RopeJoint
         float ropeLength = Constants.PLAYER_ROPE_DISTANCE;

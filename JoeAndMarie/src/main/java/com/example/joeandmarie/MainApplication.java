@@ -5,17 +5,22 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
+import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -29,13 +34,16 @@ public class MainApplication extends GameApplication {
     Text nameTag1, nameTag2;
 
     private boolean isPulling = false;
-    private float ropeFinalLength = 3.0f;
 
     private RopeJoint ropeJoint;
     private DistanceJoint distanceJoint = null;
+    private RevoluteJoint revoluteJoint = null;
 
     private boolean isSwinging;
     private boolean isCrouching = false;
+
+    private boolean highFrictionSet = false;
+    private boolean lowFrictionSet = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -138,6 +146,7 @@ public class MainApplication extends GameApplication {
             @Override
             protected void onAction() {
                 getControlP1().jump();
+                setFriction(0f, getPlayer1());
             }
         }, KeyCode.W);
 
@@ -240,7 +249,14 @@ public class MainApplication extends GameApplication {
         }, KeyCode.S);
 
         // Player 2 Controls
-        FXGL.onKey(KeyCode.UP, () -> getControlP2().jump());
+
+        FXGL.getInput().addAction(new UserAction("Jump2") {
+            @Override
+            protected void onAction() {
+                getControlP2().jump();
+                setFriction(0f, getPlayer2());
+            }
+        }, KeyCode.UP);
 
         FXGL.getInput().addAction(new UserAction("Left2") {
             @Override
@@ -336,7 +352,7 @@ public class MainApplication extends GameApplication {
             ropeDef.setBodyB(bodyB);
             ropeDef.localAnchorA.set(0, 0);
             ropeDef.localAnchorB.set(0, 0);
-            ropeDef.maxLength = 3.0f;
+            ropeDef.maxLength = Constants.ROPE_LENGTH;
             ropeDef.setBodyCollisionAllowed(false);
 
             ropeJoint = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
@@ -356,9 +372,9 @@ public class MainApplication extends GameApplication {
         } else { // return to original rope length
             if(ropeJoint != null) {
                 float current = ropeJoint.getMaxLength();
-                if (current < ropeFinalLength) {
+                if (current < Constants.ROPE_LENGTH) {
                     float newLength = current + (float) (2f * tpf);
-                    ropeJoint.setMaxLength(Math.min(newLength, ropeFinalLength));
+                    ropeJoint.setMaxLength(Math.min(newLength, Constants.ROPE_LENGTH));
                 }
             }
         }
@@ -384,6 +400,53 @@ public class MainApplication extends GameApplication {
         if(distanceJoint != null && !isSwingActive) {
             deleteDistanceJoint();
         }
+
+
+//        if (getPlayer1().getComponent(PhysicsComponent.class).isOnGround() &&
+//                getPlayer2().getComponent(PhysicsComponent.class).isOnGround()) {
+//
+//            if(!highFrictionSet) {
+//                setFriction(5f, getPlayer1());
+//                setFriction(5f, getPlayer2());
+//
+//                lowFrictionSet = false;
+//                highFrictionSet = true;
+//
+//                System.out.println("High Friction Has Been Set");
+//            }
+//
+//        } else {
+//
+//            if (!lowFrictionSet) {
+//                setFriction(0.8f, getPlayer1());
+//                setFriction(0.8f, getPlayer2());
+//
+//                lowFrictionSet = true;
+//                highFrictionSet = false;
+//
+//                System.out.println("Low Friction Has Been Set");
+//            }
+//
+//        }
+
+
+//        if (isSwingActive && !isSwinging && isCrouching) {
+//            isSwinging = true;
+//            if(revoluteJoint == null) {
+//                createRevoluteJoint();
+//            }
+//        }
+//        // Check for swing end
+//        else if (!isSwingActive && isSwinging && !isCrouching) {
+//            isSwinging = false;
+//            if(revoluteJoint != null) {
+//                deleteRevoluteJoint();
+//            }
+//        }
+//
+//        if(revoluteJoint != null && !isSwingActive) {
+//            deleteRevoluteJoint();
+//        }
     }
 
     public void deleteDistanceJoint() {
@@ -421,11 +484,77 @@ public class MainApplication extends GameApplication {
         System.out.println("CREATED DISTANCE JOINT");
     }
 
-    //        RevoluteJointDef revoluteDef = new RevoluteJointDef();
+    public void deleteRevoluteJoint() {
+        FXGL.getPhysicsWorld().getJBox2DWorld().destroyJoint(revoluteJoint);
+        revoluteJoint = null;
+
+        System.out.println("DELETED REVOLUTE JOINT");
+    }
+
+    public void createRevoluteJoint() {
+//        Point2D position1 = entity1.getPosition();
+//        Point2D position2 = entity2.getPosition();
+
+// Convert Point2D to Vec2
+//        Vec2 vecPosition1 = new Vec2((float) position1.getX(), (float) position1.getY());
+//        Vec2 vecPosition2 = new Vec2((float) position2.getX(), (float) position2.getY());
+
+// Set the local anchor points for the revolute joint
+//        Vec2 localAnchor1 = new Vec2(anchor.x - bodyA.getPosition().x, anchor.y - bodyA.getPosition().y);
+//        Vec2 localAnchor2 = new Vec2(anchor.x - bodyB.getPosition().x, anchor.y - bodyB.getPosition().y);
+
+// Create the revolute joint definition
+
+//        RevoluteJointDef revoluteJointDef = new RevoluteJointDef();
+//        revoluteJointDef.setBodyA(bodyA);
+//        revoluteJointDef.setBodyB(bodyB);
+//
+//        revoluteJointDef.localAnchorA.set(anchor1);
+//        revoluteJointDef.localAnchorB.set(anchor2);
+//
+//        revoluteJointDef.maxMotorTorque = 100f;
+//        revoluteJointDef.motorSpeed = 10f;
+//        revoluteJointDef.setBodyCollisionAllowed(false);
+
+
+//        Entity player1 = getPlayer1();
+//        PhysicsComponent physics1 = player1.getComponent(PhysicsComponent.class);
+//
+//        Entity player2 = getPlayer2();
+//        PhysicsComponent physics2 = player2.getComponent(PhysicsComponent.class);
+//
+//        Body bodyA = physics1.getBody();
+//        Body bodyB = physics2.getBody();
+
+//        Point2D worldAnchor = player1.getCenter().midpoint(player2.getCenter());
+//        Point2D anchor1 = worldAnchor.subtract(player1.getCenter());
+//        Point2D anchor2 = worldAnchor.subtract(player2.getCenter());
+
+//        RevoluteJointDef def = new RevoluteJointDef();
+//        PhysicsWorld pWorld = FXGL.getPhysicsWorld();
+//
+//        def.localAnchorA = pWorld.toPoint(
+//                player1.getAnchoredPosition().add(anchor1)).subLocal(bodyA.getWorldCenter()
+//        );
+//
+//        def.localAnchorB = pWorld.toPoint(
+//                player2.getAnchoredPosition().add(anchor2)).subLocal(bodyB.getWorldCenter()
+//        );
+//
+//        def.enableMotor = true;
+//
+//        revoluteJoint = pWorld.addJoint(player1, player2, def);
+//
+
+//        RevoluteJointDef revoluteDef = new RevoluteJointDef();
 //        revoluteDef.initialize(bodyA, bodyB, bodyA.getWorldCenter());
 //        revoluteDef.maxMotorTorque = 100f;
 //        revoluteDef.motorSpeed = 10f;
 //        revoluteDef.setBodyCollisionAllowed(false);
+//
+//        revoluteJoint = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(revoluteDef);
+    }
+
 
 //        RopeJointDef def = new RopeJointDef();
 //        def.localAnchorA.set(0, 0);
@@ -462,6 +591,12 @@ public class MainApplication extends GameApplication {
     // 1. Create a RopeJoint to limit the maximum rope length
 
 //        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
+
+    private void setFriction(float friction, Entity e) {
+        PhysicsComponent p = e.getComponent(PhysicsComponent.class);
+        p.getBody().getFixtures().getFirst().setFriction(friction);
+    }
+
     private Player1Component getControlP1() {
         return FXGL.getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))
                 .getComponent(Player1Component.class);
