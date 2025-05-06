@@ -25,19 +25,19 @@ public class Player1Component extends PlayerComponent {
 
     public Player1Component() {
         super();
-        animIdle = new AnimationChannel(FXGL.image("joe_idle_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animMove = new AnimationChannel(FXGL.image("joe_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
-        animJump = new AnimationChannel(FXGL.image("joe_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
-        animCrouch = new AnimationChannel(FXGL.image("joe_crouch_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animHang = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animCry = new AnimationChannel(FXGL.image("joe_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animFall = new AnimationChannel(FXGL.image("joe_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
-        animSwing = new AnimationChannel(FXGL.image("joe_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animPull = new AnimationChannel(FXGL.image("joe_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animPulled = new AnimationChannel(FXGL.image("joe_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
-        animPlant = new AnimationChannel(FXGL.image("joe_plant_spritesheet.png"), 20, 64, 64, Duration.seconds(2), 0, 18);
-        animSplat = new AnimationChannel(FXGL.image("joe_hapla_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
-        animHold = new AnimationChannel(FXGL.image("joe_holding_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animIdle = new AnimationChannel(FXGL.image("joe_idle_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animMove = new AnimationChannel(FXGL.image("joe_jumping_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animJump = new AnimationChannel(FXGL.image("joe_jumping_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animCrouch = new AnimationChannel(FXGL.image("joe_crouch_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animHang = new AnimationChannel(FXGL.image("joe_pulled_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animCry = new AnimationChannel(FXGL.image("joe_cry_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animFall = new AnimationChannel(FXGL.image("joe_falling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
+        animSwing = new AnimationChannel(FXGL.image("joe_pulling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animPull = new AnimationChannel(FXGL.image("joe_pulling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animPulled = new AnimationChannel(FXGL.image("joe_pulled_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animPlant = new AnimationChannel(FXGL.image("joe_plant_harness_spritesheet.png"), 20, 64, 64, Duration.seconds(2), 0, 18);
+        animSplat = new AnimationChannel(FXGL.image("joe_hapla_harness_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
+        animHold = new AnimationChannel(FXGL.image("joe_holding_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
 
         stateData.put(STAND, new StateData(animIdle, 0));
         stateData.put(WALK, new StateData(animMove,  -Constants.RUNNING_SPEED));

@@ -19,19 +19,19 @@ public class Player2Component extends PlayerComponent {
     public Player2Component() {
         super();
 
-        animIdle = new AnimationChannel(FXGL.image("marie_idle_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animMove = new AnimationChannel(FXGL.image("marie_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
-        animJump = new AnimationChannel(FXGL.image("marie_jumping_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
-        animCrouch = new AnimationChannel(FXGL.image("marie_crouch_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animHang = new AnimationChannel(FXGL.image("marie_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animCry = new AnimationChannel(FXGL.image("marie_cry_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animFall = new AnimationChannel(FXGL.image("marie_falling_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
-        animSwing = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animPull = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
-        animSplat = new AnimationChannel(FXGL.image("marie_hapla_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
-        animHold = new AnimationChannel(FXGL.image("marie_holding_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
-        animPull = new AnimationChannel(FXGL.image("marie_pulling_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
-        animPulled = new AnimationChannel(FXGL.image("marie_pulled_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animIdle = new AnimationChannel(FXGL.image("marie_idle_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animMove = new AnimationChannel(FXGL.image("marie_jumping_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animJump = new AnimationChannel(FXGL.image("marie_jumping_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.5), 0, 7);
+        animCrouch = new AnimationChannel(FXGL.image("marie_crouch_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animHang = new AnimationChannel(FXGL.image("marie_pulled_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animCry = new AnimationChannel(FXGL.image("marie_cry_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animFall = new AnimationChannel(FXGL.image("marie_falling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1.5), 0, 7);
+        animSwing = new AnimationChannel(FXGL.image("marie_pulling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animPull = new AnimationChannel(FXGL.image("marie_pulling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(0.75), 0, 7);
+        animSplat = new AnimationChannel(FXGL.image("marie_hapla_harness_spritesheet.png"), 16, 64, 64, Duration.seconds(1), 3, 15);
+        animHold = new AnimationChannel(FXGL.image("marie_holding_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animPull = new AnimationChannel(FXGL.image("marie_pulling_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
+        animPulled = new AnimationChannel(FXGL.image("marie_pulled_harness_spritesheet.png"), 8, 64, 64, Duration.seconds(1), 0, 7);
 
         stateData.put(STAND, new StateData(animIdle, 0));
         stateData.put(WALK, new StateData(animMove,  -Constants.RUNNING_SPEED));
