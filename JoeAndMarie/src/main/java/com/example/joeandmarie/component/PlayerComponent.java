@@ -177,12 +177,14 @@ public abstract class PlayerComponent extends Component {
             return false;
         }
 
+        setBodyStatic(true);
         state.changeState(PULL);
         return true;
     }
 
     public void pulled() {
         state.changeState(PULLED);
+        setFriction(0f);
     }
 
     public void hold() {
