@@ -5,5 +5,6 @@ public enum EntityType {
     PLAYER2,
     PLATFORM,
     ONE_WAY_PLATFORM,
+    ROPE_SEGMENT,
     FLAG
 }
