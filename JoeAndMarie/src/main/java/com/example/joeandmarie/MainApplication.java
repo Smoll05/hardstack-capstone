@@ -16,6 +16,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
+import com.example.joeandmarie.component.PlayerComponent;
 import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.PlatformerFactory;
@@ -81,7 +82,7 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
         try {
-            FXGL.setLevelFromMap("test2.tmx");
+            FXGL.setLevelFromMap("test3.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -146,7 +147,6 @@ public class MainApplication extends GameApplication {
             @Override
             protected void onAction() {
                 getControlP1().jump();
-                setFriction(0f, getPlayer1());
             }
         }, KeyCode.W);
 
@@ -199,14 +199,13 @@ public class MainApplication extends GameApplication {
             protected void onAction() {
                 if(Player1Component.isTouchingWall) {
                     getControlP1().hold();
-                } else {
-                    getControlP1().stand();
                 }
             }
 
             @Override
             protected void onActionEnd() {
                 getControlP1().stand();
+                setFriction(5f, getPlayer1());
             }
         }, KeyCode.Q);
 
@@ -254,8 +253,8 @@ public class MainApplication extends GameApplication {
             @Override
             protected void onAction() {
                 getControlP2().jump();
-                setFriction(0f, getPlayer2());
             }
+
         }, KeyCode.UP);
 
         FXGL.getInput().addAction(new UserAction("Left2") {
@@ -301,8 +300,6 @@ public class MainApplication extends GameApplication {
             protected void onAction() {
                 if(Player2Component.isTouchingWall) {
                     getControlP2().hold();
-                } else {
-                    getControlP2().stand();
                 }
             }
 
@@ -400,53 +397,6 @@ public class MainApplication extends GameApplication {
         if(distanceJoint != null && !isSwingActive) {
             deleteDistanceJoint();
         }
-
-
-//        if (getPlayer1().getComponent(PhysicsComponent.class).isOnGround() &&
-//                getPlayer2().getComponent(PhysicsComponent.class).isOnGround()) {
-//
-//            if(!highFrictionSet) {
-//                setFriction(5f, getPlayer1());
-//                setFriction(5f, getPlayer2());
-//
-//                lowFrictionSet = false;
-//                highFrictionSet = true;
-//
-//                System.out.println("High Friction Has Been Set");
-//            }
-//
-//        } else {
-//
-//            if (!lowFrictionSet) {
-//                setFriction(0.8f, getPlayer1());
-//                setFriction(0.8f, getPlayer2());
-//
-//                lowFrictionSet = true;
-//                highFrictionSet = false;
-//
-//                System.out.println("Low Friction Has Been Set");
-//            }
-//
-//        }
-
-
-//        if (isSwingActive && !isSwinging && isCrouching) {
-//            isSwinging = true;
-//            if(revoluteJoint == null) {
-//                createRevoluteJoint();
-//            }
-//        }
-//        // Check for swing end
-//        else if (!isSwingActive && isSwinging && !isCrouching) {
-//            isSwinging = false;
-//            if(revoluteJoint != null) {
-//                deleteRevoluteJoint();
-//            }
-//        }
-//
-//        if(revoluteJoint != null && !isSwingActive) {
-//            deleteRevoluteJoint();
-//        }
     }
 
     public void deleteDistanceJoint() {

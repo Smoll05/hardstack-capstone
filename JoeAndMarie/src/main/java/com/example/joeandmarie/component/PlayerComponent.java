@@ -3,6 +3,7 @@ package com.example.joeandmarie.component;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.EntityState;
@@ -138,6 +139,7 @@ public abstract class PlayerComponent extends Component {
 
     public void stand() {
         state.changeState(STAND);
+        setFriction(5);
     }
 
     public void jump() {
@@ -145,6 +147,7 @@ public abstract class PlayerComponent extends Component {
             return;
         }
 
+        setFriction(0);
         physics.setVelocityY(-Constants.JUMP_FORCE);
         state.changeState(JUMP);
     }
@@ -272,6 +275,14 @@ public abstract class PlayerComponent extends Component {
         }
     }
 
+    public boolean playerOnGround() {
+        return physics.isOnGround();
+    }
+
+    public boolean isHoldingWall() {
+        return state.isIn(HOLD);
+    }
+
     @Override
     public boolean isComponentInjectionRequired() {
         return false;
@@ -282,18 +293,11 @@ public abstract class PlayerComponent extends Component {
         Vec2 damped = vel.mul(factor);
         physics.getBody().setLinearVelocity(damped);
     }
+
+    private void setFriction(float friction) {
+        physics.setOnPhysicsInitialized(() -> {
+            physics.getBody().getFixtures().getFirst().setFriction(friction);
+        });
+    }
+
 }
-
-//        float angVel = physics.getBody().getAngularVelocity();
-//        physics.getBody().setAngularVelocity(angVel * factor); // reduce spin
-
-//            var speed = scale * stateData.get(newState).moveSpeed;
-//            float angle = physics.getBody().getAngle();
-//
-//            float forceX = speed * (float) Math.cos(angle); // X component of the force
-//            float forceY = speed * (float) Math.sin(angle); // Y component of the force
-//
-//            // Apply the force to the entity's center
-//            physics.applyForceToCenter(new Point2D(speed, 0));
-
-// physics.getBody().setLinearDamping(0.5f);
