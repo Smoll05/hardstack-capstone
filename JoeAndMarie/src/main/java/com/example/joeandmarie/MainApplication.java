@@ -43,7 +43,8 @@ public class MainApplication extends GameApplication {
     private DistanceJoint distanceJoint = null;
     private RevoluteJoint revoluteJoint = null;
 
-    private boolean hasPassedOneWayPlatform = false;
+    private boolean hasPlayerOnePassedOneWayPlatform = false;
+    private boolean hasPlayerTwoPassedOneWayPlatform = false;
 
     private boolean isSwinging;
     private boolean isCrouching = false;
@@ -370,19 +371,45 @@ public class MainApplication extends GameApplication {
                         player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.KINEMATIC);
                         player.getComponent(PhysicsComponent.class).setVelocityY(-400);
                     }, Duration.seconds(0));
-                    hasPassedOneWayPlatform = true;
+                    hasPlayerOnePassedOneWayPlatform = true;
                 }
             }
 
             @Override
             protected void onCollisionEnd(Entity player, Entity platform) {
-                if(hasPassedOneWayPlatform) {
+                if(hasPlayerOnePassedOneWayPlatform) {
                     FXGL.getGameTimer().runOnceAfter(() -> {
                         player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.DYNAMIC);
                         player.getComponent(PhysicsComponent.class).setVelocityY(-200);
                         player.getComponent(PhysicsComponent.class).getBody().getFixtures().getFirst().setFriction(1f);
                     }, Duration.seconds(0));
-                    hasPassedOneWayPlatform = false;
+                    hasPlayerOnePassedOneWayPlatform = false;
+                }
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER2, EntityType.ONE_WAY_PLATFORM) {
+
+            @Override
+            protected void onCollisionBegin(Entity player, Entity platform) {
+                if (player.getBottomY() >= platform.getY() && player.getY() + 32 >= platform.getBottomY()) {
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.KINEMATIC);
+                        player.getComponent(PhysicsComponent.class).setVelocityY(-400);
+                    }, Duration.seconds(0));
+                    hasPlayerTwoPassedOneWayPlatform = true;
+                }
+            }
+
+            @Override
+            protected void onCollisionEnd(Entity player, Entity platform) {
+                if(hasPlayerTwoPassedOneWayPlatform) {
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.DYNAMIC);
+                        player.getComponent(PhysicsComponent.class).setVelocityY(-200);
+                        player.getComponent(PhysicsComponent.class).getBody().getFixtures().getFirst().setFriction(1f);
+                    }, Duration.seconds(0));
+                    hasPlayerTwoPassedOneWayPlatform = false;
                 }
             }
         });
