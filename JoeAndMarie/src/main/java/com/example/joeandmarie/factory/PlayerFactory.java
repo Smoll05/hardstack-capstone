@@ -35,7 +35,7 @@ public class PlayerFactory implements EntityFactory {
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(3f));
+        physics.setFixtureDef(new FixtureDef().friction(1f).density(7f));
         physics.setBodyDef(bd);
 
         HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(5, 60), BoundingShape.box(30, 10));
@@ -47,7 +47,6 @@ public class PlayerFactory implements EntityFactory {
                 super.onCollisionBegin(other);
                 System.out.println("touching wall");
                 Player1Component.isTouchingWall = true;
-
             }
 
             @Override
@@ -88,12 +87,12 @@ public class PlayerFactory implements EntityFactory {
     public Entity newPlayer2(SpawnData data) {
 
         BodyDef bd = new BodyDef();
-        bd.setFixedRotation(true); // Does not rotate the entity
+        bd.setFixedRotation(true);
         bd.setType(BodyType.DYNAMIC);
 
         PhysicsComponent physics = new PhysicsComponent();
 
-        physics.setFixtureDef(new FixtureDef().friction(5f).density(3f));
+        physics.setFixtureDef(new FixtureDef().friction(1f).density(7f));
         physics.setBodyDef(bd);
 
         HitBox groundSensor = new HitBox("GROUND_SENSOR", new Point2D(5, 60), BoundingShape.box(30, 10));
@@ -105,7 +104,6 @@ public class PlayerFactory implements EntityFactory {
                 super.onCollisionBegin(other);
                 System.out.println("touching wall");
                 Player2Component.isTouchingWall = true;
-
             }
 
             @Override

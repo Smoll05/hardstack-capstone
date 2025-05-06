@@ -8,11 +8,13 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.BoundingBoxComponent;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.PhysicsWorld;
+import com.almasb.fxgl.physics.*;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
@@ -29,6 +31,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.EnumSet;
+import java.util.regex.Pattern;
 
 public class MainApplication extends GameApplication {
 
@@ -39,6 +42,8 @@ public class MainApplication extends GameApplication {
     private RopeJoint ropeJoint;
     private DistanceJoint distanceJoint = null;
     private RevoluteJoint revoluteJoint = null;
+
+    private boolean hasPassedOneWayPlatform = false;
 
     private boolean isSwinging;
     private boolean isCrouching = false;
@@ -205,7 +210,6 @@ public class MainApplication extends GameApplication {
             @Override
             protected void onActionEnd() {
                 getControlP1().stand();
-                setFriction(5f, getPlayer1());
             }
         }, KeyCode.Q);
 
@@ -354,6 +358,34 @@ public class MainApplication extends GameApplication {
 
             ropeJoint = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
         }, Duration.seconds(0.1));
+
+
+        // One Way Platform Logic
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER1, EntityType.ONE_WAY_PLATFORM) {
+
+            @Override
+            protected void onCollisionBegin(Entity player, Entity platform) {
+                if (player.getBottomY() >= platform.getY() && player.getY() + 32 >= platform.getBottomY()) {
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.KINEMATIC);
+                        player.getComponent(PhysicsComponent.class).setVelocityY(-400);
+                    }, Duration.seconds(0));
+                    hasPassedOneWayPlatform = true;
+                }
+            }
+
+            @Override
+            protected void onCollisionEnd(Entity player, Entity platform) {
+                if(hasPassedOneWayPlatform) {
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.DYNAMIC);
+                        player.getComponent(PhysicsComponent.class).setVelocityY(-200);
+                        player.getComponent(PhysicsComponent.class).getBody().getFixtures().getFirst().setFriction(1f);
+                    }, Duration.seconds(0));
+                    hasPassedOneWayPlatform = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -541,11 +573,6 @@ public class MainApplication extends GameApplication {
     // 1. Create a RopeJoint to limit the maximum rope length
 
 //        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
-
-    private void setFriction(float friction, Entity e) {
-        PhysicsComponent p = e.getComponent(PhysicsComponent.class);
-        p.getBody().getFixtures().getFirst().setFriction(friction);
-    }
 
     private Player1Component getControlP1() {
         return FXGL.getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))
