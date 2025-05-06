@@ -1,8 +1,10 @@
 package com.example.joeandmarie.component;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.ViewComponent;
+import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
@@ -68,8 +70,60 @@ public class Player1Component extends PlayerComponent {
         super.onAdded();
 
         state.currentStateProperty().addListener((o, oldState, newState) -> {
-//            System.out.println("Player 1 new state: " + newState);
+            System.out.println("Player 1 new state: " + newState);
         });
+    }
+
+    @Override
+    void swingMovement(EntityState newState, int scale) {
+        getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
+        Point2D previousVelocity = physics.getLinearVelocity();
+
+//        Point2D pivotPos = player2.getCenter();
+//        Point2D swingerPos = entity.getCenter();
+//        Point2D direction = swingerPos.subtract(pivotPos);
+//
+//        double angleFromVertical = Math.toDegrees(Math.atan2(direction.getX(), direction.getY())); // Note X,Y swapped
+//
+//        double normalizedAngle = (angleFromVertical + 360) % 360;
+//
+//        if(!hasTurned180 && (normalizedAngle > 175 && normalizedAngle < 185)) hasTurned180 = true;
+//
+//        if(hasTurned180) {
+//            System.out.println("Normalize Angle: " + normalizedAngle);
+//            if (normalizedAngle < 180 && normalizedAngle > 0) {
+//                scale = -1;
+////            System.out.println("Scale is: " + scale);
+//            } else if (normalizedAngle > 170 && normalizedAngle < 360){
+////            System.out.println("Scale is: " + scale);
+//                scale = 1;
+//            }
+//        }
+
+        Point2D tangentialForce;
+        if (scale == -1) { // Counter-clockwise
+            tangentialForce = new Point2D(entity.getY(), entity.getX()).normalize();
+        } else { // Clockwise
+            tangentialForce = new Point2D(entity.getY(), -entity.getX()).normalize();
+        }
+
+        int swingSpeed = scale * stateData.get(newState).moveSpeed * 5;
+        tangentialForce = tangentialForce.multiply(swingSpeed);
+        physics.applyForceToCenter(tangentialForce);
+
+        Point2D currentVelocity = physics.getLinearVelocity();
+
+        if (currentVelocity.magnitude() < previousVelocity.magnitude()) {
+            // Apply a small force in the direction of the current velocity to boost it.
+            physics.applyForceToCenter(currentVelocity.normalize().multiply(swingSpeed * 0.75f)); // Adjust 0.5f as needed
+        }
+
+//        int speed = scale * stateData.get(newState).moveSpeed;
+//        physics.applyForceToCenter(new Point2D(speed*2, 0));
+
+        if (state.getCurrentState() != newState) {
+            state.changeState(newState);
+        }
     }
 
     public void loadPlayer2(Entity player2) {
@@ -100,7 +154,7 @@ public class Player1Component extends PlayerComponent {
         double player1Y = getEntity().getPosition().getY();
         double distanceBetweenPlayers = Math.abs(player2Y - player1Y);
 
-        System.out.println(distanceBetweenPlayers);
+//        System.out.println("Distance between players: " + distanceBetweenPlayers);
 
         // Get the rope length from the RopeJoint
         float ropeLength = Constants.PLAYER_ROPE_DISTANCE;

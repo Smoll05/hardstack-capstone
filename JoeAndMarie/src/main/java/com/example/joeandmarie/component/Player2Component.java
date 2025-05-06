@@ -1,13 +1,16 @@
 package com.example.joeandmarie.component;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.ViewComponent;
+import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.example.joeandmarie.config.Constants;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import java.util.Map;
@@ -58,6 +61,54 @@ public class Player2Component extends PlayerComponent {
         state.currentStateProperty().addListener((o, oldState, newState) -> {
 //            System.out.println("Player 2 new state: " + newState);
         });
+    }
+
+    @Override
+    void swingMovement(EntityState newState, int scale) {
+
+        getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
+        Point2D previousVelocity = physics.getLinearVelocity();
+
+        Point2D pivotPos = player1.getCenter();
+        Point2D swingerPos = entity.getCenter();
+        Point2D direction = swingerPos.subtract(pivotPos);
+
+        double angleFromVertical = Math.toDegrees(Math.atan2(direction.getX(), direction.getY())); // Note X,Y swapped
+
+        double normalizedAngle = (angleFromVertical + 360) % 360;
+
+//        if(!hasTurned180 && normalizedAngle > 180) hasTurned180 = true;
+//
+//        if(hasTurned180) {
+//            if (normalizedAngle > 170 && normalizedAngle < 190) {
+//                scale = 1 - scale;
+//                System.out.println("Scale is: " + scale);
+//            } else {
+//                System.out.println("Scale is: " + scale);
+//            }
+//        }
+
+        Point2D tangentialForce;
+        if (scale == -1) { // Counter-clockwise
+            tangentialForce = new Point2D(entity.getY(), entity.getX()).normalize();
+        } else { // Clockwise
+            tangentialForce = new Point2D(entity.getY(), -entity.getX()).normalize();
+        }
+
+        int swingSpeed = scale * stateData.get(newState).moveSpeed * 5;
+        tangentialForce = tangentialForce.multiply(swingSpeed);
+        physics.applyForceToCenter(tangentialForce);
+
+        Point2D currentVelocity = physics.getLinearVelocity();
+
+        if (currentVelocity.magnitude() < previousVelocity.magnitude()) {
+            // Apply a small force in the direction of the current velocity to boost it.
+            physics.applyForceToCenter(currentVelocity.normalize().multiply(swingSpeed * 0.75f)); // Adjust 0.5f as needed
+        }
+
+        if (state.getCurrentState() != newState) {
+            state.changeState(newState);
+        }
     }
 
     public void loadPlayer1(Entity player1) {

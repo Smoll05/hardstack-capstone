@@ -3,20 +3,16 @@ package com.example.joeandmarie.component;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.Body;
-import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJoint;
-import com.almasb.fxgl.physics.box2d.dynamics.joints.DistanceJointDef;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import com.example.joeandmarie.MainApplication;
+import com.almasb.fxgl.time.TimerAction;
 import com.example.joeandmarie.config.Constants;
-import com.sun.tools.javac.Main;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -25,22 +21,26 @@ import java.util.Map;
 
 public abstract class PlayerComponent extends Component {
 
-    StateComponent state;
-    PhysicsComponent physics;
-    ViewComponent view;
+    protected StateComponent state;
+    protected PhysicsComponent physics;
+    protected ViewComponent view;
 
-    StateComponent otherState;
-    PhysicsComponent otherPhysics;
-    ViewComponent otherView;
+    protected StateComponent otherState;
+    protected PhysicsComponent otherPhysics;
+    protected ViewComponent otherView;
 
-    AnimatedTexture texture;
-    AnimationChannel animIdle,
+    protected AnimatedTexture texture;
+    protected AnimationChannel animIdle,
             animMove, animCrouch, animJump,
             animHang, animCry, animFall,
             animSwing, animPull, animPulled, animPlant,
             animSplat, animHold;
 
+    private boolean isTiredTouchingWall = false;
     public static boolean isTouchingWall = false;
+    private TimerAction wallClingTimer = null;
+
+    protected boolean isOnGroundFlag = false;
 
     final EntityState STAND = new EntityState("STAND");
     final EntityState WALK = new EntityState("WALK");
@@ -57,6 +57,7 @@ public abstract class PlayerComponent extends Component {
         }
     };
     final EntityState SWING = new EntityState("SWING");
+
     final EntityState SPLAT = new EntityState("SPLAT");
     final EntityState HANG = new EntityState("HANG") {
         @Override
@@ -74,6 +75,7 @@ public abstract class PlayerComponent extends Component {
                 state.changeState(FALL);
             }
             if (physics.getVelocityY() == 0) {
+                setFriction(1f);
                 state.changeState(STAND);
             }
         }
@@ -87,12 +89,12 @@ public abstract class PlayerComponent extends Component {
                 physics.setVelocityX(0);
                 state.changeState(SPLAT);
             }
+
+            setFriction(1f);
         }
     };
 
-    record StateData(AnimationChannel channel, int moveSpeed) { }
-
-    Map<EntityState, Player1Component.StateData> stateData = new HashMap<>();
+    protected Map<EntityState, StateData> stateData = new HashMap<>();
 
     public StateComponent getState() {
         return state;
@@ -132,14 +134,26 @@ public abstract class PlayerComponent extends Component {
         if (state.isIn(WALK)) {
             physics.setVelocityX(0);
             state.changeState(STAND);
-        } else if(state.isIn(SWING)) {
-//            state.changeState(HANG); // Commented out as to not modify VelocityX on release from swing
         }
+
+//        else if(state.isIn(SWING)) {
+//            state.changeState(HANG); // Commented out as to not modify VelocityX on release from swing
+//        }
     }
 
     public void stand() {
         state.changeState(STAND);
-        setFriction(5);
+
+        if(physics.isOnGround()) {
+            if (wallClingTimer != null && !wallClingTimer.isExpired()) {
+                wallClingTimer.expire();
+            }
+        }
+
+        isTiredTouchingWall = false;
+        if(physics.getBody().getType() == BodyType.STATIC) {
+            setBodyStatic(false);
+        }
     }
 
     public void jump() {
@@ -147,7 +161,13 @@ public abstract class PlayerComponent extends Component {
             return;
         }
 
-        setFriction(0);
+        setFriction(0f);
+
+        PhysicsComponent physics = entity.getComponent(PhysicsComponent.class);
+        float currentFriction = physics.getBody().getFixtures().getFirst().getFriction();
+
+        System.out.println("Current Friction: " + currentFriction);
+
         physics.setVelocityY(-Constants.JUMP_FORCE);
         state.changeState(JUMP);
     }
@@ -166,13 +186,23 @@ public abstract class PlayerComponent extends Component {
     }
 
     public void hold() {
-        state.changeState(HOLD);
+        if(!isTiredTouchingWall) {
+            state.changeState(HOLD);
+            setBodyStatic(true);
 
-        if(entity.getScaleX() == 1) {
-            physics.setVelocityX(stateData.get(HOLD).moveSpeed);
-        } else {
-            physics.setVelocityX(-1 * stateData.get(HOLD).moveSpeed);
+            wallClingTimer = FXGL.getGameTimer().runOnceAfter(() -> {
+                isTiredTouchingWall = true;
+                setBodyStatic(false);
+                state.changeState(STAND);
+            }, Duration.seconds(6));
         }
+
+//        physics.setVelocityY(0);
+//        if(entity.getScaleX() == 1) {
+//            physics.setVelocityX(stateData.get(HOLD).moveSpeed);
+//        } else {
+//            physics.setVelocityX(-1 * stateData.get(HOLD).moveSpeed);
+//        }
     }
 
     public void crouch() {
@@ -245,35 +275,7 @@ public abstract class PlayerComponent extends Component {
         }
     }
 
-    void swingMovement(EntityState newState, int scale) {
-        getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
-        Point2D previousVelocity = physics.getLinearVelocity();
-
-        Point2D tangentialForce;
-        if (scale == -1) { // Counter-clockwise
-            tangentialForce = new Point2D(entity.getY(), entity.getX()).normalize();
-        } else { // Clockwise
-            tangentialForce = new Point2D(entity.getY(), -entity.getX()).normalize();
-        }
-
-        int swingSpeed = scale * stateData.get(newState).moveSpeed * 5;
-        tangentialForce = tangentialForce.multiply(swingSpeed);
-        physics.applyForceToCenter(tangentialForce);
-
-        Point2D currentVelocity = physics.getLinearVelocity();
-
-        if (currentVelocity.magnitude() < previousVelocity.magnitude()) {
-            // Apply a small force in the direction of the current velocity to boost it.
-            physics.applyForceToCenter(currentVelocity.normalize().multiply(swingSpeed * 0.75f)); // Adjust 0.5f as needed
-        }
-
-//        int speed = scale * stateData.get(newState).moveSpeed;
-//        physics.applyForceToCenter(new Point2D(speed*2, 0));
-
-        if (state.getCurrentState() != newState) {
-            state.changeState(newState);
-        }
-    }
+    abstract void swingMovement(EntityState newState, int scale);
 
     public boolean playerOnGround() {
         return physics.isOnGround();
@@ -294,10 +296,16 @@ public abstract class PlayerComponent extends Component {
         physics.getBody().setLinearVelocity(damped);
     }
 
-    private void setFriction(float friction) {
-        physics.setOnPhysicsInitialized(() -> {
-            physics.getBody().getFixtures().getFirst().setFriction(friction);
-        });
+    protected void setFriction(float friction) {
+        physics.getBody().getFixtures().forEach(f -> f.setFriction(friction));
+    }
+
+    protected void setBodyStatic(boolean isKinematic) {
+        if(isKinematic) {
+            physics.getBody().setType(BodyType.STATIC);
+        } else {
+            physics.getBody().setType(BodyType.DYNAMIC);
+        }
     }
 
 }
