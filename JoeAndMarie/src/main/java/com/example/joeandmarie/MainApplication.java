@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -15,6 +16,7 @@ import com.almasb.fxgl.physics.*;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
@@ -27,6 +29,8 @@ import com.example.joeandmarie.factory.PlayerFactory;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -34,9 +38,11 @@ import javafx.util.Duration;
 import java.util.EnumSet;
 import java.util.regex.Pattern;
 
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 public class MainApplication extends GameApplication {
 
-    Text nameTag1, nameTag2;
+    private Text nameTag1, nameTag2;
 
     private boolean isPulling = false;
 
@@ -44,13 +50,11 @@ public class MainApplication extends GameApplication {
     private DistanceJoint distanceJoint = null;
     private RevoluteJoint revoluteJoint = null;
 
-    private boolean hasPassedOneWayPlatform = false;
+    private boolean hasPlayerOnePassedOneWayPlatform = false;
+    private boolean hasPlayerTwoPassedOneWayPlatform = false;
 
     private boolean isSwinging;
     private boolean isCrouching = false;
-
-    private boolean highFrictionSet = false;
-    private boolean lowFrictionSet = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -372,27 +376,60 @@ public class MainApplication extends GameApplication {
                         player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.KINEMATIC);
                         player.getComponent(PhysicsComponent.class).setVelocityY(-400);
                     }, Duration.seconds(0));
-                    hasPassedOneWayPlatform = true;
+                    hasPlayerOnePassedOneWayPlatform = true;
                 }
             }
 
             @Override
             protected void onCollisionEnd(Entity player, Entity platform) {
-                if(hasPassedOneWayPlatform) {
+                if(hasPlayerOnePassedOneWayPlatform) {
                     FXGL.getGameTimer().runOnceAfter(() -> {
                         player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.DYNAMIC);
                         player.getComponent(PhysicsComponent.class).setVelocityY(-200);
                         player.getComponent(PhysicsComponent.class).getBody().getFixtures().getFirst().setFriction(1f);
                     }, Duration.seconds(0));
-                    hasPassedOneWayPlatform = false;
+                    hasPlayerOnePassedOneWayPlatform = false;
+                }
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER2, EntityType.ONE_WAY_PLATFORM) {
+
+            @Override
+            protected void onCollisionBegin(Entity player, Entity platform) {
+                if (player.getBottomY() >= platform.getY() && player.getY() + 32 >= platform.getBottomY()) {
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.KINEMATIC);
+                        player.getComponent(PhysicsComponent.class).setVelocityY(-400);
+                    }, Duration.seconds(0));
+                    hasPlayerTwoPassedOneWayPlatform = true;
+                }
+            }
+
+            @Override
+            protected void onCollisionEnd(Entity player, Entity platform) {
+                if(hasPlayerTwoPassedOneWayPlatform) {
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        player.getComponent(PhysicsComponent.class).getBody().setType(BodyType.DYNAMIC);
+                        player.getComponent(PhysicsComponent.class).setVelocityY(-200);
+                        player.getComponent(PhysicsComponent.class).getBody().getFixtures().getFirst().setFriction(1f);
+                    }, Duration.seconds(0));
+                    hasPlayerTwoPassedOneWayPlatform = false;
                 }
             }
         });
     }
 
     @Override
+    protected void initUI() {
+        createRopeVisualization();
+    }
+
+    @Override
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
+
+//        updateRopeSegments();
 
         if (isPulling) {
             float current = ropeJoint.getMaxLength();
@@ -575,6 +612,211 @@ public class MainApplication extends GameApplication {
     // 1. Create a RopeJoint to limit the maximum rope length
 
 //        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
+
+//    private void createRopeVisualization() {
+//        var physics1 = getPlayer1().getComponent(PhysicsComponent.class);
+//
+//        Body bodyA = physics1.getBody();
+//        Vec2 position = bodyA.getPosition();
+//        float xPos = position.x;
+//        float yPos = position.y;
+//
+//        PhysicsComponent firstPhysics = new PhysicsComponent();
+//        FixtureDef firstDef = new FixtureDef();
+//
+//        firstDef.setSensor(true);
+//
+//        firstPhysics.setBodyType(BodyType.DYNAMIC);
+//        firstPhysics.setFixtureDef(firstDef);
+//
+//        Entity firstRopeSegment = entityBuilder()
+//                .at(xPos, yPos)
+//                .view(texture("rope_segment.png", 8, 8))
+//                .with(firstPhysics)
+//                .buildAndAttach();
+//
+//        addRopeJoint(getPlayer1(), firstRopeSegment);
+//
+//        Entity last = firstRopeSegment;
+//
+//        int ropeSegmentSize = 10;
+//
+//        for (int i = 0; i < ropeSegmentSize; i++) {
+//            PhysicsComponent physics = new PhysicsComponent();
+//            FixtureDef def = new FixtureDef();
+//
+//            def.setSensor(true);
+//
+//            physics.setBodyType(BodyType.DYNAMIC);
+//            physics.setFixtureDef(def);
+//
+//            Entity ropeSegment = entityBuilder()
+//                    .at(xPos * i + 8, yPos)
+//                    .view(texture("rope_segment.png", 12, 12))
+//                    .with(physics)
+//                    .buildAndAttach();
+//
+//            addRopeJoint(last, ropeSegment);
+//
+//            last = ropeSegment;
+//        }
+//
+//        addRopeJoint(last, getPlayer2());
+//    }
+//
+//    private void addRopeJoint(Entity e1, Entity e2) {
+//        RopeJointDef ropeDef = new RopeJointDef();
+//        ropeDef.setBodyA(e1.getComponent(PhysicsComponent.class).getBody());
+//        ropeDef.setBodyB(e2.getComponent(PhysicsComponent.class).getBody());
+//        ropeDef.localAnchorA.set(0, 0);
+//        ropeDef.localAnchorB.set(0, 0);
+//        ropeDef.maxLength = 0.2f;
+//        ropeDef.setBodyCollisionAllowed(false);
+//
+//        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
+//    }
+
+//    private void createRopeVisualization() {
+//        var physics1 = getPlayer1().getComponent(PhysicsComponent.class);
+//
+//        Vec2 position = physics1.getBody().getPosition();
+//        float startX = position.x * 64;
+//        float startY = position.y * 64;
+//
+//        PhysicsComponent firstPhysics = new PhysicsComponent();
+//        FixtureDef firstDef = new FixtureDef();
+//        firstDef.setSensor(true); // no collision
+//        firstPhysics.setBodyType(BodyType.DYNAMIC);
+//        firstPhysics.setFixtureDef(firstDef);
+//
+//        Entity firstRopeSegment = entityBuilder()
+//                .at(startX, startY)
+//                .view(texture("rope_segment.png", 12, 12))
+//                .with(firstPhysics)
+//                .buildAndAttach();
+//
+//        addRopeJoint(getPlayer1(), firstRopeSegment, 12f / 64f); // segment length in meters
+//
+//        Entity last = firstRopeSegment;
+//        int segmentCount = 10;
+//
+//        for (int i = 1; i <= segmentCount; i++) {
+//            float segmentX = startX + i * 12; // evenly spaced
+//            PhysicsComponent physics = new PhysicsComponent();
+//            FixtureDef def = new FixtureDef();
+//            def.setSensor(true); // or false for physical interactions
+//            def.setDensity(1.0f);
+//            physics.setBodyType(BodyType.DYNAMIC);
+//            physics.setFixtureDef(def);
+//
+//            Entity ropeSegment = entityBuilder()
+//                    .at(segmentX, startY)
+//                    .view(texture("rope_segment.png", 12, 12))
+//                    .with(physics)
+//                    .buildAndAttach();
+//
+//            addRopeJoint(last, ropeSegment, 12f / 64f); // same length
+//            last = ropeSegment;
+//        }
+//
+//        addRopeJoint(last, getPlayer2(), 12f / 64f);
+//    }
+
+    private void addRopeJoint(Entity e1, Entity e2, float maxLengthMeters) {
+        RopeJointDef ropeDef = new RopeJointDef();
+        ropeDef.setBodyA(e1.getComponent(PhysicsComponent.class).getBody());
+        ropeDef.setBodyB(e2.getComponent(PhysicsComponent.class).getBody());
+        ropeDef.localAnchorA.set(0, 0);
+        ropeDef.localAnchorB.set(0, 0);
+        ropeDef.maxLength = maxLengthMeters;
+        ropeDef.setBodyCollisionAllowed(false);
+
+        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
+    }
+
+    private void createRopeVisualization() {
+//        CubicCurve curve = new CubicCurve();
+//        curve.setStroke(Color.rgb(49, 52, 73));
+//        curve.setStrokeWidth(5);
+//        curve.setFill(Color.TRANSPARENT);
+//        FXGL.getGameScene().addUINode(curve);
+//
+//        FXGL.getGameTimer().runAtInterval(() -> {
+//            var viewport = FXGL.getGameScene().getViewport();
+//            double offsetX = viewport.getX();
+//            double offsetY = viewport.getY();
+//
+//            Point2D p1 = getPlayer1().getCenter().subtract(offsetX, offsetY);
+//            Point2D p2 = getPlayer2().getCenter().subtract(offsetX, offsetY);
+//
+//            curve.setStartX(p1.getX());
+//            curve.setStartY(p1.getY());
+//            curve.setEndX(p2.getX());
+//            curve.setEndY(p2.getY());
+//
+//            double distance = p1.distance(p2);
+//
+//            // Sag decreases as players get farther apart
+//            double sag = Math.max(0, 100 - distance * 0.5);
+//
+//            // Optional: tweak sag formula based on testing
+//            double dx = p2.getX() - p1.getX();
+//            double dy = p2.getY() - p1.getY();
+//
+//            curve.setControlX1(p1.getX() + dx * 0.25);
+//            curve.setControlY1(p1.getY() + dy * 0.25 + sag);
+//
+//            curve.setControlX2(p1.getX() + dx * 0.75);
+//            curve.setControlY2(p1.getY() + dy * 0.75 + sag);
+//        }, Duration.seconds(1.0 / 60));
+
+    CubicCurve curve = new CubicCurve();
+    curve.setStroke(Color.rgb(49, 52, 73));
+    curve.setStrokeWidth(5);
+    curve.setFill(Color.TRANSPARENT);
+    FXGL.getGameScene().addUINode(curve);
+
+    FXGL.getGameTimer().runAtInterval(() -> {
+            var viewport = FXGL.getGameScene().getViewport();
+            double offsetX = viewport.getX();
+            double offsetY = viewport.getY();
+
+            Point2D p1 = getPlayer1().getCenter().subtract(offsetX, offsetY);
+            Point2D p2 = getPlayer2().getCenter().subtract(offsetX, offsetY);
+
+            curve.setStartX(p1.getX());
+            curve.setStartY(p1.getY());
+            curve.setEndX(p2.getX());
+            curve.setEndY(p2.getY());
+
+            double distance = p1.distance(p2);
+
+            // Max rope length (3 units) and max player-to-rope distance (150 units)
+            double maxRopeLength = 3;
+            double maxDistance = 150;
+
+            // Calculate the sag, which decreases as distance increases.
+            double sag = 0;
+
+            if (distance < maxDistance) {
+                // Sag is proportional to how close the distance is to the max distance.
+                sag = Math.max(0, (maxDistance - distance) * 0.5);
+            }
+
+            // Optional: tweak sag formula based on testing
+            double dx = p2.getX() - p1.getX();
+            double dy = p2.getY() - p1.getY();
+
+            // Set the control points for the cubic curve to simulate the rope's sag
+            curve.setControlX1(p1.getX() + dx * 0.25);
+            curve.setControlY1(p1.getY() + dy * 0.25 + sag);
+
+            curve.setControlX2(p1.getX() + dx * 0.75);
+            curve.setControlY2(p1.getY() + dy * 0.75 + sag);
+
+        }, Duration.seconds(1.0 / 144));
+
+    }
 
     private Player1Component getControlP1() {
         return FXGL.getGameWorld().getSingleton(e -> e.hasComponent(Player1Component.class))

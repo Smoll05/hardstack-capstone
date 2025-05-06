@@ -17,16 +17,6 @@ import javafx.scene.shape.Rectangle;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 
 public class PlatformerFactory implements EntityFactory {
-//    @Spawns("platform")
-//    public Entity newPlatform(SpawnData data) {
-//        return FXGL.entityBuilder(data)
-//                .type(EntityType.PLATFORM)
-//                .bbox(new HitBox("BODY", BoundingShape.box(200, 20)))
-//                .viewWithBBox(new Rectangle(100, 20, Color.DARKGRAY))
-//                .with(new PhysicsComponent())
-//                .build();
-//    }
-
     @Spawns("platform")
     public Entity newPlatform(SpawnData data) {
         return entityBuilder(data)
