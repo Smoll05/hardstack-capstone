@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="40">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="62">
  <tileset firstgid="1" name="TX_Tileset_Ground" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="TX_Tileset_Ground.png" width="512" height="512"/>
  </tileset>
@@ -47,7 +47,7 @@
   <object id="27" type="platform" x="1538" y="225" width="60" height="605"/>
   <object id="33" type="platform" x="1024.67" y="512.667" width="192" height="30"/>
   <object id="34" type="platform" x="1218.67" y="416" width="60" height="126"/>
-  <object id="38" type="one_way_platform" x="511.333" y="542" width="128.667" height="34"/>
   <object id="39" type="one_way_platform" x="738" y="736.667" width="92.6667" height="31.3333"/>
+  <object id="60" type="one_way_platform" x="512.182" y="544.182" width="127.636" height="31.8182"/>
  </objectgroup>
 </map>
