@@ -45,5 +45,7 @@ public class PlatformerFactory implements EntityFactory {
                 .with(new PhysicsComponent())
                 .build();
     }
+
+
 }
 

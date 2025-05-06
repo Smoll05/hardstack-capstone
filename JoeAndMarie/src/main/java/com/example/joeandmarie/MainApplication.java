@@ -21,6 +21,7 @@ import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.component.PlayerComponent;
 import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.entity.EntityType;
+import com.example.joeandmarie.factory.BlockFactory;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
 import javafx.geometry.Point2D;
@@ -85,9 +86,10 @@ public class MainApplication extends GameApplication {
 
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
+        FXGL.getGameWorld().addEntityFactory(new BlockFactory());
 
         try {
-            FXGL.setLevelFromMap("test3.tmx");
+            FXGL.setLevelFromMap("kuan_sewer.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,10 +102,10 @@ public class MainApplication extends GameApplication {
         int mapWidth = 1600;
         int mapHeight = 950;
 
-//        viewport.setZoom(0.8);
+//        viewport.setZddadoom(0.8);
 
-        Entity player2 = FXGL.spawn("player2", 500, 300);
-        Entity player1 = FXGL.spawn("player1", 500, 200);
+        Entity player2 = FXGL.spawn("player2", 256, 500);
+        Entity player1 = FXGL.spawn("player1", 256, 500);
 
         getControlP1().loadPlayer2(player2);
         getControlP2().loadPlayer1(player1);
