@@ -41,7 +41,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class MainApplication extends GameApplication {
 
-    Text nameTag1, nameTag2;
+    private Text nameTag1, nameTag2;
 
     private boolean isPulling = false;
 
@@ -54,9 +54,6 @@ public class MainApplication extends GameApplication {
 
     private boolean isSwinging;
     private boolean isCrouching = false;
-
-    private boolean highFrictionSet = false;
-    private boolean lowFrictionSet = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
