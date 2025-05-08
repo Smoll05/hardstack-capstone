@@ -5,7 +5,9 @@ import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.data.dao.GameProgressDao;
 import com.example.joeandmarie.data.dao.SaveProgressDao;
 import com.example.joeandmarie.data.model.GameProgress;
+import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
 import com.example.joeandmarie.utils.FileChooserUtils;
+import com.example.joeandmarie.utils.SerializationUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -49,6 +51,8 @@ public class ProgressFilesController {
     private final SaveProgressDao saveDao = new SaveProgressDao();
     private final GameProgressDao gameDao = new GameProgressDao();
 
+    private final GameProgressViewModel viewModel = GameProgressViewModel.getInstance();
+
     @FXML
     public void initialize() {
 
@@ -90,12 +94,11 @@ public class ProgressFilesController {
 
         switch (clickedButton.getId()) {
             case "btnPlay1":
-                // TODO("Use a singleton ViewModel to save state")
                 setPlay(1);
                 break;
 
             case "btnPlay2":
-                setPlay(3);
+                setPlay(2);
                 break;
 
             case "btnPlay3":
@@ -242,7 +245,7 @@ public class ProgressFilesController {
         btnPlay.setId("btnPlay" + saveSlotNum);
 
         // File Name Label
-        Label lblFileName = new Label("File 1");
+        Label lblFileName = new Label("File " + saveSlotNum);
         lblFileName.setLayoutX(208.0);
         lblFileName.setLayoutY(258.0);
         lblFileName.setTextFill(Color.WHITE);
@@ -250,7 +253,8 @@ public class ProgressFilesController {
         lblFileName.setId("lblFileName");
 
         // Progress Label
-        Label lblProgress = new Label("0m");
+        int progress = gameDao.selectHeightGameProgress(saveSlotNum);
+        Label lblProgress = new Label(progress + "m");
         lblProgress.setLayoutX(232.0);
         lblProgress.setLayoutY(303.0);
         lblProgress.setTextFill(Color.WHITE);
@@ -335,32 +339,43 @@ public class ProgressFilesController {
         Window window = ((Node) event.getSource()).getScene().getWindow();
         String filePath = FileChooserUtils.chooseFile(window);
 
-        if (filePath != null) {
-            System.out.println("Imported file: " + filePath);
-        } else {
-            System.out.println("No file selected.");
-        }
+        if(filePath == null) return;
+
+        GameProgress object = SerializationUtils.deserialize(filePath);
+        object.setGameProgressId(saveSlot);
+        object.setSaveProgressId(saveSlot);
+
+        saveDao.insertSaveProgress(saveSlot);
+        gameDao.insertGameProgress(object);
+
+        System.out.println("Imported file: " + filePath);
+
+        apFile2.getChildren().clear();
+        setHasSaveUi(saveSlot);
     }
 
     private void saveFile(int saveSlot, MouseEvent event) {
         Window window = ((Node) event.getSource()).getScene().getWindow();
-        String filePath = FileChooserUtils.chooseFile(window);
+        String filePath = FileChooserUtils.saveFile(window);
 
-        if (filePath != null) {
-            System.out.println("Exported file: " + filePath);
-        } else {
-            System.out.println("No file selected.");
-        }
+        if(filePath == null) return;
+
+        GameProgress object = gameDao.selectGameProgress(saveSlot);
+        SerializationUtils.serialize(filePath, object);
+
+        System.out.println("Exported file: " + filePath);
     }
 
 
     private void setPlay(int saveSlot) {
-
+        viewModel.setState(gameDao.selectGameProgress(saveSlot));
     }
 
     private void setNewGame(int saveSlot) {
+        GameProgress state = new GameProgress(saveSlot, saveSlot);
         saveDao.insertSaveProgress(saveSlot);
-        gameDao.insertGameProgress(new GameProgress(saveSlot, saveSlot));
+        gameDao.insertGameProgress(state);
+        viewModel.setState(state);
     }
 
     private void resetFileSlotUi() {

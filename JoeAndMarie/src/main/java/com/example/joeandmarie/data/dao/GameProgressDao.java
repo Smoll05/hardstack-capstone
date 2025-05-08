@@ -65,6 +65,7 @@ public class GameProgressDao {
                 } else {
                     System.out.println("No GameProgress found with game_progress_id: " + gameProgressId);
                 }
+
             }
 
         } catch (SQLException e) {
@@ -119,5 +120,34 @@ public class GameProgressDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting game progress", e);
         }
+    }
+
+
+    // Specific query for the save file UI
+    public int selectHeightGameProgress(int gameProgressId) {
+        String sql = "SELECT height_progress FROM tbGameProgress WHERE game_progress_id = ?";
+
+        int heightProgress = 0;
+
+        try(Connection conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, gameProgressId);
+
+            try(ResultSet res = stmt.executeQuery()) {
+
+                if(res.next()) {
+                    heightProgress = res.getInt("height_progress");
+                } else {
+                    System.out.println("Failed to get height progress on game progress with id: " + gameProgressId);
+                }
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting height progress on game progress", e);
+        }
+
+        return heightProgress;
     }
 }

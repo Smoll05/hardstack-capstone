@@ -4,9 +4,6 @@ import com.example.joeandmarie.data.dao.GameProgressDao;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.GameProgress;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameProgressViewModel extends ViewModel<GameProgress> {
     private static volatile GameProgressViewModel instance;
     private final GameProgressDao dao = new GameProgressDao();
