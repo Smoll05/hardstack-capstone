@@ -1,14 +1,26 @@
 package com.example.joeandmarie.Controller;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.example.joeandmarie.MainApplication;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class JoeMainMenuController {
+    @FXML
+    private Pane apContainer;
     @FXML
     public ImageView bgTitle;
     @FXML
@@ -40,7 +52,7 @@ public class JoeMainMenuController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResource("/assets/textures/menu_bg2.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/assets/textures/menu_bg4_pixelated.png").toExternalForm()); // just testing pixelated backgrounds
         bgImage.setImage(image);
         bgImage.setPreserveRatio(true);
         bgImage.setSmooth(true);
@@ -94,10 +106,25 @@ public class JoeMainMenuController {
         FXGL.getGameController().startNewGame();
     }
 
-//    @FXML
-//    private void handleMultiplayerClick() {
-//        System.out.println("Multiplayer clicked");
-//    }
+
+    @FXML
+    private void handleMultiplayerClick() {
+        switchScreenToProgressFiles();
+    }
+
+    private void switchScreenToProgressFiles() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/progress_files.fxml"));
+            Parent newContent = fxmlLoader.load();
+
+            // Clear the current content and add the new content
+            apContainer.getChildren().clear();
+            apContainer.getChildren().add(newContent);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 //
 //    @FXML
 //    private void handleCollectionClick() {

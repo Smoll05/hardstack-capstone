@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.Controller.JoeMainMenuController">
+<Pane fx:id="apContainer" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.Controller.JoeMainMenuController">
     <!-- Background Image -->
     <ImageView fx:id="bgImage" fitHeight="1080.0" fitWidth="1920.0" />
    <ImageView fx:id="bgTitle" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" />
@@ -22,7 +22,7 @@
         <StackPane fx:id="settings" onMouseClicked="#handleSettingsClick">
          <ImageView fx:id="menu_settings" fitHeight="100.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
         </StackPane>
-      <StackPane fx:id="credit">
+      <StackPane fx:id="credit" onMouseClicked="#handleMultiplayerClick">
          <children>
             <ImageView fx:id="menu_credits" fitHeight="75.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
          </children>
