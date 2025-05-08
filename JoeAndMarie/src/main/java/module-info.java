@@ -28,6 +28,6 @@ module com.example.joeandmarie {
     exports com.example.joeandmarie.factory;
     opens com.example.joeandmarie.factory to javafx.fxml;
 
-    exports com.example.joeandmarie.Starting;
-    opens com.example.joeandmarie.Starting to javafx.fxml;
+    exports com.example.joeandmarie.ui;
+    opens com.example.joeandmarie.ui to javafx.fxml;
 }

@@ -3,7 +3,7 @@ package com.example.joeandmarie.data.model;
 public class SettingPreference {
     private int settingPreferenceId = -1;
     private int saveProgressId = -1;
-    private float musicVolume = 0;
+    private float musicVolume = 0.5f;
     private float fxVolume = 0;
     private boolean isInfiniteJump = false;
     private boolean isClimbWalls = false;

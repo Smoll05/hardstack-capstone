@@ -109,7 +109,7 @@ public class GameProgressDao {
 
             stmt.setInt(1, gameProgressId);
 
-            if(stmt.executeUpdate() >= 1) {
+            if(stmt.executeUpdate() > 0) {
                 System.out.println("Successfully deleted game progress with id " + gameProgressId);
             } else {
                 System.out.println("Failed to delete game progress with id " + gameProgressId);

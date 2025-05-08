@@ -3,8 +3,8 @@ package com.example.joeandmarie.data.model;
 import java.io.Serializable;
 
 public class GameProgress implements Serializable {
-    private int gameProgressId = -1;
-    private int saveProgressId = -1;
+    private transient int gameProgressId = -1;
+    private transient int saveProgressId = -1;
     private int heightProgress = 0;
     private float xCoordinate = 0.0f;
     private float yCoordinate = 0.0f;
