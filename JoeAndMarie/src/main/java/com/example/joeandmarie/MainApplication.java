@@ -5,40 +5,35 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.*;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
-import com.example.joeandmarie.component.PlayerComponent;
 import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.data.event.GameProgressEvent;
+import com.example.joeandmarie.data.model.GameProgress;
+import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
+import com.example.joeandmarie.data.viewmodel.SettingPreferenceViewModel;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.BlockFactory;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
+import com.example.joeandmarie.ui.GameProgressUi;
+import com.example.joeandmarie.ui.JoeMainMenu;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.EnumSet;
-import java.util.regex.Pattern;
-
-import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class MainApplication extends GameApplication {
 
@@ -55,6 +50,9 @@ public class MainApplication extends GameApplication {
 
     private boolean isSwinging;
     private boolean isCrouching = false;
+
+    private final GameProgressViewModel gameProgressViewModel = new GameProgressViewModel();
+    private final SettingPreferenceViewModel settingPreferenceViewModel = new SettingPreferenceViewModel();
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -87,6 +85,8 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initGame() {
+        gameProgressViewModel.setState(new GameProgress());
+
         FXGL.getGameScene().setBackgroundColor(Color.ALICEBLUE);
 
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
@@ -423,14 +423,20 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initUI() {
+        GameProgressUi gameProgressUi = new GameProgressUi();
+        FXGL.getGameScene().addUINode(gameProgressUi.getView());
+
         createRopeVisualization();
+
+        gameProgressViewModel.addObserver(gameProgressUi);
     }
 
     @Override
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
 
-//        updateRopeSegments();
+        int height = (int) -getPlayer1().getBottomY();
+        gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_HEIGHT, height);
 
         if (isPulling) {
             float current = ropeJoint.getMaxLength();
@@ -771,49 +777,49 @@ public class MainApplication extends GameApplication {
 //            curve.setControlY2(p1.getY() + dy * 0.75 + sag);
 //        }, Duration.seconds(1.0 / 60));
 
-    CubicCurve curve = new CubicCurve();
-    curve.setStroke(Color.rgb(49, 52, 73));
-    curve.setStrokeWidth(5);
-    curve.setFill(Color.TRANSPARENT);
-    FXGL.getGameScene().addUINode(curve);
+        CubicCurve curve = new CubicCurve();
+        curve.setStroke(Color.rgb(49, 52, 73));
+        curve.setStrokeWidth(5);
+        curve.setFill(Color.TRANSPARENT);
+        FXGL.getGameScene().addUINode(curve);
 
-    FXGL.getGameTimer().runAtInterval(() -> {
-            var viewport = FXGL.getGameScene().getViewport();
-            double offsetX = viewport.getX();
-            double offsetY = viewport.getY();
+        FXGL.getGameTimer().runAtInterval(() -> {
+                var viewport = FXGL.getGameScene().getViewport();
+                double offsetX = viewport.getX();
+                double offsetY = viewport.getY();
 
-            Point2D p1 = getPlayer1().getCenter().subtract(offsetX, offsetY);
-            Point2D p2 = getPlayer2().getCenter().subtract(offsetX, offsetY);
+                Point2D p1 = getPlayer1().getCenter().subtract(offsetX, offsetY);
+                Point2D p2 = getPlayer2().getCenter().subtract(offsetX, offsetY);
 
-            curve.setStartX(p1.getX());
-            curve.setStartY(p1.getY());
-            curve.setEndX(p2.getX());
-            curve.setEndY(p2.getY());
+                curve.setStartX(p1.getX());
+                curve.setStartY(p1.getY());
+                curve.setEndX(p2.getX());
+                curve.setEndY(p2.getY());
 
-            double distance = p1.distance(p2);
+                double distance = p1.distance(p2);
 
-            // Max rope length (3 units) and max player-to-rope distance (150 units)
-            double maxRopeLength = 3;
-            double maxDistance = 150;
+                // Max rope length (3 units) and max player-to-rope distance (150 units)
+                double maxRopeLength = 3;
+                double maxDistance = 150;
 
-            // Calculate the sag, which decreases as distance increases.
-            double sag = 0;
+                // Calculate the sag, which decreases as distance increases.
+                double sag = 0;
 
-            if (distance < maxDistance) {
-                // Sag is proportional to how close the distance is to the max distance.
-                sag = Math.max(0, (maxDistance - distance) * 0.5);
-            }
+                if (distance < maxDistance) {
+                    // Sag is proportional to how close the distance is to the max distance.
+                    sag = Math.max(0, (maxDistance - distance) * 0.5);
+                }
 
-            // Optional: tweak sag formula based on testing
-            double dx = p2.getX() - p1.getX();
-            double dy = p2.getY() - p1.getY();
+                // Optional: tweak sag formula based on testing
+                double dx = p2.getX() - p1.getX();
+                double dy = p2.getY() - p1.getY();
 
-            // Set the control points for the cubic curve to simulate the rope's sag
-            curve.setControlX1(p1.getX() + dx * 0.25);
-            curve.setControlY1(p1.getY() + dy * 0.25 + sag);
+                // Set the control points for the cubic curve to simulate the rope's sag
+                curve.setControlX1(p1.getX() + dx * 0.25);
+                curve.setControlY1(p1.getY() + dy * 0.25 + sag);
 
-            curve.setControlX2(p1.getX() + dx * 0.75);
-            curve.setControlY2(p1.getY() + dy * 0.75 + sag);
+                curve.setControlX2(p1.getX() + dx * 0.75);
+                curve.setControlY2(p1.getY() + dy * 0.75 + sag);
 
         }, Duration.seconds(1.0 / 144));
 

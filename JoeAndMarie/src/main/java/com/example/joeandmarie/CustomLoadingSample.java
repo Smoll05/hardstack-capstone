@@ -26,11 +26,6 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-/**
- * Shows how to provide a custom loading scene.
- *
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
- */
 public class CustomLoadingSample extends GameApplication {
 
     @Override
