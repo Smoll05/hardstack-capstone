@@ -80,8 +80,8 @@ public class JoeMainMenuController {
                 bgImage.fitHeightProperty().bind(bgImage.getScene().heightProperty());
 
                 // Example: Make title width 50% of window, height 20%
-                bgTitle.fitWidthProperty().bind(bgImage.getScene().widthProperty().multiply(0.5));
-                bgTitle.fitHeightProperty().bind(bgImage.getScene().heightProperty().multiply(0.2));
+//                bgTitle.fitWidthProperty().bind(bgImage.getScene().widthProperty().multiply(0.5));
+//                bgTitle.fitHeightProperty().bind(bgImage.getScene().heightProperty().multiply(0.2));
             }
         });
 
@@ -102,14 +102,13 @@ public class JoeMainMenuController {
     }
 
     @FXML
-    private void handleCoopCampaignClick() {
-        FXGL.getGameController().startNewGame();
+    private void handlePlayClick() {
+        switchScreenToProgressFiles();
     }
 
-
     @FXML
-    private void handleMultiplayerClick() {
-        switchScreenToProgressFiles();
+    private void handleCreditsClick() {
+        switchScreenToCredits();
     }
 
     private void switchScreenToProgressFiles() {
@@ -125,6 +124,35 @@ public class JoeMainMenuController {
             e.printStackTrace();
         }
     }
+
+    private void switchScreenToSettings() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/settings.fxml"));
+            Parent newContent = fxmlLoader.load();
+
+            // Clear the current content and add the new content
+            apContainer.getChildren().clear();
+            apContainer.getChildren().add(newContent);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void switchScreenToCredits() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/credits.fxml"));
+            Parent newContent = fxmlLoader.load();
+
+            // Clear the current content and add the new content
+            apContainer.getChildren().clear();
+            apContainer.getChildren().add(newContent);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 //
 //    @FXML
 //    private void handleCollectionClick() {
@@ -133,7 +161,9 @@ public class JoeMainMenuController {
 
     @FXML
     private void handleSettingsClick() {
-        System.out.println("Settings clicked");
+        switchScreenToSettings();
+//        System.out.println("Settings clicked");
+
     }
 
     @FXML
