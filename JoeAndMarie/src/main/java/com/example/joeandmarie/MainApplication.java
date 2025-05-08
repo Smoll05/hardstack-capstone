@@ -60,15 +60,14 @@ public class MainApplication extends GameApplication {
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Joe and Marie");
         settings.setVersion("1.0");
-        settings.setWidth(1920);
-        settings.setHeight(1080);
+        settings.setWidth(1280);
+        settings.setHeight(720);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
 //        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         settings.setDeveloperMenuEnabled(true);
         settings.setProfilingEnabled(true);
-        settings.setFullScreenFromStart(true);
 
         // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
@@ -94,7 +93,7 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new BlockFactory());
 
         try {
-            FXGL.setLevelFromMap("kuan_sewer.tmx");
+            FXGL.setLevelFromMap("FirstLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,13 +103,21 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 40 * 32;
 //        int mapHeight = 23 * 32;
 
-        int mapWidth = 1600;
-        int mapHeight = 950;
+        int mapWidth = 150 * 32;  // 4,800 pixels
+        int mapHeight = 112 * 32; // 3,584 pixels
 
-//        viewport.setZddadoom(0.8);
 
-        Entity player2 = FXGL.spawn("player2", 256, 500);
-        Entity player1 = FXGL.spawn("player1", 256, 500);
+        FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
+
+        // Retrieve spawn point position
+        Entity spawnPoint = FXGL.geto("spawnPoint");
+        double x = spawnPoint.getX();
+        double y = spawnPoint.getY();
+
+        // Spawn players at that point
+        Entity player1 = FXGL.spawn("player1", x, y);
+        Entity player2 = FXGL.spawn("player2", x, y);
+
 
         getControlP1().loadPlayer2(player2);
         getControlP2().loadPlayer1(player1);
