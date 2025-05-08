@@ -13,7 +13,7 @@
     <!-- Menu Box -->
     <VBox fx:id="menuBox" alignment="CENTER" layoutX="498.0" layoutY="41.0" spacing="10.0" translateX="980.0" translateY="420.0">
         <!-- Menu Items -->
-        <StackPane fx:id="coopCampaign" onMouseClicked="#handleCoopCampaignClick">
+        <StackPane fx:id="coopCampaign" onMouseClicked="#handlePlayClick">
          <children>
             <ImageView fx:id="menu_play" fitHeight="200.0" fitWidth="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
          </children>
@@ -22,7 +22,7 @@
         <StackPane fx:id="settings" onMouseClicked="#handleSettingsClick">
          <ImageView fx:id="menu_settings" fitHeight="100.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
         </StackPane>
-      <StackPane fx:id="credit" onMouseClicked="#handleMultiplayerClick">
+      <StackPane fx:id="credit" onMouseClicked="#handleCreditsClick">
          <children>
             <ImageView fx:id="menu_credits" fitHeight="75.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
          </children>
