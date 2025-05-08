@@ -60,14 +60,15 @@ public class MainApplication extends GameApplication {
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Joe and Marie");
         settings.setVersion("1.0");
-        settings.setWidth(1280);
-        settings.setHeight(720);
+        settings.setWidth(1920);
+        settings.setHeight(1080);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
 //        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         settings.setDeveloperMenuEnabled(true);
         settings.setProfilingEnabled(true);
+        settings.setFullScreenFromStart(true);
 
         // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
