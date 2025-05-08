@@ -14,25 +14,23 @@ public class SettingPreferenceDao {
         String sql = """
             INSERT INTO tbSettingPreference (
                 setting_preference_id,
-                save_progress_id,
                 music_volume,
                 fx_volume,
                 infinite_jump,
                 climb_walls,
                 infinite_grip,            
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, state.getSettingPreferenceId());
-            stmt.setInt(2, state.getSaveProgressId());
-            stmt.setFloat(3, state.getMusicVolume());
-            stmt.setFloat(4, state.getFxVolume());
-            stmt.setInt(5, state.isInfiniteJump() ? 1 : 0);
-            stmt.setInt(6, state.isClimbWalls() ? 1 : 0);
-            stmt.setInt(7, state.isInfiniteGrip() ? 1 : 0);
+            stmt.setFloat(2, state.getMusicVolume());
+            stmt.setFloat(3, state.getFxVolume());
+            stmt.setInt(4, state.isInfiniteJump() ? 1 : 0);
+            stmt.setInt(5, state.isClimbWalls() ? 1 : 0);
+            stmt.setInt(6, state.isInfiniteGrip() ? 1 : 0);
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -47,7 +45,7 @@ public class SettingPreferenceDao {
     }
 
     public SettingPreference selectSettingPreference(int settingPreferenceId) {
-        String sql = "SELECT * FROM tbSettingPreference WHERE game_progress_id = ?";
+        String sql = "SELECT * FROM tbSettingPreference WHERE setting_preference_id = ?";
 
         SettingPreference currentState = null;
 
@@ -60,8 +58,6 @@ public class SettingPreferenceDao {
 
                 if (resultSet.next()) {
                     currentState = new SettingPreference();
-                    currentState.setSettingPreferenceId(resultSet.getInt("setting_progress_id"));
-                    currentState.setSaveProgressId(resultSet.getInt("save_progress_id"));
                     currentState.setMusicVolume(resultSet.getFloat("music_volume"));
                     currentState.setFxVolume(resultSet.getFloat("fx_volume"));
                     currentState.setInfiniteJump(resultSet.getFloat("infinite_jump") == 1);

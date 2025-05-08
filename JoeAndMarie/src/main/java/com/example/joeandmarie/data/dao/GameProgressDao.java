@@ -10,22 +10,24 @@ public class GameProgressDao {
     public void insertGameProgress(GameProgress state) {
         String sql = """
             INSERT INTO tbGameProgress (
+                game_progress_id,      
                 save_progress_id,
                 height_progress,
                 x_coordinate,
                 y_coordinate,
                 deepfall_count
-            ) VALUES (?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, state.getSaveProgressId());
-            stmt.setInt(2, state.getHeightProgress());
-            stmt.setFloat(3, state.getXCoordinate());
-            stmt.setFloat(4, state.getYCoordinate());
-            stmt.setInt(5, state.getDeepFallCount());
+            stmt.setInt(1, state.getGameProgressId());
+            stmt.setInt(2, state.getSaveProgressId());
+            stmt.setInt(3, state.getHeightProgress());
+            stmt.setFloat(4, state.getXCoordinate());
+            stmt.setFloat(5, state.getYCoordinate());
+            stmt.setInt(6, state.getDeepFallCount());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -52,9 +54,8 @@ public class GameProgressDao {
             try (ResultSet resultSet = stmt.executeQuery()) {
 
                 if (resultSet.next()) {
-                    currentState = new GameProgress();
-                    currentState.setGameProgressId(resultSet.getInt("game_progress_id"));
-                    currentState.setSaveProgressId(resultSet.getInt("save_progress_id"));
+                    int saveProgressId = resultSet.getInt("save_progress_id");
+                    currentState = new GameProgress(gameProgressId, saveProgressId);
                     currentState.setHeightProgress(resultSet.getInt("height_progress"));
                     currentState.setXCoordinate(resultSet.getFloat("x_coordinate"));
                     currentState.setYCoordinate(resultSet.getFloat("y_coordinate"));

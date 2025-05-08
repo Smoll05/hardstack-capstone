@@ -27,14 +27,11 @@ public class DatabaseInit {
     private static final String createSettingPreference = """
             CREATE TABLE IF NOT EXISTS tbSettingPreference (
                 setting_preference_id INT PRIMARY KEY,
-                save_progress_id INT,
                 music_volume FLOAT,
                 fx_volume FLOAT,
                 infinite_jump TINYINT(1),
                 climb_walls TINYINT(1),
-                infinite_grip TINYINT(1),
-                FOREIGN KEY(save_progress_id) REFERENCES tbSaveProgress(save_progress_id)
-                ON DELETE CASCADE
+                infinite_grip TINYINT(1)
             )
             """;
 

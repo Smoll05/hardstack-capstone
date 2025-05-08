@@ -11,7 +11,7 @@ module com.example.joeandmarie {
     requires java.sql;
 
     opens com.example.joeandmarie to javafx.fxml;  // Allows FXMLLoader to access the main package
-    opens com.example.joeandmarie.Controller to javafx.fxml;  // Add this line to open the Controller package
+    opens com.example.joeandmarie.controller to javafx.fxml;  // Add this line to open the Controller package
 
     opens assets.textures;
     opens assets.sounds;

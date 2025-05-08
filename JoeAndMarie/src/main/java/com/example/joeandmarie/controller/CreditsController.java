@@ -1,4 +1,4 @@
-package com.example.joeandmarie.Controller;
+package com.example.joeandmarie.controller;
 
 import com.example.joeandmarie.MainApplication;
 import javafx.fxml.FXML;

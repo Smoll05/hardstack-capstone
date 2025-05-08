@@ -51,8 +51,8 @@ public class MainApplication extends GameApplication {
     private boolean isSwinging;
     private boolean isCrouching = false;
 
-    private final GameProgressViewModel gameProgressViewModel = new GameProgressViewModel();
-    private final SettingPreferenceViewModel settingPreferenceViewModel = new SettingPreferenceViewModel();
+    private final GameProgressViewModel gameProgressViewModel = GameProgressViewModel.getInstance();
+    private final SettingPreferenceViewModel settingPreferenceViewModel = SettingPreferenceViewModel.getInstance();
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -85,7 +85,7 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        gameProgressViewModel.setState(new GameProgress());
+        gameProgressViewModel.setState(new GameProgress(-1, -1));
 
         FXGL.getGameScene().setBackgroundColor(Color.ALICEBLUE);
 

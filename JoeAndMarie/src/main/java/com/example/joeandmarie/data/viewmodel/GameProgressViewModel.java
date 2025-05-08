@@ -7,31 +7,22 @@ import com.example.joeandmarie.data.model.GameProgress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameProgressViewModel implements Subject<GameProgress> {
+public class GameProgressViewModel extends ViewModel<GameProgress> {
+    private static volatile GameProgressViewModel instance;
     private final GameProgressDao dao = new GameProgressDao();
-    private final List<Observer<GameProgress>> observers = new ArrayList<>();
-    private GameProgress state;
 
-    @Override
-    public void addObserver(Observer<GameProgress> observer) {
-        observers.add(observer);
-    }
+    private GameProgressViewModel() { }
 
-    @Override
-    public void removeObserver(Observer<GameProgress> observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for(Observer<GameProgress> observer : observers) {
-            observer.update(state);
+    public static GameProgressViewModel getInstance() {
+        if(instance == null) {
+            synchronized (GameProgressViewModel.class) {
+                if (instance == null) {
+                    instance = new GameProgressViewModel();
+                }
+            }
         }
-    }
 
-    public void setState(GameProgress state) {
-        this.state = state;
-        notifyObservers();
+        return instance;
     }
 
     public void saveGameProgress() {

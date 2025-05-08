@@ -1,8 +1,7 @@
 package com.example.joeandmarie.data.model;
 
 public class SettingPreference {
-    private int settingPreferenceId = -1;
-    private int saveProgressId = -1;
+    private final int settingPreferenceId = 1;
     private float musicVolume = 0.5f;
     private float fxVolume = 0;
     private boolean isInfiniteJump = false;
@@ -11,18 +10,6 @@ public class SettingPreference {
 
     public int getSettingPreferenceId() {
         return settingPreferenceId;
-    }
-
-    public void setSettingPreferenceId(int settingPreferenceId) {
-        this.settingPreferenceId = settingPreferenceId;
-    }
-
-    public int getSaveProgressId() {
-        return saveProgressId;
-    }
-
-    public void setSaveProgressId(int saveProgressId) {
-        this.saveProgressId = saveProgressId;
     }
 
     public float getMusicVolume() {

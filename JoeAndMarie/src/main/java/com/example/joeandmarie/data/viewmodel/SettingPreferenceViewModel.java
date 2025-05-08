@@ -4,34 +4,22 @@ import com.example.joeandmarie.data.dao.SettingPreferenceDao;
 import com.example.joeandmarie.data.event.SettingPreferenceEvent;
 import com.example.joeandmarie.data.model.SettingPreference;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SettingPreferenceViewModel implements Subject<SettingPreference> {
+public class SettingPreferenceViewModel extends ViewModel<SettingPreference> {
+    private static volatile SettingPreferenceViewModel instance;
     private final SettingPreferenceDao dao = new SettingPreferenceDao();
-    private final List<Observer<SettingPreference>> observers = new ArrayList<>();
-    private SettingPreference state;
 
-    @Override
-    public void addObserver(Observer<SettingPreference> observer) {
-        observers.add(observer);
-    }
+    private SettingPreferenceViewModel() { }
 
-    @Override
-    public void removeObserver(Observer<SettingPreference> observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for(Observer<SettingPreference> observer : observers) {
-            observer.update(state);
+    public static SettingPreferenceViewModel getInstance() {
+        if(instance == null) {
+            synchronized (SettingPreferenceViewModel.class) {
+                if (instance == null) {
+                    instance = new SettingPreferenceViewModel();
+                }
+            }
         }
-    }
 
-    public void setState(SettingPreference state) {
-        this.state = state;
-        notifyObservers();
+        return instance;
     }
 
     public void saveSettingPreference() {

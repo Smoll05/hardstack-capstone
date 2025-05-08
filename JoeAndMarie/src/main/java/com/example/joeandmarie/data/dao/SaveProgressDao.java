@@ -4,6 +4,7 @@ import com.example.joeandmarie.data.database.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SaveProgressDao {
@@ -12,7 +13,7 @@ public class SaveProgressDao {
     public void insertSaveProgress(int saveProgressId) {
         String sql = """
             INSERT INTO tbSaveProgress (
-                save_progress_id,          
+                save_progress_id      
             ) VALUES (?)
         """;
 
@@ -31,6 +32,29 @@ public class SaveProgressDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting SaveProgress", e);
+        }
+    }
+
+    public boolean selectSaveProgress(int save_progress_id) {
+        String sql = "SELECT * FROM tbSaveProgress WHERE save_progress_id = ?";
+
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, save_progress_id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("Found save progress with id " + save_progress_id);
+                    return true;
+                } else {
+                    System.out.println("No save progress found with id " + save_progress_id);
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting save progress", e);
         }
     }
 
