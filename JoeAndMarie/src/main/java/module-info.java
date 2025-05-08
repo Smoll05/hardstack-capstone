@@ -30,4 +30,7 @@ module com.example.joeandmarie {
 
     exports com.example.joeandmarie.ui;
     opens com.example.joeandmarie.ui to javafx.fxml;
+
+    exports com.example.joeandmarie.data.model;
+    opens com.example.joeandmarie.data.model to javafx.fxml;
 }
