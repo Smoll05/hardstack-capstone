@@ -101,14 +101,21 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 40 * 32;
 //        int mapHeight = 23 * 32;
 
+        int mapWidth = 150 * 32;  // 4,800 pixels
+        int mapHeight = 112 * 32; // 3,584 pixels
 
-        int mapWidth = 110 * 32;  // 1,792 pixels
-        int mapHeight = 100 * 32; // 1,504 pixels
 
-//        viewport.setZoom(0.8);
+        FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
 
-        Entity player2 = FXGL.spawn("player2", 500, 1300);
-        Entity player1 = FXGL.spawn("player1", 500, 1300);
+        // Retrieve spawn point position
+        Entity spawnPoint = FXGL.geto("spawnPoint");
+        double x = spawnPoint.getX();
+        double y = spawnPoint.getY();
+
+        // Spawn players at that point
+        Entity player1 = FXGL.spawn("player1", x, y);
+        Entity player2 = FXGL.spawn("player2", x, y);
+
 
         getControlP1().loadPlayer2(player2);
         getControlP2().loadPlayer1(player1);

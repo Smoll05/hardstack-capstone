@@ -35,5 +35,18 @@ public class PlatformerFactory implements EntityFactory {
                 .with(new PhysicsComponent())
                 .build();
     }
+
+    @Spawns("spawn")
+    public Entity spawn(SpawnData data) {
+        return entityBuilder(data)
+                .type(EntityType.SPAWN_POINT)
+                .bbox(new HitBox(BoundingShape.box(
+                        data.<Integer>get("width"),
+                        data.<Integer>get("height")
+                )))
+                .build();
+    }
+
+
 }
 
