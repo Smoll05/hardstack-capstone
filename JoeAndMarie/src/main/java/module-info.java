@@ -7,6 +7,8 @@ module com.example.joeandmarie {
     requires java.desktop;
     requires javafx.media;
     requires jdk.compiler;
+    requires com.zaxxer.hikari;
+    requires java.sql;
 
     opens com.example.joeandmarie to javafx.fxml;  // Allows FXMLLoader to access the main package
     opens com.example.joeandmarie.Controller to javafx.fxml;  // Add this line to open the Controller package
