@@ -91,7 +91,7 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
 
         try {
-            FXGL.setLevelFromMap("test3.tmx");
+            FXGL.setLevelFromMap("FirstLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,13 +101,14 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 40 * 32;
 //        int mapHeight = 23 * 32;
 
-        int mapWidth = 1600;
-        int mapHeight = 950;
+
+        int mapWidth = 56 * 32;  // 1,792 pixels
+        int mapHeight = 50 * 32; // 1,504 pixels
 
 //        viewport.setZoom(0.8);
 
-        Entity player2 = FXGL.spawn("player2", 500, 300);
-        Entity player1 = FXGL.spawn("player1", 500, 200);
+        Entity player2 = FXGL.spawn("player2", 100, 800);
+        Entity player1 = FXGL.spawn("player1", 100, 800);
 
         getControlP1().loadPlayer2(player2);
         getControlP2().loadPlayer1(player1);
