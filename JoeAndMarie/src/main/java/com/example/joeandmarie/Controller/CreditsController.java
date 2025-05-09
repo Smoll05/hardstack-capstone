@@ -1,39 +1,41 @@
 package com.example.joeandmarie.Controller;
 
-import com.example.joeandmarie.MainApplication;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-
-import java.io.IOException;
 
 public class CreditsController {
-    @FXML private AnchorPane apContainer;
-    @FXML private ImageView ivPeepsAvatar;
-    @FXML private ImageView ivBrentAvatar;
-    @FXML private ImageView ivIvannAvatar;
-    @FXML private ImageView ivRainAvatar;
-    @FXML private ImageView ivNateAvatar;
+    @FXML private ImageView btnExit;
+
+    @FXML
+    public void initialize() {
+        setupHoverEffect(btnExit);
+    }
 
     @FXML
     private void handleExitClick() {
-        switchScreenToMainMenu();
+        ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
 
-    private void switchScreenToMainMenu() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/joe_main_menu.fxml"));
-            Parent newContent = fxmlLoader.load();
+    private void setupHoverEffect(ImageView item) {
+        if (item != null) {
+            ColorAdjust colorAdjust = new ColorAdjust();
 
-            // Clear the current content and add the new content
-            apContainer.getChildren().clear();
-            apContainer.getChildren().add(newContent);
+            item.setOnMouseEntered(e -> {
+                item.setStyle("-fx-cursor: hand;");
+                colorAdjust.setContrast(0.05);
+                item.setEffect(colorAdjust);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+                item.setScaleX(1.05);
+                item.setScaleY(1.05);
+            });
+
+            item.setOnMouseExited(e -> {
+                item.setEffect(null);
+
+                item.setScaleX(1.0);
+                item.setScaleY(1.0);
+            });
         }
     }
-
 }

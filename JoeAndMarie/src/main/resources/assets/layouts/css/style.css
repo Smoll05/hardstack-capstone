@@ -1,0 +1,116 @@
+@font-face {
+    font-family: "Freckle Face";
+    src: url("../../Fonts/freckleface.ttf");
+}
+
+.label {
+    -fx-font-family: "Freckle Face";
+    -fx-text-fill: #F5F5F5;
+}
+
+#lblFileName {
+    -fx-font-size: 64;
+    -fx-text-fill: #F5F5F5;
+    -fx-effect: dropshadow(one-pass-box, #2A2725, 2, 0.5, 1, 1);
+}
+
+#lblProgress {
+    -fx-font-size: 48;
+    -fx-text-fill: #AB7E52;
+    -fx-effect: dropshadow(one-pass-box, #2A2725, 2, 0.5, 1, 1);
+}
+
+#cbInfiJump .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+    -fx-padding: 10px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 15;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+}
+
+#cbInfiJump:selected .box {
+    -fx-background-color: #453D36;
+}
+
+#cbInfiJump:selected .box > .mark {
+    -fx-background-color: #F5F5F5;
+}
+
+#cbInfiClimb .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+    -fx-padding: 10px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 15;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+}
+
+#cbInfiClimb:selected .box {
+    -fx-background-color: #453D36;
+}
+
+#cbInfiClimb:selected .box > .mark {
+    -fx-background-color: #F5F5F5;
+}
+
+#cbInfiGrip .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+    -fx-padding: 10px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 15;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+}
+
+#cbInfiGrip:selected .box {
+    -fx-background-color: #453D36;
+}
+
+#cbInfiGrip:selected .box > .mark {
+    -fx-background-color: #F5F5F5;
+}
+
+#slMusicVolume .track {
+    -fx-background-color: #F5F5F5;
+    -fx-background-insets: 0;
+    -fx-background-radius: 13;
+    -fx-padding: 0.25em;
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+    -fx-border-radius: 10;
+}
+
+#slMusicVolume .thumb {
+    -fx-background-color: #453D36;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 4, 0.5, 0, 1);
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+}
+
+#slFXVolume .track {
+    -fx-background-color: #F5F5F5;
+    -fx-background-insets: 0;
+    -fx-background-radius: 13;
+    -fx-padding: 0.25em;
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+    -fx-border-radius: 10;
+}
+
+#slFXVolume .thumb {
+    -fx-background-color: #453D36;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 4, 0.5, 0, 1);
+    -fx-border-color: #2A2725;
+    -fx-border-width: 5;
+}

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,102 +10,115 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apContainer" onMouseClicked="#handleExitClick" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.Controller.CreditsController">
+<AnchorPane onMouseClicked="#handleExitClick" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.Controller.CreditsController">
    <children>
-      <Button fx:id="btnClose" layoutX="1803.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#handleExitClick" text="&lt;-">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-      </Button>
-      <Label layoutX="838.0" layoutY="108.0" text="HardStack">
-         <font>
-            <Font name="System Bold" size="50.0" />
-         </font>
-      </Label>
-      <Label layoutX="831.0" layoutY="181.0" text="Meet the team behind Joe and Marie">
-         <font>
-            <Font name="System Bold Italic" size="15.0" />
-         </font>
-      </Label>
-      <GridPane hgap="25.0" layoutX="285.0" layoutY="271.0" vgap="25.0">
+      <ImageView fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../textures/menu_bg_unfocused.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="910.0" fitWidth="1588.0" layoutX="166.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../textures/menu_container.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="674.0" fitWidth="1412.0" layoutX="270.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="203.0" AnchorPane.leftAnchor="254.0" AnchorPane.rightAnchor="254.0" AnchorPane.topAnchor="203.0">
+         <image>
+            <Image url="@../textures/credits_container.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="626.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="647.0" AnchorPane.rightAnchor="647.0" AnchorPane.topAnchor="160.0">
+         <image>
+            <Image url="@../textures/text_hardstack.png" />
+         </image>
+      </ImageView>
+      <GridPane hgap="25.0" layoutX="396.0" layoutY="284.0" vgap="25.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox alignment="TOP_CENTER" GridPane.columnIndex="2">
+            <VBox alignment="TOP_CENTER" GridPane.columnIndex="2" GridPane.valignment="TOP">
                <children>
-                  <ImageView fx:id="ivPeepsAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label text="Carl Angelo Pepino">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
+                  <ImageView fx:id="ivPeepsAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../textures/joe_gif.gif" />
+                     </image>
+                  </ImageView>
                </children>
             </VBox>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="4">
                <children>
-                  <ImageView fx:id="ivIvannAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label text="Ivann James Paradero">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
+                  <ImageView fx:id="ivIvannAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../textures/joe_gif.gif" />
+                     </image>
+                  </ImageView>
                </children>
             </VBox>
             <VBox alignment="TOP_CENTER">
                <children>
-                  <ImageView fx:id="ivBrentAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label text="Brent Micheal Tolentino">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
+                  <ImageView fx:id="ivBrentAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../textures/joe_gif.gif" />
+                     </image>
+                  </ImageView>
                </children>
             </VBox>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ImageView fx:id="ivRainAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label text="Mary Avriel Rainne Borromeo">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
+                  <ImageView fx:id="ivRainAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../textures/marie_gif.gif" />
+                     </image></ImageView>
                </children>
             </VBox>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <ImageView fx:id="ivNateAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label text="Nathanael Jedd Del Castillo">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
+                  <ImageView fx:id="ivNateAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../textures/joe_gif.gif" />
+                     </image></ImageView>
                </children>
             </VBox>
          </children>
       </GridPane>
+      <Label layoutX="975.0" layoutY="807.0" text="Nathanael Jedd Del Castillo" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="535.0" layoutY="808.0" text="Mary Avriel Rainne Borromeo" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="btnExit" fitHeight="115.0" fitWidth="115.0" layoutX="1701.0" layoutY="109.0" onMouseClicked="#handleExitClick" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../textures/button_x.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="350.0" layoutY="526.0" text="Brent Micheal Tolentino" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="1250.0" layoutY="526.0" text="Ivann James Paradero" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="835.0" layoutY="526.0" text="Carl Angelo Pepino" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
