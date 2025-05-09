@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -30,23 +31,33 @@ public class ProgressFilesController {
     @FXML private AnchorPane apFile1; //anchorpanes for files, has click handlers to continue playing game for now
     @FXML private AnchorPane apFile2;
     @FXML private AnchorPane apFile3;
-    @FXML private ImageView ivBackground;
-    @FXML private AnchorPane apContainer;
 
     @FXML private ImageView ivContainerBackground1; // temporary container backgrounds
     @FXML private ImageView ivContainerBackground2;
     @FXML private ImageView ivContainerBackground3;
 
-    @FXML private Label lblFileName; // file number label for container 1
-    @FXML private Label lblProgress; // height progress label for container 1
-    @FXML private Button btnPlay; // play button to continue playing
-    @FXML private Button btnExport; // export current game file
+    @FXML
+    private Label lblFileName; // file number label for container 1
+    @FXML
+    private Label lblProgress; // height progress label for container 1
 
-    @FXML private Button btnNewGame; // new game button for file 2
-    @FXML private Button btnImportGame; // import file button for file 2
+    @FXML
+    private ImageView btnPlay; // play button to continue playing
+    @FXML
+    private ImageView btnExport; // export current game file
 
-    @FXML private Button btnNewGame2; // new game button for file 3
-    @FXML private Button btnImportGame2; // import file button for file 3
+    @FXML
+    private ImageView btnNewGame; // new game button for file 2
+    @FXML
+    private ImageView btnImportGame; // import file button for file 2
+
+    @FXML
+    private ImageView btnNewGame2; // new game button for file 3
+    @FXML
+    private ImageView btnImportGame2; // import file button for file 3
+
+    @FXML
+    private ImageView btnExit;
 
     private final SaveProgressDao saveDao = new SaveProgressDao();
     private final GameProgressDao gameDao = new GameProgressDao();
@@ -55,15 +66,7 @@ public class ProgressFilesController {
 
     @FXML
     public void initialize() {
-
-        resetFileSlotUi();
-
-        Image image = new Image(getClass().getResource("/assets/textures/menu_bg4_pixelated.png").toExternalForm());
-        ivBackground.setImage(image);
-        ivBackground.setPreserveRatio(true);
-        ivBackground.setSmooth(true);
-
-        Image containerImage = new Image(getClass().getResource("/assets/textures/temp_file_container.png").toExternalForm());
+        Image containerImage = new Image(getClass().getResource("/assets/textures/save_files_container.png").toExternalForm());
         ivContainerBackground1.setImage(containerImage);
         ivContainerBackground1.setPreserveRatio(true);
         ivContainerBackground1.setSmooth(true);
@@ -76,18 +79,19 @@ public class ProgressFilesController {
         ivContainerBackground3.setPreserveRatio(true);
         ivContainerBackground3.setSmooth(true);
 
-        javafx.application.Platform.runLater(() -> {
-            if (ivBackground.getScene() != null) {
-                ivBackground.fitWidthProperty().bind(ivBackground.getScene().widthProperty());
-                ivBackground.fitHeightProperty().bind(ivBackground.getScene().heightProperty());
-            }
-        });
-
-        // Check if there exist some saved slots
+        resetFileSlotUi();
         setSavedFiles();
+
+        setupHoverEffect(btnExit);
+        setupHoverEffect(btnPlay);
+        setupHoverEffect(btnExport);
+        setupHoverEffect(btnNewGame);
+        setupHoverEffect(btnNewGame2);
+        setupHoverEffect(btnImportGame);
+        setupHoverEffect(btnImportGame2);
     }
 
-//    To implement: importing and exporting files, loading game onclick of AnchorPane Background
+    //    To implement: importing and exporting files, loading game onclick of AnchorPane Background
     @FXML
     private void handleFileClick(MouseEvent event) {
         Button clickedButton = (Button) event.getSource();
@@ -110,7 +114,7 @@ public class ProgressFilesController {
         }
 
         FXGL.getGameController().startNewGame();
-        switchScreenToMainMenu();
+        ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
 
     @FXML
@@ -157,7 +161,7 @@ public class ProgressFilesController {
         }
 
         FXGL.getGameController().startNewGame();
-        switchScreenToMainMenu();
+        ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
 
     @FXML
@@ -184,40 +188,24 @@ public class ProgressFilesController {
 
     @FXML
     private void handleExitClick() {
-        switchScreenToMainMenu();
-    }
-
-
-//    Switches back the contents of the menu screen to the main menu
-    private void switchScreenToMainMenu() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/joe_main_menu.fxml"));
-            Parent newContent = fxmlLoader.load();
-
-            // Clear the current content and add the new content
-            apContainer.getChildren().clear();
-            apContainer.getChildren().add(newContent);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
 
 
     private void setSavedFiles() {
-        if(saveDao.selectSaveProgress(1)) {
+        if (saveDao.selectSaveProgress(1)) {
             setHasSaveUi(1);
         } else {
             setHasNoSaveUi(1);
         }
 
-        if(saveDao.selectSaveProgress(2)) {
+        if (saveDao.selectSaveProgress(2)) {
             setHasSaveUi(2);
         } else {
             setHasNoSaveUi(2);
         }
 
-        if(saveDao.selectSaveProgress(3)) {
+        if (saveDao.selectSaveProgress(3)) {
             setHasSaveUi(3);
         } else {
             setHasNoSaveUi(3);
@@ -264,31 +252,31 @@ public class ProgressFilesController {
         switch (saveSlotNum) {
             case 1:
                 apFile1.getChildren().addAll(
-                    ivContainerBackground1,
-                    btnExport,
-                    btnPlay,
-                    lblFileName,
-                    lblProgress
+                        ivContainerBackground1,
+                        btnExport,
+                        btnPlay,
+                        lblFileName,
+                        lblProgress
                 );
                 break;
 
             case 2:
                 apFile2.getChildren().addAll(
-                    ivContainerBackground2,
-                    btnExport,
-                    btnPlay,
-                    lblFileName,
-                    lblProgress
+                        ivContainerBackground2,
+                        btnExport,
+                        btnPlay,
+                        lblFileName,
+                        lblProgress
                 );
                 break;
 
             case 3:
                 apFile3.getChildren().addAll(
-                    ivContainerBackground3,
-                    btnExport,
-                    btnPlay,
-                    lblFileName,
-                    lblProgress
+                        ivContainerBackground3,
+                        btnExport,
+                        btnPlay,
+                        lblFileName,
+                        lblProgress
                 );
                 break;
 
@@ -339,7 +327,7 @@ public class ProgressFilesController {
         Window window = ((Node) event.getSource()).getScene().getWindow();
         String filePath = FileChooserUtils.chooseFile(window);
 
-        if(filePath == null) return;
+        if (filePath == null) return;
 
         GameProgress object = SerializationUtils.deserialize(filePath);
         object.setGameProgressId(saveSlot);
@@ -358,7 +346,7 @@ public class ProgressFilesController {
         Window window = ((Node) event.getSource()).getScene().getWindow();
         String filePath = FileChooserUtils.saveFile(window);
 
-        if(filePath == null) return;
+        if (filePath == null) return;
 
         GameProgress object = gameDao.selectGameProgress(saveSlot);
         SerializationUtils.serialize(filePath, object);
@@ -382,5 +370,27 @@ public class ProgressFilesController {
         apFile1.getChildren().clear();
         apFile2.getChildren().clear();
         apFile3.getChildren().clear();
+    }
+
+    private void setupHoverEffect(ImageView item) {
+        if (item != null) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+
+            item.setOnMouseEntered(e -> {
+                item.setStyle("-fx-cursor: hand;");
+                colorAdjust.setContrast(0.05);
+                item.setEffect(colorAdjust);
+
+                item.setScaleX(1.05);
+                item.setScaleY(1.05);
+            });
+
+            item.setOnMouseExited(e -> {
+                item.setEffect(null);
+
+                item.setScaleX(1.0);
+                item.setScaleY(1.0);
+            });
+        }
     }
 }
