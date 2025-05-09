@@ -223,18 +223,18 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {
+                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveLeft();
             }
 
             @Override
-            protected void onActionEnd() {
-                getControlP1().stop();
-            }
+            protected void onActionEnd() { getControlP1().stop(); }
         }, KeyCode.A);
 
         FXGL.getInput().addAction(new UserAction("Right1") {
             @Override
             protected void onAction() {
+                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveRight();
             }
 
@@ -271,6 +271,7 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left2") {
             @Override
             protected void onAction() {
+                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveLeft();
             }
 
@@ -283,6 +284,7 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right2") {
             @Override
             protected void onAction() {
+                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveRight();
             }
 
