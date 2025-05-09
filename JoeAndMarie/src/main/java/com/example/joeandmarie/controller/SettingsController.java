@@ -35,20 +35,7 @@ public class SettingsController implements Observer<SettingPreference> {
     private void initialize() {
 
         viewModel.addObserver(this);
-
-        if(!viewModel.hasCurrentState()) {
-            SettingPreference snapshot = dao.selectSettingPreference();
-
-            if(snapshot == null) {
-                snapshot = new SettingPreference();
-                dao.insertSettingPreference(snapshot);
-            }
-
-            viewModel.setState(snapshot);
-            update(snapshot);
-        } else {
-            update(viewModel.getSnapshot());
-        }
+        update(viewModel.getSnapshot());
 
         slMusicVolume.valueProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_MUSIC_VOLUME, newValue.floatValue());
