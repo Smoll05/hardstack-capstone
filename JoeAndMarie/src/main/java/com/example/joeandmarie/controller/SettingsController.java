@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
@@ -24,6 +25,8 @@ public class SettingsController implements Observer<SettingPreference> {
     @FXML private CheckBox cbInfiClimb;
     @FXML private CheckBox cbInfiGrip;
     @FXML private ImageView btnExit;
+    @FXML private Label lblMusicVolume;
+    @FXML private Label lblFxVolume;
 
     private final SettingPreferenceViewModel viewModel = SettingPreferenceViewModel.getInstance();
     private final SettingPreferenceDao dao = new SettingPreferenceDao();
@@ -81,6 +84,9 @@ public class SettingsController implements Observer<SettingPreference> {
 
         slMusicVolume.setValue(state.getMusicVolume());
         slFXVolume.setValue(state.getFxVolume());
+
+        lblMusicVolume.setText(String.format("%.0f", state.getMusicVolume()));
+        lblFxVolume.setText(String.format("%.0f", state.getFxVolume()));
 
         cbInfiJump.setSelected(state.isInfiniteJump());
         cbInfiClimb.setSelected(state.isClimbWalls());

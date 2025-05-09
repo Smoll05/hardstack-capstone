@@ -20,6 +20,14 @@
     -fx-effect: dropshadow(one-pass-box, #2A2725, 2, 0.5, 1, 1);
 }
 
+#lblMusicVolume {
+    -fx-text-fill: #2A2725;
+}
+
+#lblFxVolume {
+    -fx-text-fill: #2A2725;
+}
+
 #cbInfiJump .box {
     -fx-background-color: transparent;
     -fx-border-color: #2A2725;

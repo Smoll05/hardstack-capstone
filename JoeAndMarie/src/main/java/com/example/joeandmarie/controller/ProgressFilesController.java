@@ -83,18 +83,12 @@ public class ProgressFilesController {
         setSavedFiles();
 
         setupHoverEffect(btnExit);
-        setupHoverEffect(btnPlay);
-        setupHoverEffect(btnExport);
-        setupHoverEffect(btnNewGame);
-        setupHoverEffect(btnNewGame2);
-        setupHoverEffect(btnImportGame);
-        setupHoverEffect(btnImportGame2);
     }
 
     //    To implement: importing and exporting files, loading game onclick of AnchorPane Background
     @FXML
     private void handleFileClick(MouseEvent event) {
-        Button clickedButton = (Button) event.getSource();
+        ImageView clickedButton = (ImageView) event.getSource();
 
         switch (clickedButton.getId()) {
             case "btnPlay1":
@@ -119,7 +113,7 @@ public class ProgressFilesController {
 
     @FXML
     private void handleExportClick(MouseEvent event) {
-        Button clickedButton = (Button) event.getSource();
+        ImageView clickedButton = (ImageView) event.getSource();
 
         switch (clickedButton.getId()) {
             case "btnExport1":
@@ -141,7 +135,7 @@ public class ProgressFilesController {
 
     @FXML
     private void handleNewFileClick(MouseEvent event) {
-        Button clickedButton = (Button) event.getSource();
+        ImageView clickedButton = (ImageView) event.getSource();
 
         switch (clickedButton.getId()) {
             case "btnNewGame1":
@@ -166,7 +160,7 @@ public class ProgressFilesController {
 
     @FXML
     private void handleImportClick(MouseEvent event) {
-        Button clickedButton = (Button) event.getSource();
+        ImageView clickedButton = (ImageView) event.getSource();
 
         switch (clickedButton.getId()) {
             case "btnImport1":
@@ -191,7 +185,6 @@ public class ProgressFilesController {
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
 
-
     private void setSavedFiles() {
         if (saveDao.selectSaveProgress(1)) {
             setHasSaveUi(1);
@@ -213,94 +206,99 @@ public class ProgressFilesController {
     }
 
     private void setHasSaveUi(int saveSlotNum) {
-
-        // Export Button
-        Button btnExport = new Button("Export Save File");
-        btnExport.setLayoutX(182.0);
-        btnExport.setLayoutY(492.0);
-        btnExport.setFont(Font.font(15));
-        btnExport.setOnMouseClicked(this::handleExportClick);
-        btnExport.setId("btnExport" + saveSlotNum);
-
-        // Play Button
-        Button btnPlay = new Button("Play");
-        btnPlay.setLayoutX(183.0);
-        btnPlay.setLayoutY(449.0);
-        btnPlay.setPrefWidth(124.0);
-        btnPlay.setPrefHeight(31.0);
-        btnPlay.setFont(Font.font(15));
-        btnPlay.setOnMouseClicked(this::handleFileClick);
-        btnPlay.setId("btnPlay" + saveSlotNum);
-
         // File Name Label
         Label lblFileName = new Label("File " + saveSlotNum);
-        lblFileName.setLayoutX(208.0);
-        lblFileName.setLayoutY(258.0);
+        lblFileName.setLayoutX(132.0);
+        lblFileName.setLayoutY(180.0);
         lblFileName.setTextFill(Color.WHITE);
-        lblFileName.setFont(Font.font("System", FontWeight.BOLD, 30));
+        lblFileName.setFont(Font.font("System", FontWeight.BOLD, 64));
         lblFileName.setId("lblFileName");
 
         // Progress Label
         int progress = gameDao.selectHeightGameProgress(saveSlotNum);
         Label lblProgress = new Label(progress + "m");
-        lblProgress.setLayoutX(232.0);
-        lblProgress.setLayoutY(303.0);
+        lblProgress.setLayoutX(175.0);
+        lblProgress.setLayoutY(248.0);
         lblProgress.setTextFill(Color.WHITE);
-        lblProgress.setFont(Font.font("System", FontWeight.BOLD, FontPosture.ITALIC, 15));
+        lblProgress.setFont(Font.font("System", FontWeight.BOLD, FontPosture.ITALIC, 48));
         lblProgress.setId("lblProgress");
+
+        // Play Button (ImageView)
+        ImageView btnPlay = new ImageView(new Image(getClass().getResource("/assets/textures/button_play.png").toExternalForm()));
+        btnPlay.setFitWidth(84);
+        btnPlay.setFitHeight(84);
+        btnPlay.setLayoutX(221);
+        btnPlay.setLayoutY(335);
+        btnPlay.setPickOnBounds(true);
+        btnPlay.setPreserveRatio(true);
+        btnPlay.setOnMouseClicked(this::handleFileClick);
+        btnPlay.setId("btnPlay" + saveSlotNum);
+
+        // Export Button (ImageView)
+        ImageView btnExport = new ImageView(new Image(getClass().getResource("/assets/textures/button_export.png").toExternalForm()));
+        btnExport.setFitWidth(84);
+        btnExport.setFitHeight(84);
+        btnExport.setLayoutX(114);
+        btnExport.setLayoutY(335);
+        btnExport.setPickOnBounds(true);
+        btnExport.setPreserveRatio(true);
+        btnExport.setOnMouseClicked(this::handleExportClick);
+        btnExport.setId("btnExport" + saveSlotNum);
 
         switch (saveSlotNum) {
             case 1:
                 apFile1.getChildren().addAll(
                         ivContainerBackground1,
-                        btnExport,
-                        btnPlay,
                         lblFileName,
-                        lblProgress
+                        lblProgress,
+                        btnPlay,
+                        btnExport
                 );
                 break;
-
             case 2:
                 apFile2.getChildren().addAll(
                         ivContainerBackground2,
-                        btnExport,
-                        btnPlay,
                         lblFileName,
-                        lblProgress
+                        lblProgress,
+                        btnPlay,
+                        btnExport
                 );
                 break;
-
             case 3:
                 apFile3.getChildren().addAll(
                         ivContainerBackground3,
-                        btnExport,
-                        btnPlay,
                         lblFileName,
-                        lblProgress
+                        lblProgress,
+                        btnPlay,
+                        btnExport
                 );
-                break;
-
-            default:
                 break;
         }
 
+        setupHoverEffect(btnPlay);
+        setupHoverEffect(btnExport);
     }
 
     private void setHasNoSaveUi(int saveSlotNum) {
-
-        // New Game Button
-        Button btnNewGame = new Button("+");
-        btnNewGame.setLayoutX(162.0);
-        btnNewGame.setLayoutY(358.0);
-        btnNewGame.setFont(Font.font(30));
+        // New Game Button (ImageView)
+        ImageView btnNewGame = new ImageView(new Image(getClass().getResource("/assets/textures/button_play.png").toExternalForm()));
+        btnNewGame.setFitWidth(84);
+        btnNewGame.setFitHeight(84);
+        btnNewGame.setLayoutX(223);
+        btnNewGame.setLayoutY(258);
+        btnNewGame.setPickOnBounds(true);
+        btnNewGame.setPreserveRatio(true);
         btnNewGame.setOnMouseClicked(this::handleNewFileClick);
         btnNewGame.setId("btnNewGame" + saveSlotNum);
 
-        // Import Game Button
-        Button btnImportGame = new Button("↓");
-        btnImportGame.setLayoutX(273.0);
-        btnImportGame.setLayoutY(358.0);
-        btnImportGame.setFont(Font.font(30));
+        // Import Button (ImageView)
+        ImageView btnImportGame = new ImageView(new Image(getClass().getResource("/assets/textures/button_import.png").toExternalForm()));
+        btnImportGame.setFitWidth(84);
+        btnImportGame.setFitHeight(84);
+        btnImportGame.setLayoutX(113);
+        btnImportGame.setLayoutY(258);
+        btnImportGame.setPickOnBounds(true);
+        btnImportGame.setPreserveRatio(true);
         btnImportGame.setOnMouseClicked(this::handleImportClick);
         btnImportGame.setId("btnImport" + saveSlotNum);
 
@@ -308,19 +306,16 @@ public class ProgressFilesController {
             case 1:
                 apFile1.getChildren().addAll(ivContainerBackground1, btnNewGame, btnImportGame);
                 break;
-
             case 2:
                 apFile2.getChildren().addAll(ivContainerBackground2, btnNewGame, btnImportGame);
                 break;
-
             case 3:
                 apFile3.getChildren().addAll(ivContainerBackground3, btnNewGame, btnImportGame);
                 break;
-
-            default:
-                break;
         }
 
+        setupHoverEffect(btnNewGame);
+        setupHoverEffect(btnImportGame);
     }
 
     private void chooseFile(int saveSlot, MouseEvent event) {
