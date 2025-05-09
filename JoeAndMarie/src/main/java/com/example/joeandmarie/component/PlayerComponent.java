@@ -236,7 +236,7 @@ public abstract class PlayerComponent extends Component {
 //        lockedPos = entity.getPosition();
 //    }
 
-    public void cry() {
+    public void cry() { 
         if (!physics.isOnGround()) {
             return;
         }

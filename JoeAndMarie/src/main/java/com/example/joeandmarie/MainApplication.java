@@ -60,8 +60,8 @@ public class MainApplication extends GameApplication {
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Joe and Marie");
         settings.setVersion("1.0");
-        settings.setWidth(1280);
-        settings.setHeight(720);
+        settings.setWidth(1920);
+        settings.setHeight(1080);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
 //        settings.setIntroEnabled(true);
@@ -103,10 +103,12 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 40 * 32;
 //        int mapHeight = 23 * 32;
 
-        int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+//        int mapWidth = 150 * 32;  // 4,800 pixels
+//        int mapHeight = 112 * 32; // 3,584 pixels
 
-
+            int mapWidth = 150 * 32;
+            int mapHeight = 165 * 32;
+            
         FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
 
         // Retrieve spawn point position
