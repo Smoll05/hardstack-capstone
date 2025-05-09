@@ -4,25 +4,19 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.IntroScene;
+import com.almasb.fxgl.app.scene.LoadingScene;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.*;
 import com.almasb.fxgl.physics.box2d.dynamics.Body;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
-import com.example.joeandmarie.component.PlayerComponent;
 import com.example.joeandmarie.config.Constants;
-import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
 import com.example.joeandmarie.data.viewmodel.SettingPreferenceViewModel;
@@ -30,7 +24,7 @@ import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.BlockFactory;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
-import com.example.joeandmarie.ui.GameProgressUi;
+import com.example.joeandmarie.ui.JoeIntroScene;
 import com.example.joeandmarie.ui.JoeMainMenu;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -69,7 +63,7 @@ public class MainApplication extends GameApplication {
         settings.setHeight(1080);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
-//        settings.setIntroEnabled(true);
+        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         settings.setDeveloperMenuEnabled(true);
         settings.setProfilingEnabled(true);
@@ -77,16 +71,20 @@ public class MainApplication extends GameApplication {
 
         // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
-//            @Override
-//            public IntroScene newIntro() {
-//                return new JoeIntroScene.MyIntroScene();
-//            }
+
+            @Override
+            public IntroScene newIntro() {
+                return new JoeIntroScene.MyIntroScene();
+            }
+
 
             @Override
             public FXGLMenu newMainMenu() {
                 return new JoeMainMenu();
             }
+
         });
+
     }
 
 
