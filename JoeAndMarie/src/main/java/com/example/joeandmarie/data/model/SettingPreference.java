@@ -2,8 +2,8 @@ package com.example.joeandmarie.data.model;
 
 public class SettingPreference {
     private final int settingPreferenceId = 1;
-    private float musicVolume = 0.5f;
-    private float fxVolume = 0;
+    private float musicVolume = 50f;
+    private float fxVolume = 50f;
     private boolean isInfiniteJump = false;
     private boolean isClimbWalls = false;
     private boolean isInfiniteGrip = false;
@@ -50,5 +50,15 @@ public class SettingPreference {
 
     public void setInfiniteGrip(boolean infiniteGrip) {
         isInfiniteGrip = infiniteGrip;
+    }
+
+    public SettingPreference readOnlyCopy() {
+        SettingPreference copy = new SettingPreference();
+        copy.setMusicVolume(this.musicVolume);
+        copy.setFxVolume(this.fxVolume);
+        copy.setInfiniteJump(this.isInfiniteJump);
+        copy.setClimbWalls(this.isClimbWalls);
+        copy.setInfiniteGrip(this.isInfiniteGrip);
+        return copy;
     }
 }

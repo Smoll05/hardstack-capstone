@@ -1,7 +1,6 @@
 package com.example.joeandmarie.data.viewmodel;
 
-import com.example.joeandmarie.data.event.GameProgressEvent;
-import com.example.joeandmarie.data.model.GameProgress;
+import com.example.joeandmarie.data.model.SettingPreference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +34,10 @@ public abstract class ViewModel<T> implements Subject<T> {
 
     public void clearState() {
         this.state = null;
+    }
+
+    public boolean hasCurrentState() {
+        return state != null;
     }
 
 }

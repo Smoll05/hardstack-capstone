@@ -20,7 +20,7 @@
             <AnchorPane fx:id="apFile1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleFileClick" prefWidth="490.0">
                <children>
                   <ImageView fx:id="ivContainerBackground1" fitHeight="780.0" fitWidth="490.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="btnExport" layoutX="182.0" layoutY="492.0" mnemonicParsing="false" text="Export Save File">
+                  <Button fx:id="btnExport" layoutX="182.0" layoutY="492.0" mnemonicParsing="false" onMouseClicked="#handleExportClick" text="Export Save File">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -44,12 +44,12 @@
             <AnchorPane fx:id="apFile2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleFileClick" prefWidth="490.0">
                <children>
                   <ImageView fx:id="ivContainerBackground2" fitHeight="780.0" fitWidth="490.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="btnNewGame" layoutX="162.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#handleFileClick" text="+">
+                  <Button fx:id="btnNewGame" layoutX="162.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#handleNewFileClick" text="+">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnImportGame" layoutX="273.0" layoutY="358.0" mnemonicParsing="false" text="↓">
+                  <Button fx:id="btnImport2" layoutX="273.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#handleImportClick" text="↓">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -59,12 +59,12 @@
             <AnchorPane fx:id="apFile3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleFileClick" prefWidth="490.0">
                <children>
                   <ImageView fx:id="ivContainerBackground3" fitHeight="780.0" fitWidth="490.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="btnNewGame2" layoutX="162.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#handleFileClick" text="+">
+                  <Button fx:id="btnNewGame2" layoutX="162.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#handleNewFileClick" text="+">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnImportGame2" layoutX="273.0" layoutY="358.0" mnemonicParsing="false" text="↓">
+                  <Button fx:id="btnImport3" layoutX="273.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#handleImportClick" text="↓">
                      <font>
                         <Font size="30.0" />
                      </font>

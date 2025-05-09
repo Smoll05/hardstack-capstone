@@ -53,4 +53,8 @@ public class SettingPreferenceViewModel extends ViewModel<SettingPreference> {
 
         notifyObservers();
     }
+
+    public SettingPreference getSnapshot() {
+        return state.readOnlyCopy();
+    }
 }
