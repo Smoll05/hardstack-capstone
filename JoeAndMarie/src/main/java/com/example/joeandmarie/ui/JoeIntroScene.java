@@ -4,30 +4,15 @@
  * See LICENSE for details.
  */
 
-package com.example.joeandmarie.Starting;
+package com.example.joeandmarie.ui;
 
 import com.almasb.fxgl.animation.Animation;
-import com.almasb.fxgl.animation.Interpolators;
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.IntroScene;
-import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.animation.FadeTransition;
-import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.Pane;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
-import javafx.scene.media.Media; // ✅ Correct import
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -82,13 +67,13 @@ public class JoeIntroScene {
             progressBar.setTranslateX((FXGL.getAppWidth() - barWidth) / 2);
             progressBar.setTranslateY(FXGL.getAppHeight() - 30);
             progressBar.setStyle(
-                    "-fx-accent: #00ff88;" +
-                            "-fx-control-inner-background: #222;" +
-                            "-fx-background-insets: 0;" +
-                            "-fx-background-radius: 5;" +
-                            "-fx-border-color: white;" +
-                            "-fx-border-radius: 5;" +
-                            "-fx-border-width: 1;"
+                "-fx-accent: #00ff88;" +
+                        "-fx-control-inner-background: #222;" +
+                        "-fx-background-insets: 0;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-color: white;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-border-width: 1;"
             );
 
             // --- Setup character animation ---
