@@ -135,7 +135,35 @@ public class ProgressFilesController {
 
     @FXML
     private void handleDeleteClick(MouseEvent event) {
+        ImageView clickedButton = (ImageView) event.getSource();
 
+        switch (clickedButton.getId()) {
+            case "btnDelete1":
+                deleteSaveFile(1);
+                resetFileSlotUi();
+                setSavedFiles();
+                break;
+
+            case "btnDelete2":
+                deleteSaveFile(2);
+                resetFileSlotUi();
+                setSavedFiles();
+                break;
+
+            case "btnDelete3":
+                deleteSaveFile(3);
+                resetFileSlotUi();
+                setSavedFiles();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void deleteSaveFile(int saveSlot) {
+        saveDao.deleteSaveProgress(saveSlot);
+        gameDao.deleteGameProgress(saveSlot);
     }
 
     @FXML
@@ -289,7 +317,8 @@ public class ProgressFilesController {
                         lblFileName,
                         lblProgress,
                         btnPlay,
-                        btnExport
+                        btnExport,
+                        btnDelete
                 );
                 break;
         }
@@ -351,10 +380,20 @@ public class ProgressFilesController {
         saveDao.insertSaveProgress(saveSlot);
         gameDao.insertGameProgress(object);
 
-        System.out.println("Imported file: " + filePath);
+        switch (saveSlot) {
+            case 1:
+                apFile1.getChildren().clear();
+                break;
+            case 2:
+                apFile2.getChildren().clear();
+                break;
+            case 3:
+                apFile3.getChildren().clear();
+                break;
+        }
 
-        apFile2.getChildren().clear();
         setHasSaveUi(saveSlot);
+        System.out.println("Imported file: " + filePath);
     }
 
     private void saveFile(int saveSlot, MouseEvent event) {
