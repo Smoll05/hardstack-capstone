@@ -8,4 +8,4 @@ public enum EntityType {
     ROPE_SEGMENT,
     FLAG,
     SPAWN_POINT
-    }
+}
