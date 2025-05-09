@@ -37,7 +37,7 @@ public class ProgressFilesController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResource("/assets/textures/menu_bg4_pixelated.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/assets/textures/menu_bg_unfocused.png").toExternalForm());
         ivBackground.setImage(image);
         ivBackground.setPreserveRatio(true);
         ivBackground.setSmooth(true);

@@ -11,30 +11,30 @@
       <children>
           <!-- Background Image -->
           <ImageView fx:id="bgImage" fitHeight="1080.0" fitWidth="1920.0" />
-         <ImageView fx:id="bgTitle" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="bgTitle" fitHeight="410.0" fitWidth="1709.0" layoutX="106.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="50.0" />
       
                 <!-- Menu Box -->
-          <VBox fx:id="menuBox" alignment="CENTER" spacing="10.0">
+          <VBox fx:id="menuBox" alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="100.0">
             <children>
                  <!-- Menu Items -->
-                 <StackPane fx:id="coopCampaign" onMouseClicked="#handlePlayClick">
+                 <StackPane fx:id="coopCampaign" onMouseClicked="#handlePlayClick" prefHeight="146.0" prefWidth="346.0">
                   <children>
-                     <ImageView fx:id="menu_play" fitHeight="200.0" fitWidth="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
+                     <ImageView fx:id="menu_play" fitHeight="146.0" fitWidth="346.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
                   </children>
                  </StackPane>
             
                        <StackPane fx:id="settings" onMouseClicked="#handleSettingsClick">
-                  <ImageView fx:id="menu_settings" fitHeight="100.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
+                  <ImageView fx:id="menu_settings" fitHeight="94.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
                  </StackPane>
                <StackPane fx:id="credit" onMouseClicked="#handleCreditsClick">
                   <children>
-                     <ImageView fx:id="menu_credits" fitHeight="75.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
+                     <ImageView fx:id="menu_credits" fitHeight="86.0" fitWidth="251.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
                   </children>
                </StackPane>
             
                        <StackPane fx:id="quit" onMouseClicked="#handleQuitClick">
                   <children>
-                     <ImageView fx:id="menu_exit" fitHeight="90.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
+                     <ImageView fx:id="menu_exit" fitHeight="85.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT" />
                   </children>
                  </StackPane>
             </children>

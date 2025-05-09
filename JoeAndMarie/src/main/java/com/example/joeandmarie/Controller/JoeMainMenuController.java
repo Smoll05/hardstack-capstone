@@ -49,26 +49,26 @@ public class JoeMainMenuController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResource("/assets/textures/menu_bg4_pixelated.png").toExternalForm()); // just testing pixelated backgrounds
+        Image image = new Image(getClass().getResource("/assets/textures/menu_bg.png").toExternalForm()); // just testing pixelated backgrounds
         bgImage.setImage(image);
         bgImage.setPreserveRatio(true);
         bgImage.setSmooth(true);
 
-        Image title = new Image(getClass().getResource("/assets/textures/menu_title.png").toExternalForm());
+        Image title = new Image(getClass().getResource("/assets/textures/menu_title_noshadow.png").toExternalForm());
         bgTitle.setImage(title);
         bgTitle.setPreserveRatio(true);
         bgTitle.setSmooth(true);
 
-        Image play = new Image(getClass().getResource("/assets/textures/menu_play.png").toExternalForm());
+        Image play = new Image(getClass().getResource("/assets/textures/menu_new_play.png").toExternalForm());
         menu_play.setImage(play);
 
-        Image setting = new Image(getClass().getResource("/assets/textures/menu_settings.png").toExternalForm());
+        Image setting = new Image(getClass().getResource("/assets/textures/menu_new_settings.png").toExternalForm());
         menu_settings.setImage(setting);
 
-        Image exit = new Image(getClass().getResource("/assets/textures/menu_exit.png").toExternalForm());
+        Image exit = new Image(getClass().getResource("/assets/textures/menu_new_exit.png").toExternalForm());
         menu_exit.setImage(exit);
 
-        Image credits = new Image(getClass().getResource("/assets/textures/menu_credits.png").toExternalForm());
+        Image credits = new Image(getClass().getResource("/assets/textures/menu_new_credits.png").toExternalForm());
         menu_credits.setImage(credits);
 
         javafx.application.Platform.runLater(() -> {
