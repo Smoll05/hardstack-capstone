@@ -26,24 +26,29 @@
                      <image>
                         <Image url="@../textures/save_files_container.png" />
                      </image></ImageView>
-                  <Label fx:id="lblFileName" layoutX="132.0" layoutY="180.0" text="File 1" textAlignment="CENTER" textFill="WHITE">
+                  <Label fx:id="lblFileName" layoutX="132.0" layoutY="138.0" text="File 1" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="64.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblProgress" layoutX="175.0" layoutY="248.0" text="0m" textAlignment="CENTER" textFill="WHITE">
+                  <Label fx:id="lblProgress" layoutX="175.0" layoutY="206.0" text="0m" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="System Bold Italic" size="48.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="btnPlay" fitHeight="84.0" fitWidth="84.0" layoutX="221.0" layoutY="335.0" onMouseClicked="#handleFileClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="btnPlay" fitHeight="84.0" fitWidth="84.0" layoutX="221.0" layoutY="293.0" onMouseClicked="#handleFileClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../textures/button_play.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="btnExport" fitHeight="84.0" fitWidth="84.0" layoutX="114.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="btnExport" fitHeight="84.0" fitWidth="84.0" layoutX="114.0" layoutY="293.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../textures/button_export.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnDelete" fitHeight="84.0" fitWidth="84.0" layoutX="167.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../textures/button_delete.png" />
                      </image>
                   </ImageView>
                </children></AnchorPane>

@@ -54,7 +54,7 @@ public class SaveProgressDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting save progress", e);
+            throw new RuntimeException("Error searching save progress", e);
         }
     }
 
