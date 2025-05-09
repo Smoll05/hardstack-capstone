@@ -134,6 +134,11 @@ public class ProgressFilesController {
     }
 
     @FXML
+    private void handleDeleteClick(MouseEvent event) {
+
+    }
+
+    @FXML
     private void handleNewFileClick(MouseEvent event) {
         ImageView clickedButton = (ImageView) event.getSource();
 
@@ -209,42 +214,54 @@ public class ProgressFilesController {
         // File Name Label
         Label lblFileName = new Label("File " + saveSlotNum);
         lblFileName.setLayoutX(132.0);
-        lblFileName.setLayoutY(180.0);
+        lblFileName.setLayoutY(138.0);
         lblFileName.setTextFill(Color.WHITE);
         lblFileName.setFont(Font.font("System", FontWeight.BOLD, 64));
-        lblFileName.setId("lblFileName");
+        lblFileName.setId("lblFileName" + saveSlotNum);
 
         // Progress Label
-        int progress = gameDao.selectHeightGameProgress(saveSlotNum);
+        int progress = gameDao.selectHeightGameProgress(saveSlotNum); // assumes you have a DAO returning height
         Label lblProgress = new Label(progress + "m");
         lblProgress.setLayoutX(175.0);
-        lblProgress.setLayoutY(248.0);
+        lblProgress.setLayoutY(206.0);
         lblProgress.setTextFill(Color.WHITE);
-        lblProgress.setFont(Font.font("System", FontWeight.BOLD, FontPosture.ITALIC, 48));
-        lblProgress.setId("lblProgress");
+        lblProgress.setFont(Font.font("System", FontPosture.ITALIC, 48));
+        lblProgress.setId("lblProgress" + saveSlotNum);
 
-        // Play Button (ImageView)
+        // Play Button
         ImageView btnPlay = new ImageView(new Image(getClass().getResource("/assets/textures/button_play.png").toExternalForm()));
         btnPlay.setFitWidth(84);
         btnPlay.setFitHeight(84);
-        btnPlay.setLayoutX(221);
-        btnPlay.setLayoutY(335);
-        btnPlay.setPickOnBounds(true);
+        btnPlay.setLayoutX(221.0);
+        btnPlay.setLayoutY(293.0);
         btnPlay.setPreserveRatio(true);
+        btnPlay.setPickOnBounds(true);
         btnPlay.setOnMouseClicked(this::handleFileClick);
         btnPlay.setId("btnPlay" + saveSlotNum);
 
-        // Export Button (ImageView)
+        // Export Button
         ImageView btnExport = new ImageView(new Image(getClass().getResource("/assets/textures/button_export.png").toExternalForm()));
         btnExport.setFitWidth(84);
         btnExport.setFitHeight(84);
-        btnExport.setLayoutX(114);
-        btnExport.setLayoutY(335);
-        btnExport.setPickOnBounds(true);
+        btnExport.setLayoutX(114.0);
+        btnExport.setLayoutY(293.0);
         btnExport.setPreserveRatio(true);
+        btnExport.setPickOnBounds(true);
         btnExport.setOnMouseClicked(this::handleExportClick);
         btnExport.setId("btnExport" + saveSlotNum);
 
+        // Delete Button
+        ImageView btnDelete = new ImageView(new Image(getClass().getResource("/assets/textures/button_delete.png").toExternalForm()));
+        btnDelete.setFitWidth(84);
+        btnDelete.setFitHeight(84);
+        btnDelete.setLayoutX(167.0);
+        btnDelete.setLayoutY(377.0);
+        btnDelete.setPreserveRatio(true);
+        btnDelete.setPickOnBounds(true);
+        btnDelete.setOnMouseClicked(this::handleDeleteClick);
+        btnDelete.setId("btnDelete" + saveSlotNum);
+
+        // Add to appropriate Pane
         switch (saveSlotNum) {
             case 1:
                 apFile1.getChildren().addAll(
@@ -252,7 +269,8 @@ public class ProgressFilesController {
                         lblFileName,
                         lblProgress,
                         btnPlay,
-                        btnExport
+                        btnExport,
+                        btnDelete
                 );
                 break;
             case 2:
@@ -261,7 +279,8 @@ public class ProgressFilesController {
                         lblFileName,
                         lblProgress,
                         btnPlay,
-                        btnExport
+                        btnExport,
+                        btnDelete
                 );
                 break;
             case 3:
@@ -277,6 +296,7 @@ public class ProgressFilesController {
 
         setupHoverEffect(btnPlay);
         setupHoverEffect(btnExport);
+        setupHoverEffect(btnDelete);
     }
 
     private void setHasNoSaveUi(int saveSlotNum) {
