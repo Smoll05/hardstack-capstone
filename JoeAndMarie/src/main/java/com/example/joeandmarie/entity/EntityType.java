@@ -7,5 +7,6 @@ public enum EntityType {
     ONE_WAY_PLATFORM,
     ROPE_SEGMENT,
     FLAG,
-    SPAWN_POINT
+    SPAWN_POINT,
+    CHECK_POINT
 }

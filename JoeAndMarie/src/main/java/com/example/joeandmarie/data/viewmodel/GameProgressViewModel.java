@@ -39,7 +39,7 @@ public class GameProgressViewModel extends ViewModel<GameProgress> {
                     state.setYCoordinate((Float) value);
                     break;
                 case UPDATE_DEEP_FALL_COUNT:
-                    state.setDeepFallCount((int) value);
+                    state.setDeepFallCount(state.getDeepFallCount() + (int) value);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown event type: " + event);
@@ -49,5 +49,9 @@ public class GameProgressViewModel extends ViewModel<GameProgress> {
         }
 
         notifyObservers();
+    }
+
+    public GameProgress getSnapshot() {
+        return state.readOnlyCopy(state.getGameProgressId(), state.getSaveProgressId());
     }
 }

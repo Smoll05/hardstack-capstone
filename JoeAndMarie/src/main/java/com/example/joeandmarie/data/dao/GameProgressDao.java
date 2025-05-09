@@ -89,7 +89,8 @@ public class GameProgressDao {
             stmt.setInt(1, state.getHeightProgress());
             stmt.setFloat(2, state.getXCoordinate());
             stmt.setFloat(3, state.getYCoordinate());
-            stmt.setInt(4, state.getGameProgressId());
+            stmt.setFloat(4, state.getDeepFallCount());
+            stmt.setInt(5, state.getGameProgressId());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
