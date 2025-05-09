@@ -2,25 +2,22 @@ package com.example.joeandmarie.Controller;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.example.joeandmarie.MainApplication;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class JoeMainMenuController {
     @FXML
-    private Pane apContainer;
+    private Pane apMenuContainer;
+    @FXML
+    private AnchorPane apContainer;
     @FXML
     public ImageView bgTitle;
     @FXML
@@ -101,16 +98,6 @@ public class JoeMainMenuController {
 //        }
     }
 
-    @FXML
-    private void handlePlayClick() {
-        switchScreenToProgressFiles();
-    }
-
-    @FXML
-    private void handleCreditsClick() {
-        switchScreenToCredits();
-    }
-
     private void switchScreenToProgressFiles() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/progress_files.fxml"));
@@ -160,14 +147,25 @@ public class JoeMainMenuController {
 //    }
 
     @FXML
-    private void handleSettingsClick() {
-        switchScreenToSettings();
-//        System.out.println("Settings clicked");
-
+    private void handleQuitClick() {
+        FXGL.getGameController().exit();
     }
 
     @FXML
-    private void handleQuitClick() {
-        FXGL.getGameController().exit();
+    private void handlePlayClick() {
+        switchScreenToProgressFiles();
+        System.out.println("PLAY");
+    }
+
+    @FXML
+    private void handleCreditsClick() {
+        switchScreenToCredits();
+        System.out.println("CREDS");
+    }
+
+    @FXML
+    private void handleSettingsClick() {
+        switchScreenToSettings();
+        System.out.println("Settings clicked");
     }
 }

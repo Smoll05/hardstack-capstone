@@ -11,10 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="apContainer" onMouseClicked="#handleExitClick" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.Controller.CreditsController">
    <children>
-      <Button fx:id="btnExit" layoutX="1803.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#handleExitClick" text="&lt;-">
+      <Button fx:id="btnClose" layoutX="1803.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#handleExitClick" text="&lt;-">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
@@ -44,7 +43,7 @@
          <children>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="2">
                <children>
-                  <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivPeepsAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Carl Angelo Pepino">
                      <font>
                         <Font name="System Bold" size="16.0" />
@@ -57,7 +56,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="4">
                <children>
-                  <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivIvannAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Ivann James Paradero">
                      <font>
                         <Font name="System Bold" size="16.0" />
@@ -70,7 +69,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER">
                <children>
-                  <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivBrentAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Brent Micheal Tolentino">
                      <font>
                         <Font name="System Bold" size="16.0" />
@@ -83,7 +82,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivRainAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Mary Avriel Rainne Borromeo">
                      <font>
                         <Font name="System Bold" size="16.0" />
@@ -96,7 +95,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivNateAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Nathanael Jedd Del Castillo">
                      <font>
                         <Font name="System Bold" size="16.0" />
