@@ -3,10 +3,7 @@ package com.example.joeandmarie.data.dao;
 import com.example.joeandmarie.data.database.ConnectionPool;
 import com.example.joeandmarie.data.model.SettingPreference;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SettingPreferenceDao {
 
@@ -18,7 +15,7 @@ public class SettingPreferenceDao {
                 fx_volume,
                 infinite_jump,
                 climb_walls,
-                infinite_grip,            
+                infinite_grip       
             ) VALUES (?, ?, ?, ?, ?, ?)
         """;
 
@@ -44,17 +41,15 @@ public class SettingPreferenceDao {
         }
     }
 
-    public SettingPreference selectSettingPreference(int settingPreferenceId) {
-        String sql = "SELECT * FROM tbSettingPreference WHERE setting_preference_id = ?";
+    public SettingPreference selectSettingPreference() {
+        String sql = "SELECT * FROM tbSettingPreference WHERE setting_preference_id = 1";
 
         SettingPreference currentState = null;
 
         try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             Statement stmt = conn.createStatement()) {
 
-            stmt.setInt(1, settingPreferenceId);
-
-            try (ResultSet resultSet = stmt.executeQuery()) {
+            try (ResultSet resultSet = stmt.executeQuery(sql)) {
 
                 if (resultSet.next()) {
                     currentState = new SettingPreference();
@@ -64,9 +59,9 @@ public class SettingPreferenceDao {
                     currentState.setClimbWalls(resultSet.getInt("climb_walls") == 1);
                     currentState.setInfiniteGrip(resultSet.getInt("infinite_grip") == 1);
 
-                    System.out.println("SettingPreference with setting_progress_id: " + settingPreferenceId + " found");
+                    System.out.println("SettingPreference found");
                 } else {
-                    System.out.println("No SettingPreference found with setting_progress_id: " + settingPreferenceId);
+                    System.out.println("No SettingPreference found ");
                 }
             }
 
@@ -83,7 +78,7 @@ public class SettingPreferenceDao {
             SET music_volume = ?, fx_volume = ?,
                 infinite_jump = ?, climb_walls = ?,
                 infinite_grip = ?
-            WHERE setting_preference_id = ?
+            WHERE setting_preference_id = 1
         """;
 
         try (Connection conn = ConnectionPool.getConnection();
@@ -94,7 +89,6 @@ public class SettingPreferenceDao {
             stmt.setInt(3, state.isInfiniteJump() ? 1 : 0);
             stmt.setInt(4, state.isClimbWalls() ? 1 : 0);
             stmt.setInt(5, state.isInfiniteGrip() ? 1 : 0);
-            stmt.setInt(5, state.getSettingPreferenceId());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -108,18 +102,16 @@ public class SettingPreferenceDao {
         }
     }
 
-    public void deleteSettingPreference(int settingPreferenceId) {
-        String sql = "DELETE FROM tbSettingPreference WHERE setting_preference_id = ?";
+    public void deleteSettingPreference() {
+        String sql = "DELETE FROM tbSettingPreference";
 
         try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             Statement stmt = conn.createStatement()) {
 
-            stmt.setInt(1, settingPreferenceId);
-
-            if(stmt.executeUpdate() > 0) {
-                System.out.println("Successfully deleted setting preference with id " + settingPreferenceId);
+            if(stmt.executeUpdate(sql) > 0) {
+                System.out.println("Successfully deleted setting preference");
             } else {
-                System.out.println("Failed to delete setting preference with id " + settingPreferenceId);
+                System.out.println("Failed to delete setting preference ");
             }
 
         } catch (SQLException e) {
