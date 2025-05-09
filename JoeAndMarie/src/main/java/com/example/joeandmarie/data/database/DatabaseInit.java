@@ -1,10 +1,15 @@
 package com.example.joeandmarie.data.database;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseInit {
+    private static final String createDatabase = """
+            CREATE DATABASE IF NOT EXISTS dbCapstone
+            """;
+
     private static final String createGameProgress = """ 
             CREATE TABLE IF NOT EXISTS tbGameProgress (
                 game_progress_id INT PRIMARY KEY,
@@ -36,13 +41,23 @@ public class DatabaseInit {
             """;
 
     public static void initialize() {
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", DatabaseCredentials.USERNAME, DatabaseCredentials.PASSWORD);
+             Statement statement = connection.createStatement()) {
+
+            statement.executeUpdate(createDatabase);
+            System.out.println("Database created");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database: " + e.getMessage());
+        }
+
         try (Connection connection = ConnectionPool.getConnection();
              Statement statement = connection.createStatement()) {
 
             statement.addBatch(createSaveProgress);
             statement.addBatch(createGameProgress);
             statement.addBatch(createSettingPreference);
-
             statement.executeBatch();
 
             System.out.println("Database initialized successfully.");
