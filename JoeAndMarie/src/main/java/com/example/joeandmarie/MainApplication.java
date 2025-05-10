@@ -69,7 +69,7 @@ public class MainApplication extends GameApplication {
         settings.setHeight(1080);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
-        settings.setIntroEnabled(true);
+//        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         settings.setDeveloperMenuEnabled(true);
         settings.setProfilingEnabled(true);

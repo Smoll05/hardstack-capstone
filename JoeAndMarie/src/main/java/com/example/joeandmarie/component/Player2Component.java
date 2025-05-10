@@ -131,13 +131,12 @@ public class Player2Component extends PlayerComponent {
         // Check if the distance is near the rope length and both players are stationary
         boolean ropeIsFullyExtended = Math.abs(distanceBetweenPlayers - ropeLength) <= 20;  // Tolerance
 
-        // System.out.println("Physics not on ground: " + !physics.isOnGround());
-        // System.out.println("Other physics on ground: " + otherPhysics.isOnGround());
-
         // Return true if both conditions are met
         return ropeIsFullyExtended
                 && !physics.isOnGround()
-                && otherPhysics.isOnGround();
+                && (otherPhysics.isOnGround() ||
+                otherState.getCurrentState().toString().equals("HOLD")
+        );
     }
 
     @Override
