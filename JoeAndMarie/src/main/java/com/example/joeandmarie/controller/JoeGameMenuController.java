@@ -41,11 +41,14 @@ public class JoeGameMenuController {
 
     @FXML
     private void handlePlayClick() {
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         FXGL.getSceneService().popSubScene();
     }
 
     @FXML
     private void handleSettingsClick() {
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
+
         try {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/game_menu_settings.fxml"));
             Parent newContent = null;
@@ -63,6 +66,7 @@ public class JoeGameMenuController {
 
     @FXML
     private void handleExitClick() {
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         FXGL.getGameController().gotoMainMenu();
     }
 }

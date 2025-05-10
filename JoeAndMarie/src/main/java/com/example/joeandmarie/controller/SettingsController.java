@@ -52,14 +52,17 @@ public class SettingsController implements Observer<SettingPreference> {
 
         cbInfiJump.selectedProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_INFINITE_JUMP, newValue);
+            FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         });
 
         cbInfiClimb.selectedProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_CLIMB_WALLS, newValue);
+            FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         });
 
         cbInfiGrip.selectedProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_INFINITE_GRIP, newValue);
+            FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         });
 
         setupHoverEffect(btnExit);
@@ -69,6 +72,7 @@ public class SettingsController implements Observer<SettingPreference> {
     private void handleExitClick() {
         viewModel.saveSettingPreference();
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     @Override

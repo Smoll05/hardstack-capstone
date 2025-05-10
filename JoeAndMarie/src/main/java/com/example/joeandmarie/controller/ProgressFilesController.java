@@ -9,10 +9,7 @@ import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
 import com.example.joeandmarie.utils.FileChooserUtils;
 import com.example.joeandmarie.utils.SerializationUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -24,8 +21,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Window;
-
-import java.io.IOException;
 
 public class ProgressFilesController {
     @FXML private AnchorPane apFile1; //anchorpanes for files, has click handlers to continue playing game for now
@@ -65,7 +60,6 @@ public class ProgressFilesController {
         setupHoverEffect(btnExit);
     }
 
-    //    To implement: importing and exporting files, loading game onclick of AnchorPane Background
     @FXML
     private void handleFileClick(MouseEvent event) {
         ImageView clickedButton = (ImageView) event.getSource();
@@ -87,7 +81,7 @@ public class ProgressFilesController {
                 break;
         }
 
-        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_meow());
         FXGL.getGameController().startNewGame();
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
@@ -112,6 +106,7 @@ public class ProgressFilesController {
             default:
                 break;
         }
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     @FXML
@@ -140,6 +135,7 @@ public class ProgressFilesController {
             default:
                 break;
         }
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     private void deleteSaveFile(int saveSlot) {
@@ -170,6 +166,7 @@ public class ProgressFilesController {
 
         FXGL.getGameController().startNewGame();
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_meow());
     }
 
     @FXML
@@ -192,11 +189,13 @@ public class ProgressFilesController {
             default:
                 break;
         }
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     @FXML
     private void handleExitClick() {
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     private void setSavedFiles() {
@@ -418,6 +417,8 @@ public class ProgressFilesController {
 
                 item.setScaleX(1.05);
                 item.setScaleY(1.05);
+
+                FXGL.getAudioPlayer().playSound(MainApplication.getSfx_hover());
             });
 
             item.setOnMouseExited(e -> {

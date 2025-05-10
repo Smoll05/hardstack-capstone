@@ -24,8 +24,9 @@ public class JoeMainMenu extends FXGLMenu {
         super(MenuType.MAIN_MENU);
         DatabaseInit.initialize();
 
-        MainApplication.setSfx_click(FXGL.getAssetLoader().loadSound("sound_meow.wav"));
+        MainApplication.setSfx_meow(FXGL.getAssetLoader().loadSound("sound_meow.wav"));
         MainApplication.setSfx_hover(FXGL.getAssetLoader().loadSound("sound_button_hover.wav"));
+        MainApplication.setSfx_click(FXGL.getAssetLoader().loadSound("sound_button_click.wav"));
 
         SettingPreference snapshot = dao.selectSettingPreference();
 
