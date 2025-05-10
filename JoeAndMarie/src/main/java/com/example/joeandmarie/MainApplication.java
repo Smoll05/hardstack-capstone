@@ -4,7 +4,6 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.IntroScene;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -16,15 +15,20 @@ import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.data.event.GameProgressEvent;
+import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
 import com.example.joeandmarie.data.viewmodel.SettingPreferenceViewModel;
 import com.example.joeandmarie.entity.EntityType;
 import com.example.joeandmarie.factory.BlockFactory;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
-import com.example.joeandmarie.ui.JoeIntroScene;
+import com.example.joeandmarie.threading.SaveRunnable;
+import com.example.joeandmarie.ui.HeightProgressUi;
 import com.example.joeandmarie.ui.JoeMainMenu;
+import com.example.joeandmarie.ui.SavingGameSpinnerUi;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
@@ -63,7 +67,7 @@ public class MainApplication extends GameApplication {
         settings.setHeight(1080);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
-        settings.setIntroEnabled(true);
+//        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         settings.setDeveloperMenuEnabled(true);
         settings.setProfilingEnabled(true);
@@ -82,9 +86,7 @@ public class MainApplication extends GameApplication {
             public FXGLMenu newMainMenu() {
                 return new JoeMainMenu();
             }
-
         });
-
     }
 
 
@@ -438,18 +440,56 @@ public class MainApplication extends GameApplication {
                 }
             }
         });
+
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER1, EntityType.CHECK_POINT) {
+
+            @Override
+            protected void onCollisionBegin(Entity player, Entity checkpoint) {
+
+                SavingGameSpinnerUi spinnerUi = new SavingGameSpinnerUi();
+                Node spinnerView = spinnerUi.getView();
+
+                double screenWidth = FXGL.getAppWidth();
+                double screenHeight = FXGL.getAppHeight();
+
+                spinnerView.setTranslateX(screenWidth - spinnerView.prefWidth(-1) - 250);
+                spinnerView.setTranslateY(screenHeight - spinnerView.prefHeight(-1) - 50);
+
+                FXGL.addUINode(spinnerView);
+
+                Thread saveThread = new Thread(new SaveRunnable());
+                saveThread.start();
+
+                FXGL.runOnce(() -> {
+
+                    FXGL.getGameScene().removeUINode(spinnerView);
+
+                }, Duration.seconds(2));
+
+            }
+        });
+
     }
 
     @Override
     protected void initUI() {
         createRopeVisualization();
+
+        HeightProgressUi heightProgressUi = new HeightProgressUi();
+        Node heightProgress = heightProgressUi.getView();
+        FXGL.addUINode(heightProgress);
+        gameProgressViewModel.addObserver(heightProgressUi);
     }
 
     @Override
     protected void onUpdate(double tpf) {
-        super.onUpdate(tpf);
 
-//        updateRopeSegments();
+        int currentHeight = (int) ((-getPlayer1().getY() + originY) / 50);
+
+        gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_HEIGHT, currentHeight);
+        gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_X_COORDINATE, (float) getPlayer1().getX());
+        gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_Y_COORDINATE, (float) getPlayer1().getY());
 
         if (isPulling) {
             float current = ropeJoint.getMaxLength();
