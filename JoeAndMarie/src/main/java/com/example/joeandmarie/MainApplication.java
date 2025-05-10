@@ -74,7 +74,7 @@ public class MainApplication extends GameApplication {
         settings.setVersion("1.0");
         settings.setWidth(1920);
         settings.setHeight(1080);
-        settings.setIntroEnabled(true);
+//        settings.setIntroEnabled(true);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
@@ -123,7 +123,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("MAIN-LEVEL.tmx");
+            FXGL.setLevelFromMap("MainLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,8 +136,8 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 1600;
 //        int mapHeight = 950;
 
-        int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+        int mapWidth = 152 * 32;  // 4,800 pixels
+        int mapHeight = 252 * 32; // 3,584 pixels
 
 //        viewport.setZoom(0.8);
 
