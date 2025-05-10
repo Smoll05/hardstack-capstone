@@ -13,6 +13,8 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.TimerAction;
 import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.data.event.GameProgressEvent;
+import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -20,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class PlayerComponent extends Component {
+
+    private GameProgressViewModel viewModel = GameProgressViewModel.getInstance();
 
     protected StateComponent state;
     protected PhysicsComponent physics;
@@ -88,6 +92,7 @@ public abstract class PlayerComponent extends Component {
             if (physics.isOnGround()) {
                 physics.setVelocityX(0);
                 state.changeState(SPLAT);
+                viewModel.onEvent(GameProgressEvent.UPDATE_DEEP_FALL_COUNT, 1);
             }
 
             setFriction(1f);

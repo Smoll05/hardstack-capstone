@@ -196,8 +196,4 @@ public class Player1Component extends PlayerComponent {
         }
     }
 
-    @Override
-    public boolean isComponentInjectionRequired() {
-        return false;
-    }
 }

@@ -39,5 +39,4 @@ public abstract class ViewModel<T> implements Subject<T> {
     public boolean hasCurrentState() {
         return state != null;
     }
-
 }

@@ -11,6 +11,7 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.example.joeandmarie.entity.EntityType;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -47,6 +48,17 @@ public class PlatformerFactory implements EntityFactory {
                 .build();
     }
 
+    @Spawns("checkpoint")
+    public Entity checkpoint(SpawnData data) {
+        return entityBuilder(data)
+                .type(EntityType.CHECK_POINT)
+                .bbox(new HitBox(BoundingShape.box(
+                        data.<Integer>get("width"),
+                        data.<Integer>get("height")
+                )))
+                .with(new CollidableComponent(true))
+                .build();
+    }
 
 }
 

@@ -62,4 +62,13 @@ public class GameProgress implements Serializable {
     public void setDeepFallCount(int deepFallCount) {
         this.deepFallCount = deepFallCount;
     }
+
+    public GameProgress readOnlyCopy(int gameProgressId, int saveProgressId) {
+        GameProgress copy = new GameProgress(gameProgressId, saveProgressId);
+        copy.setHeightProgress(this.heightProgress);
+        copy.setXCoordinate(this.xCoordinate);
+        copy.setYCoordinate(this.yCoordinate);
+        copy.setDeepFallCount(this.deepFallCount);
+        return copy;
+    }
 }
