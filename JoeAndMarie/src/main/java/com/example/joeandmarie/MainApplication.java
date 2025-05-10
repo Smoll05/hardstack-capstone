@@ -122,7 +122,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("FirstLevel.tmx");
+            FXGL.setLevelFromMap("MainLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +136,7 @@ public class MainApplication extends GameApplication {
 //        int mapHeight = 950;
 
         int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+        int mapHeight = 180 * 32; // 3,584 pixels
 
 //        viewport.setZoom(0.8);
 
@@ -185,6 +185,8 @@ public class MainApplication extends GameApplication {
         }, Duration.seconds(1.0 / 60));
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
+
+//        FXGL.getPhysicsWorld().setGravity(0, -9.8);
 
         FXGL.runOnce(() -> {
             nameTag1 = new Text("Joe");
@@ -281,7 +283,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {
-                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveLeft();
             }
 
@@ -294,7 +295,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right1") {
             @Override
             protected void onAction() {
-                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveRight();
             }
 
@@ -331,7 +331,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left2") {
             @Override
             protected void onAction() {
-                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveLeft();
             }
 
@@ -344,7 +343,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right2") {
             @Override
             protected void onAction() {
-                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveRight();
             }
 

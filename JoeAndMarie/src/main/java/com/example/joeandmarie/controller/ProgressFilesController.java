@@ -6,6 +6,7 @@ import com.example.joeandmarie.data.dao.GameProgressDao;
 import com.example.joeandmarie.data.dao.SaveProgressDao;
 import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
+import com.example.joeandmarie.ui.cutscene.IntroCutscene;
 import com.example.joeandmarie.utils.FileChooserUtils;
 import com.example.joeandmarie.utils.SerializationUtils;
 import javafx.fxml.FXML;
@@ -24,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -170,6 +172,7 @@ public class ProgressFilesController {
 
         FXGL.getGameController().startNewGame();
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
+
     }
 
     @FXML
