@@ -184,9 +184,6 @@ This use of concurrency helps us maintain real-time performance while still perf
 #### - State Design Pattern
 - **Entity State**
   Player entities maintain internal state (like IDLE, JUMP, FALL, etc.) which changes based on interactions. This is a classic use of the State pattern, enabling dynamic behavior changes at runtime without modifying the entity’s structure.
----
-
-Certainly! Here's a clearer and more polished version of your **Code Quality and Documentation** section, formatted in a more professional and readable way for a `README.md` or project documentation:
 
 ---
 
@@ -198,25 +195,26 @@ Our project follows a well-organized directory structure to maintain clarity, mo
 
 ```
 project-root/
-├── src/                                		 # Source code directory
-│   ├── assets/                      		# Game assets
-│   │   ├── textures/             		 # Image files (.png, .jpg)
-│   │   ├── sounds/              		 # Sound effects (.wav)
-│   │   ├── music/                		  # Background music (.mp3)
-│   │   ├── text/                    		 # Text files (.txt)
-│   │   └── ui/
-│   │       ├── css/                 		 # UI stylesheets
-│   │       └── fonts/             		  # Fonts (.ttf, .otf)
-│   └── com/yourpackage/           # Application source packages
-│       ├── component/            	 # Player components (e.g., movement, swing logic)
-│       ├── config/               		   # Constants (e.g., swing speed, jump force, rope length)
-│       ├── controller/           		 # JavaFX controllers for UI screens
-│       ├── data/                 			# DAOs, models, events, ViewModels, and database integration
-│       ├── entity/               			# Entity type definitions and enums
-│       ├── factory/              			# Entity factories for spawning game objects
-│       ├── threading/            		 # Runnables and threading utilities
-│       ├── ui/                   			   # UI layout and view components
-│       └── utils/                	   	   # Utility classes (e.g., file choosers, serialization helpers)
+├── src/                             # Source code directory
+│   └── com/yourpackage/             # Application source packages
+│       ├── component/               # Player components (e.g., movement, swing logic)
+│       ├── config/                  # Constants (e.g., swing speed, jump force, rope length)
+│       ├── controller/              # JavaFX controllers for UI screens
+│       ├── data/                    # DAOs, models, events, ViewModels, and database integration
+│       ├── entity/                  # Entity type definitions and enums
+│       ├── factory/                 # Entity factories for spawning game objects
+│       ├── threading/               # Runnables and threading utilities
+│       ├── ui/                      # UI layout and view components
+│       └── utils/                   # Utility classes (e.g., file choosers, serialization helpers)
+├── assets/                          # Game assets directory
+│   ├── fonts/                       # Global fonts used in the game
+│   ├── layouts/                     # Layout definitions for UI or levels
+│   ├── levels/                      # Level data files (e.g., JSON, text maps)
+│   ├── music/                       # Background music files (.mp3, etc.)
+│   ├── sounds/                      # Sound effect files (.wav, etc.)
+│   ├── textures/                    # Image textures for entities, backgrounds, UI
+│   └── ui/                          
+│       └── fonts/                   # Fonts specifically used for UI elements
 ```
 
 This structure promotes separation of concerns, allowing different areas of the codebase (game logic, UI, data handling, etc.) to remain decoupled and easier to navigate. Each package serves a specific purpose, contributing to the overall maintainability and scalability of the project.
@@ -239,9 +237,6 @@ Our contribution is documented in the following issue thread:
 ### **ViewModel**
 
 We implemented custom `ViewModel` classes using the **Observer Design Pattern**. This design allows the UI to automatically respond to changes in the underlying data models by observing updates from the `ViewModel`. As a result, the UI always reflects the latest state without requiring manual synchronization, improving both responsiveness and maintainability.
-
----
-Certainly! Here's a more polished and professional version of your **MVVM Architecture** section:
 
 ---
 
