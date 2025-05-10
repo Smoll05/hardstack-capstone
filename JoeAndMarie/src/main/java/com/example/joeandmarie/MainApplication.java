@@ -484,7 +484,6 @@ public class MainApplication extends GameApplication {
     protected void onUpdate(double tpf) {
 
         int currentHeight = (int) ((-getPlayer1().getY() + originY) / 50);
-
         gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_HEIGHT, currentHeight);
         gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_X_COORDINATE, (float) getPlayer1().getX());
         gameProgressViewModel.onEvent(GameProgressEvent.UPDATE_Y_COORDINATE, (float) getPlayer1().getY());
