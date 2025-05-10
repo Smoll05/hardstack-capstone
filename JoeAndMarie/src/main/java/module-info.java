@@ -17,6 +17,7 @@ module com.example.joeandmarie {
     opens assets.sounds;
     opens assets.levels;
     opens assets.music;
+    opens assets.fonts;
 
     exports com.example.joeandmarie;
 

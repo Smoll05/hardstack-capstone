@@ -64,19 +64,10 @@ public class PlayerFactory implements EntityFactory {
         physics.addGroundSensor(groundSensor);
         physics.addSensor(wallSensor, wallHandler);
 
-        Rectangle debugBox = new Rectangle(30, 10, Color.RED);
-        debugBox.setTranslateX(groundSensor.getBounds().getMinX());
-        debugBox.setTranslateY(groundSensor.getBounds().getMinY());
-
-        Rectangle debugWallBox= new Rectangle(10, 30, Color.BLUE);
-        debugWallBox.setTranslateX(wallSensor.getBounds().getMinX());
-        debugWallBox.setTranslateY(wallSensor.getBounds().getMinY());
-
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER1)
                 .bbox(new HitBox("BODY", new Point2D(0, 23), BoundingShape.circle(20)))
                 .with(new CollidableComponent(true))
-                .view(new Group(debugBox, debugWallBox))
                 .with(new StateComponent())
                 .with(physics)
                 .with(new Player1Component())
@@ -121,19 +112,10 @@ public class PlayerFactory implements EntityFactory {
         physics.addGroundSensor(groundSensor);
         physics.addSensor(wallSensor, wallHandler);
 
-        Rectangle debugBox = new Rectangle(30, 10, Color.RED);
-        debugBox.setTranslateX(groundSensor.getBounds().getMinX());
-        debugBox.setTranslateY(groundSensor.getBounds().getMinY());
-
-        Rectangle debugWallBox= new Rectangle(10, 30, Color.BLUE);
-        debugWallBox.setTranslateX(wallSensor.getBounds().getMinX());
-        debugWallBox.setTranslateY(wallSensor.getBounds().getMinY());
-
         return FXGL.entityBuilder(data)
                 .type(EntityType.PLAYER2)
                 .bbox(new HitBox("BODY", new Point2D(0, 23), BoundingShape.circle(20)))
                 .with(new CollidableComponent(true))
-                .view(new Group(debugBox, debugWallBox))
                 .with(new StateComponent())
                 .with(physics)
                 .with(new Player2Component())

@@ -24,14 +24,6 @@ public class JoeIntroScene extends  IntroScene{
     public JoeIntroScene() {
         var root = getRoot();
 
-//        // --- Background music ---
-//        try {
-//            mainMenuMusic = FXGL.getAssetLoader().loadMusic("IntroMusic.mp3");
-//            FXGL.getAudioPlayer().loopMusic(mainMenuMusic);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         // --- Background image ---
         var background = FXGL.texture("background_plain.png");
         background.setFitWidth(FXGL.getAppWidth());
@@ -124,7 +116,6 @@ public class JoeIntroScene extends  IntroScene{
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
             fadeOut.setOnFinished(ev -> {
-//                FXGL.getAudioPlayer().stopMusic(mainMenuMusic);
                 root.getChildren().clear();
                 finishIntro();
             });

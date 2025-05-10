@@ -57,12 +57,6 @@ public class Player1Component extends PlayerComponent {
 
         texture = new AnimatedTexture(animIdle);
         texture.loop();
-
-//        texture.setOnCycleFinished(() -> {
-//            if (texture.getAnimationChannel() == animJump) {
-//                state.changeState(FALL);
-//            }
-//        }); // Commented out to avoid constant falling state
     }
 
     @Override
@@ -136,8 +130,6 @@ public class Player1Component extends PlayerComponent {
         double player1Y = getEntity().getPosition().getY();
         double distanceBetweenPlayers = Math.abs(player2Y - player1Y);
 
-//        System.out.println("Distance between players: " + distanceBetweenPlayers);
-
         // Get the rope length from the RopeJoint
         float ropeLength = Constants.PLAYER_ROPE_DISTANCE;
 
@@ -172,7 +164,7 @@ public class Player1Component extends PlayerComponent {
             return;
         }
 
-        if (physics.getVelocityY() > 750 && !physics.isOnGround()) { // changed min velocity for falling detection
+        if (physics.getVelocityY() > 750 && !physics.isOnGround()) {
             state.changeState(FALL);
         }
     }

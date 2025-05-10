@@ -27,8 +27,8 @@ import java.util.Map;
 
 public abstract class PlayerComponent extends Component implements Observer<SettingPreference> {
 
-    private GameProgressViewModel gameViewModel = GameProgressViewModel.getInstance();
-    private SettingPreferenceViewModel settingViewModel = SettingPreferenceViewModel.getInstance();
+    private final GameProgressViewModel gameViewModel = GameProgressViewModel.getInstance();
+    private final SettingPreferenceViewModel settingViewModel = SettingPreferenceViewModel.getInstance();
 
     protected boolean isInfiniteJump = false;
     protected boolean isClimbWalls = false;
@@ -228,13 +228,6 @@ public abstract class PlayerComponent extends Component implements Observer<Sett
                 }, Duration.seconds(6));
             }
         }
-
-//        physics.setVelocityY(0);
-//        if(entity.getScaleX() == 1) {
-//            physics.setVelocityX(stateData.get(HOLD).moveSpeed);
-//        } else {
-//            physics.setVelocityX(-1 * stateData.get(HOLD).moveSpeed);
-//        }
     }
 
     public void crouch() {
@@ -243,28 +236,8 @@ public abstract class PlayerComponent extends Component implements Observer<Sett
 
             state.changeState(CROUCH);
 
-//            if(physics.getBody().getType() != BodyType.STATIC) {
-//                physics.getBody().setType(BodyType.STATIC);
-//            }
         }
     }
-
-//    if (physics.isOnGround() && state.isIn(STAND, WALK)) {
-//        physics.setVelocityX(0);
-//        state.changeState(CROUCH);
-//        System.out.println("Crouching");
-//
-//        FXGL.runOnce(() -> {
-//            physics.getBody().setType(BodyType.KINEMATIC);
-//        }, Duration.seconds(0.1));
-//    }
-//
-//        if(physics.isOnGround() && state.isIn(STAND, WALK)) {
-//        physics.setVelocityX(0);
-//        state.changeState(CROUCH);
-//        isImmobile = true;
-//        lockedPos = entity.getPosition();
-//    }
 
     public void cry() {
         if (!physics.isOnGround()) {
@@ -308,14 +281,6 @@ public abstract class PlayerComponent extends Component implements Observer<Sett
     }
 
     abstract void swingMovement(EntityState newState, int scale);
-
-    public boolean playerOnGround() {
-        return physics.isOnGround();
-    }
-
-    public boolean isHoldingWall() {
-        return state.isIn(HOLD);
-    }
 
     @Override
     public boolean isComponentInjectionRequired() {

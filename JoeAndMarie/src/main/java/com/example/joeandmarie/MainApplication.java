@@ -44,9 +44,6 @@ import javafx.util.Duration;
 import java.util.EnumSet;
 
 public class MainApplication extends GameApplication {
-
-    private Text nameTag1, nameTag2;
-
     private boolean isPulling = false;
 
     private RopeJoint ropeJoint;
@@ -68,7 +65,6 @@ public class MainApplication extends GameApplication {
     private static Music music_underground;
 
     private final GameProgressViewModel gameProgressViewModel = GameProgressViewModel.getInstance();
-    private final SettingPreferenceViewModel settingPreferenceViewModel = SettingPreferenceViewModel.getInstance();
 
     private double originY;
 
@@ -82,11 +78,8 @@ public class MainApplication extends GameApplication {
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
-//        settings.setDeveloperMenuEnabled(true);
-//        settings.setProfilingEnabled(true);
         settings.setFullScreenFromStart(true);
 
-        // Attach your custom menu
         settings.setSceneFactory(new SceneFactory() {
 
             @Override
@@ -101,7 +94,7 @@ public class MainApplication extends GameApplication {
 
             @Override
             public FXGLMenu newGameMenu() {
-                return new JoeGameMenu(); // This replaces the ESC menu
+                return new JoeGameMenu();
             }
         });
     }
@@ -131,21 +124,8 @@ public class MainApplication extends GameApplication {
             e.printStackTrace();
         }
 
-        var viewport = FXGL.getGameScene().getViewport();
-//
-//        int mapWidth = 40 * 32;
-//        int mapHeight = 23 * 32;
-
-//        int mapWidth = 1600;
-//        int mapHeight = 950;
-
         int mapWidth = 165 * 32;  // 4,800 pixels
         int mapHeight = 261 * 32; // 3,584 pixels
-
-//        viewport.setZoom(0.8);
-
-//        Entity player2 = FXGL.spawn("player2", 500, 300);
-//        Entity player1 = FXGL.spawn("player1", 500, 200);
 
         FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
 
@@ -169,7 +149,7 @@ public class MainApplication extends GameApplication {
 
         GameProgress snapshot = gameProgressViewModel.getSnapshot();
 
-        if(snapshot.getHeightProgress() == 0) {
+        if (snapshot.getHeightProgress() == 0) {
             // Retrieve spawn point position
             x = spawnPoint.getX();
             y = spawnPoint.getY();
@@ -203,24 +183,6 @@ public class MainApplication extends GameApplication {
         }, Duration.seconds(1.0 / 60));
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
-
-        FXGL.runOnce(() -> {
-            nameTag1 = new Text("Joe");
-            nameTag1.setFont(Font.font(14));
-            nameTag1.setFill(Color.BLACK);
-
-            nameTag1.setTranslateX(-nameTag1.getLayoutBounds().getWidth() / 2);
-            nameTag1.setTranslateY(-20);
-
-            nameTag2 = new Text("Marie");
-            nameTag2.setFont(Font.font(14));
-            nameTag2.setFill(Color.BLACK);
-            nameTag2.setTranslateX(-nameTag2.getLayoutBounds().getWidth() / 2);
-            nameTag2.setTranslateY(-20);
-
-            getPlayer1().getViewComponent().addChild(nameTag1);
-            getPlayer2().getViewComponent().addChild(nameTag2);
-        }, Duration.seconds(0.1));
     }
 
     protected void initInput() {
@@ -442,7 +404,6 @@ public class MainApplication extends GameApplication {
             ropeJoint = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
         }, Duration.seconds(0.1));
 
-
         // One Way Platform Logic
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER1, EntityType.ONE_WAY_PLATFORM) {
 
@@ -498,7 +459,6 @@ public class MainApplication extends GameApplication {
 
 
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER1, EntityType.CHECK_POINT) {
-
             @Override
             protected void onCollisionBegin(Entity player, Entity checkpoint) {
 
@@ -521,10 +481,8 @@ public class MainApplication extends GameApplication {
                     FXGL.getGameScene().removeUINode(spinnerView);
 
                 }, Duration.seconds(2));
-
             }
         });
-
     }
 
     @Override
@@ -533,8 +491,14 @@ public class MainApplication extends GameApplication {
 
         HeightProgressUi heightProgressUi = new HeightProgressUi();
         Node heightProgress = heightProgressUi.getView();
+
+        DeepFallCountUi deepFallCountUi = new DeepFallCountUi();
+        Node deepFallProgress = deepFallCountUi.getView();
+
+        FXGL.addUINode(deepFallProgress);
         FXGL.addUINode(heightProgress);
         gameProgressViewModel.addObserver(heightProgressUi);
+        gameProgressViewModel.addObserver(deepFallCountUi);
     }
 
     @Override
@@ -603,7 +567,6 @@ public class MainApplication extends GameApplication {
         Body bodyB = physics2.getBody();
 
         FXGL.runOnce(() -> {
-
             DistanceJointDef distanceDef = new DistanceJointDef();
             distanceDef.setBodyA(bodyA);
             distanceDef.setBodyB(bodyB);
@@ -620,223 +583,6 @@ public class MainApplication extends GameApplication {
         System.out.println("CREATED DISTANCE JOINT");
     }
 
-    public void deleteRevoluteJoint() {
-        FXGL.getPhysicsWorld().getJBox2DWorld().destroyJoint(revoluteJoint);
-        revoluteJoint = null;
-
-        System.out.println("DELETED REVOLUTE JOINT");
-    }
-
-    public void createRevoluteJoint() {
-//        Point2D position1 = entity1.getPosition();
-//        Point2D position2 = entity2.getPosition();
-
-// Convert Point2D to Vec2
-//        Vec2 vecPosition1 = new Vec2((float) position1.getX(), (float) position1.getY());
-//        Vec2 vecPosition2 = new Vec2((float) position2.getX(), (float) position2.getY());
-
-// Set the local anchor points for the revolute joint
-//        Vec2 localAnchor1 = new Vec2(anchor.x - bodyA.getPosition().x, anchor.y - bodyA.getPosition().y);
-//        Vec2 localAnchor2 = new Vec2(anchor.x - bodyB.getPosition().x, anchor.y - bodyB.getPosition().y);
-
-// Create the revolute joint definition
-
-//        RevoluteJointDef revoluteJointDef = new RevoluteJointDef();
-//        revoluteJointDef.setBodyA(bodyA);
-//        revoluteJointDef.setBodyB(bodyB);
-//
-//        revoluteJointDef.localAnchorA.set(anchor1);
-//        revoluteJointDef.localAnchorB.set(anchor2);
-//
-//        revoluteJointDef.maxMotorTorque = 100f;
-//        revoluteJointDef.motorSpeed = 10f;
-//        revoluteJointDef.setBodyCollisionAllowed(false);
-
-
-//        Entity player1 = getPlayer1();
-//        PhysicsComponent physics1 = player1.getComponent(PhysicsComponent.class);
-//
-//        Entity player2 = getPlayer2();
-//        PhysicsComponent physics2 = player2.getComponent(PhysicsComponent.class);
-//
-//        Body bodyA = physics1.getBody();
-//        Body bodyB = physics2.getBody();
-
-//        Point2D worldAnchor = player1.getCenter().midpoint(player2.getCenter());
-//        Point2D anchor1 = worldAnchor.subtract(player1.getCenter());
-//        Point2D anchor2 = worldAnchor.subtract(player2.getCenter());
-
-//        RevoluteJointDef def = new RevoluteJointDef();
-//        PhysicsWorld pWorld = FXGL.getPhysicsWorld();
-//
-//        def.localAnchorA = pWorld.toPoint(
-//                player1.getAnchoredPosition().add(anchor1)).subLocal(bodyA.getWorldCenter()
-//        );
-//
-//        def.localAnchorB = pWorld.toPoint(
-//                player2.getAnchoredPosition().add(anchor2)).subLocal(bodyB.getWorldCenter()
-//        );
-//
-//        def.enableMotor = true;
-//
-//        revoluteJoint = pWorld.addJoint(player1, player2, def);
-//
-
-//        RevoluteJointDef revoluteDef = new RevoluteJointDef();
-//        revoluteDef.initialize(bodyA, bodyB, bodyA.getWorldCenter());
-//        revoluteDef.maxMotorTorque = 100f;
-//        revoluteDef.motorSpeed = 10f;
-//        revoluteDef.setBodyCollisionAllowed(false);
-//
-//        revoluteJoint = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(revoluteDef);
-    }
-
-
-//        RopeJointDef def = new RopeJointDef();
-//        def.localAnchorA.set(0, 0);
-//        def.localAnchorB.set(0, 0);
-//        def.maxLength = 3.0f;
-//        def.setBodyCollisionAllowed(false);
-//
-//        def.setBodyA(physics1.getBody());
-//        def.setBodyB(physics2.getBody());
-//
-//        RopeJoint rope = FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(def);
-
-//        RevoluteJoint revoluteJoint = new RevoluteJointDef(bodyA, bodyB, new Vec2(0, 0));  // fixedAnchorBody is the body where the rope or bar is attached
-//        revoluteJoint.setMaxMotorTorque(100f); // Limit the motor torque to control swinging force
-//        revoluteJoint.setMotorSpeed(10f); // Set motor speed for rotating around the fixed point
-
-//        DistanceJointDef def = new DistanceJointDef();
-//        def.initialize(bodyA, bodyB, bodyA.getWorldCenter(), bodyB.getWorldCenter());
-//        def.length = 3.0f;
-//        def.setBodyCollisionAllowed(false);
-
-    /// /        def.collideConnected = false;
-
-//        RevoluteJointDef def = new RevoluteJointDef();
-//        def.initialize(bodyA, bodyB, bodyA.getWorldCenter());
-//
-//        def.setBodyCollisionAllowed(false);
-
-
-    // THIS IS THE BODY
-//
-
-
-    // 1. Create a RopeJoint to limit the maximum rope length
-
-//        var world = FXGL.getPhysicsWorld().getJBox2DWorld();
-
-//    private void createRopeVisualization() {
-//        var physics1 = getPlayer1().getComponent(PhysicsComponent.class);
-//
-//        Body bodyA = physics1.getBody();
-//        Vec2 position = bodyA.getPosition();
-//        float xPos = position.x;
-//        float yPos = position.y;
-//
-//        PhysicsComponent firstPhysics = new PhysicsComponent();
-//        FixtureDef firstDef = new FixtureDef();
-//
-//        firstDef.setSensor(true);
-//
-//        firstPhysics.setBodyType(BodyType.DYNAMIC);
-//        firstPhysics.setFixtureDef(firstDef);
-//
-//        Entity firstRopeSegment = entityBuilder()
-//                .at(xPos, yPos)
-//                .view(texture("rope_segment.png", 8, 8))
-//                .with(firstPhysics)
-//                .buildAndAttach();
-//
-//        addRopeJoint(getPlayer1(), firstRopeSegment);
-//
-//        Entity last = firstRopeSegment;
-//
-//        int ropeSegmentSize = 10;
-//
-//        for (int i = 0; i < ropeSegmentSize; i++) {
-//            PhysicsComponent physics = new PhysicsComponent();
-//            FixtureDef def = new FixtureDef();
-//
-//            def.setSensor(true);
-//
-//            physics.setBodyType(BodyType.DYNAMIC);
-//            physics.setFixtureDef(def);
-//
-//            Entity ropeSegment = entityBuilder()
-//                    .at(xPos * i + 8, yPos)
-//                    .view(texture("rope_segment.png", 12, 12))
-//                    .with(physics)
-//                    .buildAndAttach();
-//
-//            addRopeJoint(last, ropeSegment);
-//
-//            last = ropeSegment;
-//        }
-//
-//        addRopeJoint(last, getPlayer2());
-//    }
-//
-//    private void addRopeJoint(Entity e1, Entity e2) {
-//        RopeJointDef ropeDef = new RopeJointDef();
-//        ropeDef.setBodyA(e1.getComponent(PhysicsComponent.class).getBody());
-//        ropeDef.setBodyB(e2.getComponent(PhysicsComponent.class).getBody());
-//        ropeDef.localAnchorA.set(0, 0);
-//        ropeDef.localAnchorB.set(0, 0);
-//        ropeDef.maxLength = 0.2f;
-//        ropeDef.setBodyCollisionAllowed(false);
-//
-//        FXGL.getPhysicsWorld().getJBox2DWorld().createJoint(ropeDef);
-//    }
-
-//    private void createRopeVisualization() {
-//        var physics1 = getPlayer1().getComponent(PhysicsComponent.class);
-//
-//        Vec2 position = physics1.getBody().getPosition();
-//        float startX = position.x * 64;
-//        float startY = position.y * 64;
-//
-//        PhysicsComponent firstPhysics = new PhysicsComponent();
-//        FixtureDef firstDef = new FixtureDef();
-//        firstDef.setSensor(true); // no collision
-//        firstPhysics.setBodyType(BodyType.DYNAMIC);
-//        firstPhysics.setFixtureDef(firstDef);
-//
-//        Entity firstRopeSegment = entityBuilder()
-//                .at(startX, startY)
-//                .view(texture("rope_segment.png", 12, 12))
-//                .with(firstPhysics)
-//                .buildAndAttach();
-//
-//        addRopeJoint(getPlayer1(), firstRopeSegment, 12f / 64f); // segment length in meters
-//
-//        Entity last = firstRopeSegment;
-//        int segmentCount = 10;
-//
-//        for (int i = 1; i <= segmentCount; i++) {
-//            float segmentX = startX + i * 12; // evenly spaced
-//            PhysicsComponent physics = new PhysicsComponent();
-//            FixtureDef def = new FixtureDef();
-//            def.setSensor(true); // or false for physical interactions
-//            def.setDensity(1.0f);
-//            physics.setBodyType(BodyType.DYNAMIC);
-//            physics.setFixtureDef(def);
-//
-//            Entity ropeSegment = entityBuilder()
-//                    .at(segmentX, startY)
-//                    .view(texture("rope_segment.png", 12, 12))
-//                    .with(physics)
-//                    .buildAndAttach();
-//
-//            addRopeJoint(last, ropeSegment, 12f / 64f); // same length
-//            last = ropeSegment;
-//        }
-//
-//        addRopeJoint(last, getPlayer2(), 12f / 64f);
-//    }
-
     private void addRopeJoint(Entity e1, Entity e2, float maxLengthMeters) {
         RopeJointDef ropeDef = new RopeJointDef();
         ropeDef.setBodyA(e1.getComponent(PhysicsComponent.class).getBody());
@@ -850,48 +596,13 @@ public class MainApplication extends GameApplication {
     }
 
     private void createRopeVisualization() {
-//        CubicCurve curve = new CubicCurve();
-//        curve.setStroke(Color.rgb(49, 52, 73));
-//        curve.setStrokeWidth(5);
-//        curve.setFill(Color.TRANSPARENT);
-//        FXGL.getGameScene().addUINode(curve);
-//
-//        FXGL.getGameTimer().runAtInterval(() -> {
-//            var viewport = FXGL.getGameScene().getViewport();
-//            double offsetX = viewport.getX();
-//            double offsetY = viewport.getY();
-//
-//            Point2D p1 = getPlayer1().getCenter().subtract(offsetX, offsetY);
-//            Point2D p2 = getPlayer2().getCenter().subtract(offsetX, offsetY);
-//
-//            curve.setStartX(p1.getX());
-//            curve.setStartY(p1.getY());
-//            curve.setEndX(p2.getX());
-//            curve.setEndY(p2.getY());
-//
-//            double distance = p1.distance(p2);
-//
-//            // Sag decreases as players get farther apart
-//            double sag = Math.max(0, 100 - distance * 0.5);
-//
-//            // Optional: tweak sag formula based on testing
-//            double dx = p2.getX() - p1.getX();
-//            double dy = p2.getY() - p1.getY();
-//
-//            curve.setControlX1(p1.getX() + dx * 0.25);
-//            curve.setControlY1(p1.getY() + dy * 0.25 + sag);
-//
-//            curve.setControlX2(p1.getX() + dx * 0.75);
-//            curve.setControlY2(p1.getY() + dy * 0.75 + sag);
-//        }, Duration.seconds(1.0 / 60));
+        CubicCurve curve = new CubicCurve();
+        curve.setStroke(Color.rgb(49, 52, 73));
+        curve.setStrokeWidth(5);
+        curve.setFill(Color.TRANSPARENT);
+        FXGL.getGameScene().addUINode(curve);
 
-    CubicCurve curve = new CubicCurve();
-    curve.setStroke(Color.rgb(49, 52, 73));
-    curve.setStrokeWidth(5);
-    curve.setFill(Color.TRANSPARENT);
-    FXGL.getGameScene().addUINode(curve);
-
-    FXGL.getGameTimer().runAtInterval(() -> {
+        FXGL.getGameTimer().runAtInterval(() -> {
             var viewport = FXGL.getGameScene().getViewport();
             double offsetX = viewport.getX();
             double offsetY = viewport.getY();
@@ -930,7 +641,6 @@ public class MainApplication extends GameApplication {
             curve.setControlY2(p1.getY() + dy * 0.75 + sag);
 
         }, Duration.seconds(1.0 / 144));
-
     }
 
     private Player1Component getControlP1() {
@@ -965,10 +675,15 @@ public class MainApplication extends GameApplication {
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), imageView);
         fadeIn.setFromValue(0);   // Start transparent
         fadeIn.setToValue(1);     // End fully visible
-        fadeIn.play();            // Start animation
+        fadeIn.play();            // Start animation ivann gwapo h
 
+        try {
+            Music mainMenuMusic = FXGL.getAssetLoader().loadMusic("IntroMusic.mp3");
+            FXGL.getAudioPlayer().loopMusic(mainMenuMusic);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
     public static void main(String[] args) {
         launch(args);
@@ -1009,3 +724,4 @@ public class MainApplication extends GameApplication {
         MainApplication.sfx_click = sfx_click;
     }
 }
+

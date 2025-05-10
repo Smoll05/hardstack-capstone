@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="165" height="261" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="702">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="165" height="261" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="709">
  <tileset firstgid="1" name="test1" tilewidth="32" tileheight="32" tilecount="19050" columns="150">
   <image source="test1.png" width="4800" height="4064"/>
  </tileset>
@@ -1130,5 +1130,9 @@
   <object id="698" type="one_way_platform" x="2623.34" y="5121.69" width="65.3182" height="17.6364"/>
   <object id="699" type="Finish" x="1305.59" y="66.4493" width="37" height="723.333"/>
   <object id="701" type="platform" x="577.333" y="0" width="4607.33" height="62.6667"/>
+  <object id="702" type="checkpoint" x="3335.33" y="4898.67" width="22" height="254"/>
+  <object id="705" type="checkpoint" x="928.583" y="3947.33" width="230.667" height="31.3333"/>
+  <object id="706" type="checkpoint" x="1185" y="2169" width="35" height="455"/>
+  <object id="707" type="checkpoint" x="4160" y="64" width="34.6667" height="797.333"/>
  </objectgroup>
 </map>

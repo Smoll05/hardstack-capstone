@@ -23,7 +23,6 @@ public class BlockFactory implements EntityFactory {
 
         return entityBuilder(data)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-//                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.DARKGRAY))
                 .with(new CollidableComponent(true))
                 .with(physics)
                 .build();

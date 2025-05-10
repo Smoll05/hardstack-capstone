@@ -45,19 +45,7 @@ public class CheckpointComponent {
         }
     }
 
-    public static void teleportToCheckpoint(Entity entity) {
-        if (flagEntity != null) {
-            entity.setPosition(flagEntity.getPosition());
-        } else {
-            System.out.println("No checkpoint set yet.");
-        }
-    }
-
     public static Entity getFlagEntity() {
         return flagEntity;
-    }
-
-    public Point2D getPosition() {
-        return pos;
     }
 }

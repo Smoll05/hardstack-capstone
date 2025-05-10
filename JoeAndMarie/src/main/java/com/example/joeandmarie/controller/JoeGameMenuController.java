@@ -56,7 +56,7 @@ public class JoeGameMenuController {
             newContent.getStylesheets().add(MainApplication.class.getResource("/assets/layouts/stylesheets/style.css").toExternalForm());
 
             GameMenuSettingsController controller = loader.getController();
-            controller.setParentContainer(apGameMenuContainer); // pass this pane to settings controller
+            controller.setParentContainer(apGameMenuContainer);
 
             apGameMenuContainer.getChildren().setAll(newContent);
         } catch (IOException e) {

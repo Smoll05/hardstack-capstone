@@ -1,5 +1,7 @@
 package com.example.joeandmarie.ui;
 
+import com.almasb.fxgl.dsl.FXGL;
+import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.Observer;
 import javafx.scene.Node;
@@ -13,7 +15,7 @@ public class HeightProgressUi implements Observer<GameProgress> {
 
     public HeightProgressUi() {
         heightText = new Text("Height: 0m");
-        heightText.setFont(Font.font("Verdana", 24));
+        heightText.setFont(Font.font("Georgia", 24));
         heightText.setFill(Color.WHITE);
         heightText.setTranslateX(20);
         heightText.setTranslateY(50);

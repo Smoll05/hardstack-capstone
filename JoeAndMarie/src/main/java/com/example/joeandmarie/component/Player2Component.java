@@ -60,7 +60,6 @@ public class Player2Component extends PlayerComponent {
         super.onAdded();
 
         state.currentStateProperty().addListener((o, oldState, newState) -> {
-//            System.out.println("Player 2 new state: " + newState);
         });
     }
 
