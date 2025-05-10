@@ -12,6 +12,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.TimerAction;
+import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.config.Constants;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
@@ -88,6 +89,7 @@ public abstract class PlayerComponent extends Component {
             if (physics.isOnGround()) {
                 physics.setVelocityX(0);
                 state.changeState(SPLAT);
+                FXGL.getAudioPlayer().playSound(MainApplication.getSfx_splat());
             }
 
             setFriction(1f);

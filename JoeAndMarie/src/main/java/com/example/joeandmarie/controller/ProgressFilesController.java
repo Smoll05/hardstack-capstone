@@ -87,6 +87,7 @@ public class ProgressFilesController {
                 break;
         }
 
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         FXGL.getGameController().startNewGame();
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }

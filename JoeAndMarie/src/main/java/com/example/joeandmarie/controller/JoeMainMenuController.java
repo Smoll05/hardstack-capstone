@@ -77,6 +77,8 @@ public class JoeMainMenuController {
                 item.setStyle("-fx-cursor: hand;");
                 item.setScaleX(1.05);
                 item.setScaleY(1.05);
+
+                FXGL.getAudioPlayer().playSound(MainApplication.getSfx_hover());
             });
 
             item.setOnMouseExited(e -> {

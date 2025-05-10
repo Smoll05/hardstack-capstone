@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
@@ -54,6 +55,11 @@ public class MainApplication extends GameApplication {
     private boolean isSwinging;
     private boolean isCrouching = false;
 
+    private static Sound sfx_cry;
+    private static Sound sfx_hover;
+    private static Sound sfx_splat;
+    private static Sound sfx_click;
+
     private final GameProgressViewModel gameProgressViewModel = GameProgressViewModel.getInstance();
     private final SettingPreferenceViewModel settingPreferenceViewModel = SettingPreferenceViewModel.getInstance();
 
@@ -67,8 +73,8 @@ public class MainApplication extends GameApplication {
         settings.setMainMenuEnabled(true);
 //        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
-        settings.setDeveloperMenuEnabled(true);
-        settings.setProfilingEnabled(true);
+//        settings.setDeveloperMenuEnabled(true);
+//        settings.setProfilingEnabled(true);
         settings.setFullScreenFromStart(true);
 
         // Attach your custom menu
@@ -101,6 +107,11 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.getGameWorld().addEntityFactory(new BlockFactory());
+
+        sfx_click = FXGL.getAssetLoader().loadSound("sound_meow.wav");
+        sfx_cry = FXGL.getAssetLoader().loadSound("sound_back_checkpoint.wav");
+        sfx_hover = FXGL.getAssetLoader().loadSound("sound_button_hover.wav");
+        sfx_splat = FXGL.getAssetLoader().loadSound("sound_cry.wav");
 
         try {
             FXGL.setLevelFromMap("kuan_sewer.tmx");
@@ -202,6 +213,11 @@ public class MainApplication extends GameApplication {
         }, KeyCode.F);
 
         FXGL.getInput().addAction(new UserAction("Cry") {
+            @Override
+            protected void onActionBegin() {
+                FXGL.getAudioPlayer().playSound(sfx_cry);
+            }
+
             @Override
             protected void onAction() {
                 getControlP1().cry();
@@ -856,5 +872,25 @@ public class MainApplication extends GameApplication {
 
     public Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
+    }
+
+    public static Sound getSfx_hover() {
+        return sfx_hover;
+    }
+
+    public static Sound getSfx_splat() {
+        return sfx_splat;
+    }
+
+    public static Sound getSfx_click() {
+        return sfx_click;
+    }
+
+    public static void setSfx_hover(Sound sfx_hover) {
+        MainApplication.sfx_hover = sfx_hover;
+    }
+
+    public static void setSfx_click(Sound sfx_click) {
+        MainApplication.sfx_click = sfx_click;
     }
 }
