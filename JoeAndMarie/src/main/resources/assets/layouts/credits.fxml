@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -10,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.image.Image?>
+
 <AnchorPane onMouseClicked="#handleExitClick" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.controller.CreditsController">
    <children>
       <ImageView fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true">
@@ -50,7 +49,7 @@
                <children>
                   <ImageView fx:id="ivPeepsAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../textures/joe_gif.gif" />
+                        <Image url="@../textures/peeps_cat.gif" />
                      </image>
                   </ImageView>
                </children>
@@ -59,7 +58,7 @@
                <children>
                   <ImageView fx:id="ivIvannAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../textures/joe_gif.gif" />
+                        <Image url="@../textures/iban_cat.gif" />
                      </image>
                   </ImageView>
                </children>
@@ -68,7 +67,7 @@
                <children>
                   <ImageView fx:id="ivBrentAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../textures/joe_gif.gif" />
+                        <Image url="@../textures/brent_cat.gif" />
                      </image>
                   </ImageView>
                </children>
@@ -77,7 +76,7 @@
                <children>
                   <ImageView fx:id="ivRainAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../textures/marie_gif.gif" />
+                        <Image url="@../textures/ren_cat.gif" />
                      </image></ImageView>
                </children>
             </VBox>
@@ -85,7 +84,7 @@
                <children>
                   <ImageView fx:id="ivNateAvatar" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../textures/joe_gif.gif" />
+                        <Image url="@../textures/nate_cat.gif" />
                      </image></ImageView>
                </children>
             </VBox>
