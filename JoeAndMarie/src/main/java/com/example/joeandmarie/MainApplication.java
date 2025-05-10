@@ -108,7 +108,7 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        FXGL.getGameScene().setBackgroundColor(Color.ALICEBLUE);
+        FXGL.getGameScene().setBackgroundColor(Color.BLACK);
 
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
@@ -125,7 +125,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("MainLevel.tmx");
+            FXGL.setLevelFromMap("ForestBottom.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,8 +138,8 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 1600;
 //        int mapHeight = 950;
 
-        int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 165 * 32; // 3,584 pixels
+        int mapWidth = 165 * 32;  // 4,800 pixels
+        int mapHeight = 261 * 32; // 3,584 pixels
 
 //        viewport.setZoom(0.8);
 
@@ -971,10 +971,11 @@ public class MainApplication extends GameApplication {
         FXGL.getGameScene().addUINode(imageView);
 
         // Create fade-in animation
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(4), imageView);
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), imageView);
         fadeIn.setFromValue(0);   // Start transparent
         fadeIn.setToValue(1);     // End fully visible
         fadeIn.play();            // Start animation
+
     }
 
 
