@@ -45,7 +45,7 @@ public class JoeIntroScene extends  IntroScene{
         titleImage.setOpacity(0);
 
         var fallTransition = new TranslateTransition(Duration.seconds(4), titleImage);
-        fallTransition.setToY(FXGL.getAppHeight() / 2.0 - titleImage.getHeight() / 2.0);
+        fallTransition.setToY((FXGL.getAppHeight() / 2.0 - titleImage.getHeight() / 2.0) - 50);
         fallTransition.setInterpolator(Interpolators.BOUNCE.EASE_OUT());
 
         var fadeInImage = new FadeTransition(Duration.seconds(2), titleImage);
@@ -87,7 +87,7 @@ public class JoeIntroScene extends  IntroScene{
 
         fadeInImage.setOnFinished(event -> {
             labelImage.setTranslateX(FXGL.getAppWidth() / 2.0 - labelImage.getWidth() / 2.0);
-            labelImage.setTranslateY(titleImage.getTranslateY() + titleImage.getHeight() - 20);
+            labelImage.setTranslateY(titleImage.getTranslateY() + titleImage.getHeight() - 40);
 
             var labelFade = new FadeTransition(Duration.seconds(1), labelImage);
             labelFade.setFromValue(0);
