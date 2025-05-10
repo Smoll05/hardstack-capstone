@@ -57,7 +57,7 @@ public abstract class PlayerComponent extends Component {
         @Override
         protected void onUpdate(double tpf) {
             physics.setVelocityX(0);
-            physics.setVelocityY(1000); // to be improved, when other character is hanging, crouching would cause it to spring up
+            physics.setVelocityY(500);
         }
     };
     final EntityState SWING = new EntityState("SWING");
@@ -140,10 +140,6 @@ public abstract class PlayerComponent extends Component {
             physics.setVelocityX(0);
             state.changeState(STAND);
         }
-
-//        else if(state.isIn(SWING)) {
-//            state.changeState(HANG); // Commented out as to not modify VelocityX on release from swing
-//        }
     }
 
     public void stand() {
