@@ -123,7 +123,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("MAIN-LEVEL.tmx");
+            FXGL.setLevelFromMap("MainLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,8 +178,8 @@ public class MainApplication extends GameApplication {
             double cameraY = midY - FXGL.getAppHeight() / 2.0;
 
             // Clamp cameraX and cameraY to not go out of bounds
-            cameraX = Math.max(0, Math.min(cameraX, mapWidth - FXGL.getAppWidth()));
-            cameraY = Math.max(0, Math.min(cameraY, mapHeight - FXGL.getAppHeight()));
+//            cameraX = Math.max(0, Math.min(cameraX, mapWidth - FXGL.getAppWidth()));
+//            cameraY = Math.max(0, Math.min(cameraY, mapHeight - FXGL.getAppHeight()));
 
             FXGL.getGameScene().getViewport().setX(cameraX);
             FXGL.getGameScene().getViewport().setY(cameraY);
