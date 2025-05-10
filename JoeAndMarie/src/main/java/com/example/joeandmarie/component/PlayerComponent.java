@@ -17,6 +17,7 @@ import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.SettingPreference;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
+import com.example.joeandmarie.data.viewmodel.Observer;
 import com.example.joeandmarie.data.viewmodel.SettingPreferenceViewModel;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
@@ -24,7 +25,7 @@ import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class PlayerComponent extends Component {
+public abstract class PlayerComponent extends Component implements Observer<SettingPreference> {
 
     private GameProgressViewModel gameViewModel = GameProgressViewModel.getInstance();
     private SettingPreferenceViewModel settingViewModel = SettingPreferenceViewModel.getInstance();
@@ -120,6 +121,8 @@ public abstract class PlayerComponent extends Component {
 
     @Override
     public void onAdded() {
+
+        settingViewModel.addObserver(this);
 
         state = getEntity().getComponent(StateComponent.class);
         physics = getEntity().getComponent(PhysicsComponent.class);
@@ -337,4 +340,11 @@ public abstract class PlayerComponent extends Component {
         }
     }
 
+
+    @Override
+    public void update(SettingPreference newState) {
+        isInfiniteJump = newState.isInfiniteJump();
+        isClimbWalls = newState.isClimbWalls();
+        isInfiniteGrip = newState.isInfiniteGrip();
+    }
 }

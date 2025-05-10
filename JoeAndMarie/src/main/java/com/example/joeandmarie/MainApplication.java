@@ -59,6 +59,7 @@ public class MainApplication extends GameApplication {
     private static Sound sfx_cry;
     private static Sound sfx_hover;
     private static Sound sfx_splat;
+    private static Sound sfx_meow;
     private static Sound sfx_click;
 
     private static Music music_underground;
@@ -128,21 +129,8 @@ public class MainApplication extends GameApplication {
             e.printStackTrace();
         }
 
-        var viewport = FXGL.getGameScene().getViewport();
-//
-//        int mapWidth = 40 * 32;
-//        int mapHeight = 23 * 32;
-
-//        int mapWidth = 1600;
-//        int mapHeight = 950;
-
         int mapWidth = 150 * 32;  // 4,800 pixels
         int mapHeight = 180 * 32; // 3,584 pixels
-
-//        viewport.setZoom(0.8);
-
-//        Entity player2 = FXGL.spawn("player2", 500, 300);
-//        Entity player1 = FXGL.spawn("player1", 500, 200);
 
         FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
 
@@ -187,23 +175,6 @@ public class MainApplication extends GameApplication {
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
-        FXGL.runOnce(() -> {
-            nameTag1 = new Text("Joe");
-            nameTag1.setFont(Font.font(14));
-            nameTag1.setFill(Color.BLACK);
-
-            nameTag1.setTranslateX(-nameTag1.getLayoutBounds().getWidth() / 2);
-            nameTag1.setTranslateY(-20);
-
-            nameTag2 = new Text("Marie");
-            nameTag2.setFont(Font.font(14));
-            nameTag2.setFill(Color.BLACK);
-            nameTag2.setTranslateX(-nameTag2.getLayoutBounds().getWidth() / 2);
-            nameTag2.setTranslateY(-20);
-
-            getPlayer1().getViewComponent().addChild(nameTag1);
-            getPlayer2().getViewComponent().addChild(nameTag2);
-        }, Duration.seconds(0.1));
     }
 
     protected void initInput() {
@@ -937,6 +908,7 @@ public class MainApplication extends GameApplication {
     public Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
     }
+    
     public static Sound getSfx_hover() {
         return sfx_hover;
     }
@@ -945,12 +917,20 @@ public class MainApplication extends GameApplication {
         return sfx_splat;
     }
 
+    public static Sound getSfx_meow() {
+        return sfx_meow;
+    }
+
     public static Sound getSfx_click() {
         return sfx_click;
     }
 
     public static void setSfx_hover(Sound sfx_hover) {
         MainApplication.sfx_hover = sfx_hover;
+    }
+
+    public static void setSfx_meow(Sound sfx_meow) {
+        MainApplication.sfx_meow = sfx_meow;
     }
 
     public static void setSfx_click(Sound sfx_click) {

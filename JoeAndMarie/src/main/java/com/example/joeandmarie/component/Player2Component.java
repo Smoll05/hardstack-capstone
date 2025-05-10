@@ -10,6 +10,7 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.data.model.SettingPreference;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -68,28 +69,20 @@ public class Player2Component extends PlayerComponent {
     public void swingMovement(EntityState newState, int scale) {
         getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
 
-        // Use the other player as the pivot point for the swing
-        Point2D pivot = player1.getCenter(); // Replace with your actual other entity
+        Point2D pivot = player1.getCenter();
         Point2D center = getEntity().getCenter();
 
-        // Vector from pivot to this entity
         Point2D toEntity = center.subtract(pivot);
 
-        // Tangent is perpendicular to the radius vector
         Point2D tangent = new Point2D(-toEntity.getY(), toEntity.getX()).normalize().multiply(scale);
 
-        // Apply tangential swing force
         double swingSpeed = stateData.get(newState).moveSpeed * 5;
 
-        // Opposite tangent
         Point2D oppositeTangent = tangent.multiply(-1);
 
-        // Apply opposite tangential force
         Point2D oppositeForce = oppositeTangent.multiply(swingSpeed);
         physics.applyForceToCenter(oppositeForce);
 
-
-        // Optional boost if slowing down
         Point2D prevVelocity = physics.getLinearVelocity();
         FXGL.getGameTimer().runOnceAfter(() -> {
             Point2D currentVelocity = physics.getLinearVelocity();
