@@ -12,7 +12,6 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.TimerAction;
-import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
@@ -24,7 +23,12 @@ import java.util.Map;
 
 public abstract class PlayerComponent extends Component {
 
-    private GameProgressViewModel viewModel = GameProgressViewModel.getInstance();
+    private GameProgressViewModel gameViewModel = GameProgressViewModel.getInstance();
+    private SettingPreferenceViewModel settingViewModel = SettingPreferenceViewModel.getInstance();
+
+    protected boolean isInfiniteJump = false;
+    protected boolean isClimbWalls = false;
+    protected boolean isInfiniteGrip = false;
 
     protected StateComponent state;
     protected PhysicsComponent physics;
@@ -118,6 +122,12 @@ public abstract class PlayerComponent extends Component {
         physics = getEntity().getComponent(PhysicsComponent.class);
         view = getEntity().getComponent(ViewComponent.class);
 
+        SettingPreference settingPref = settingViewModel.getSnapshot();
+
+        isInfiniteJump = settingPref.isInfiniteJump();
+        isClimbWalls = settingPref.isClimbWalls();
+        isInfiniteGrip = settingPref.isInfiniteGrip();
+
         view.addChild(texture);
 
         state.changeState(STAND);
@@ -160,8 +170,17 @@ public abstract class PlayerComponent extends Component {
     }
 
     public void jump() {
-        if (!physics.isOnGround()) {
-            return;
+
+        if(!physics.isOnGround() && !isInfiniteJump) {
+
+            if(isClimbWalls) {
+                if(!isTouchingWall) {
+                    return;
+                }
+            } else {
+                return;
+            }
+
         }
 
         setFriction(0f);
@@ -195,11 +214,13 @@ public abstract class PlayerComponent extends Component {
             state.changeState(HOLD);
             setBodyStatic(true);
 
-            wallClingTimer = FXGL.getGameTimer().runOnceAfter(() -> {
-                isTiredTouchingWall = true;
-                setBodyStatic(false);
-                state.changeState(STAND);
-            }, Duration.seconds(6));
+            if(!isInfiniteGrip) {
+                wallClingTimer = FXGL.getGameTimer().runOnceAfter(() -> {
+                    isTiredTouchingWall = true;
+                    setBodyStatic(false);
+                    state.changeState(STAND);
+                }, Duration.seconds(6));
+            }
         }
 
 //        physics.setVelocityY(0);

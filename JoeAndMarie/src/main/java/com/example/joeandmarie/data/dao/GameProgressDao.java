@@ -151,4 +151,31 @@ public class GameProgressDao {
 
         return heightProgress;
     }
+
+
+    // Specific value change for the deepfall_count attribute
+    public void updateDeepFallCount(GameProgress state) {
+        String sql = """
+            UPDATE tbGameProgress
+            SET deepfall_count = ?
+            WHERE game_progress_id = ?
+        """;
+
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setFloat(1, state.getDeepFallCount());
+            stmt.setInt(2, state.getGameProgressId());
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("GameProgress deep fall count successfully updated");
+            } else {
+                System.out.println("No rows affected during update of GameProgress deep fall count");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating GameProgress deep fall count", e);
+        }
+    }
 }

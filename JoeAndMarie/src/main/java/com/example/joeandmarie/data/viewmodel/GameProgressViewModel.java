@@ -40,6 +40,7 @@ public class GameProgressViewModel extends ViewModel<GameProgress> {
                     break;
                 case UPDATE_DEEP_FALL_COUNT:
                     state.setDeepFallCount(state.getDeepFallCount() + (int) value);
+                    dao.updateDeepFallCount(state);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown event type: " + event);
