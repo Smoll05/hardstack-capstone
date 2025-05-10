@@ -1,5 +1,7 @@
 package com.example.joeandmarie.controller;
 
+import com.almasb.fxgl.dsl.FXGL;
+import com.example.joeandmarie.MainApplication;
 import javafx.fxml.FXML;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
@@ -14,6 +16,7 @@ public class CreditsController {
 
     @FXML
     private void handleExitClick() {
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }
 
@@ -28,6 +31,8 @@ public class CreditsController {
 
                 item.setScaleX(1.05);
                 item.setScaleY(1.05);
+
+                FXGL.getAudioPlayer().playSound(MainApplication.getSfx_hover());
             });
 
             item.setOnMouseExited(e -> {

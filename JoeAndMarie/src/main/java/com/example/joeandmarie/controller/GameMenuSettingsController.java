@@ -54,14 +54,17 @@ public class GameMenuSettingsController implements Observer<SettingPreference> {
 
         cbInfiJump.selectedProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_INFINITE_JUMP, newValue);
+            FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         });
 
         cbInfiClimb.selectedProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_CLIMB_WALLS, newValue);
+            FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         });
 
         cbInfiGrip.selectedProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_INFINITE_GRIP, newValue);
+            FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         });
 
         setupHoverEffect(btnExit);
@@ -70,6 +73,7 @@ public class GameMenuSettingsController implements Observer<SettingPreference> {
     @FXML
     private void handleExitClick() {
         viewModel.saveSettingPreference();
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         try {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("/assets/layouts/joe_game_menu.fxml"));
             Parent newContent = loader.load();
@@ -113,6 +117,7 @@ public class GameMenuSettingsController implements Observer<SettingPreference> {
 
                 item.setScaleX(1.05);
                 item.setScaleY(1.05);
+                FXGL.getAudioPlayer().playSound(MainApplication.getSfx_hover());
             });
 
             item.setOnMouseExited(e -> {

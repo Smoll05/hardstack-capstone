@@ -90,20 +90,24 @@ public class JoeMainMenuController {
     @FXML
     private void handlePlayClick() {
         ScreenManager.switchScreen("/assets/layouts/progress_files.fxml");
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     @FXML
     private void handleCreditsClick() {
         ScreenManager.switchScreen("/assets/layouts/credits.fxml");
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     @FXML
     private void handleSettingsClick() {
         ScreenManager.switchScreen("/assets/layouts/settings.fxml");
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 
     @FXML
     private void handleQuitClick() {
         FXGL.getGameController().exit();
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
     }
 }

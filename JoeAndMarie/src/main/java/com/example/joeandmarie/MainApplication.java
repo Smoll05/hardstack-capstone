@@ -18,7 +18,6 @@ import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.config.Constants;
-import com.example.joeandmarie.controller.JoeMainMenuController;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
@@ -59,6 +58,7 @@ public class MainApplication extends GameApplication {
     private static Sound sfx_cry;
     private static Sound sfx_hover;
     private static Sound sfx_splat;
+    private static Sound sfx_meow;
     private static Sound sfx_click;
 
     private static Music music_underground;
@@ -111,10 +111,11 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.getGameWorld().addEntityFactory(new BlockFactory());
 
-        sfx_click = FXGL.getAssetLoader().loadSound("sound_meow.wav");
+        sfx_meow = FXGL.getAssetLoader().loadSound("sound_meow.wav");
         sfx_cry = FXGL.getAssetLoader().loadSound("sound_back_checkpoint.wav");
         sfx_hover = FXGL.getAssetLoader().loadSound("sound_button_hover.wav");
         sfx_splat = FXGL.getAssetLoader().loadSound("sound_cry.wav");
+        sfx_click = FXGL.getAssetLoader().loadSound("sound_button_click.wav");
 
         music_underground = FXGL.getAssetLoader().loadMusic("music_underground_city.mp3");
 
@@ -122,7 +123,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("FirstLevel.tmx");
+            FXGL.setLevelFromMap("MAIN-LEVEL.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -948,12 +949,20 @@ public class MainApplication extends GameApplication {
         return sfx_splat;
     }
 
+    public static Sound getSfx_meow() {
+        return sfx_meow;
+    }
+
     public static Sound getSfx_click() {
         return sfx_click;
     }
 
     public static void setSfx_hover(Sound sfx_hover) {
         MainApplication.sfx_hover = sfx_hover;
+    }
+
+    public static void setSfx_meow(Sound sfx_meow) {
+        MainApplication.sfx_meow = sfx_meow;
     }
 
     public static void setSfx_click(Sound sfx_click) {
