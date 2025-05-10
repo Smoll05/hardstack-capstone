@@ -28,33 +28,13 @@ import javafx.stage.Window;
 import java.io.IOException;
 
 public class ProgressFilesController {
-    @FXML private AnchorPane apFile1; //anchorpanes for files, has click handlers to continue playing game for now
+    @FXML private AnchorPane apFile1;
     @FXML private AnchorPane apFile2;
     @FXML private AnchorPane apFile3;
 
     @FXML private ImageView ivContainerBackground1; // temporary container backgrounds
     @FXML private ImageView ivContainerBackground2;
     @FXML private ImageView ivContainerBackground3;
-
-    @FXML
-    private Label lblFileName; // file number label for container 1
-    @FXML
-    private Label lblProgress; // height progress label for container 1
-
-    @FXML
-    private ImageView btnPlay; // play button to continue playing
-    @FXML
-    private ImageView btnExport; // export current game file
-
-    @FXML
-    private ImageView btnNewGame; // new game button for file 2
-    @FXML
-    private ImageView btnImportGame; // import file button for file 2
-
-    @FXML
-    private ImageView btnNewGame2; // new game button for file 3
-    @FXML
-    private ImageView btnImportGame2; // import file button for file 3
 
     @FXML
     private ImageView btnExit;

@@ -24,6 +24,7 @@ import com.example.joeandmarie.factory.BlockFactory;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
 import com.example.joeandmarie.ui.GameProgressUi;
+import com.example.joeandmarie.ui.JoeGameMenu;
 import com.example.joeandmarie.ui.JoeMainMenu;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -34,6 +35,8 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.EnumSet;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getSettings;
 
 public class MainApplication extends GameApplication {
 
@@ -79,6 +82,12 @@ public class MainApplication extends GameApplication {
             public FXGLMenu newMainMenu() {
                 return new JoeMainMenu();
             }
+
+            @Override
+            public FXGLMenu newGameMenu() {
+                return new JoeGameMenu(); // This replaces the ESC menu
+            }
+
         });
     }
 
