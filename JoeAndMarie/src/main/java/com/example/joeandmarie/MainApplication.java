@@ -114,8 +114,9 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 1600;
 //        int mapHeight = 950;
 
-        int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+
+        int mapWidth = 150 * 32;  // 4800 pixels
+        int mapHeight = 165 * 32; // 5280 pixels
 
 //        viewport.setZoom(0.8);
 
@@ -140,8 +141,6 @@ public class MainApplication extends GameApplication {
 
         FXGL.getGameTimer().runAtInterval(() -> {
             // After level loading and spawning
-            FXGL.getGameScene().getRoot().setScaleX(1.5);
-            FXGL.getGameScene().getRoot().setScaleY(1.5);
 
             double midX = (player1.getX() + player2.getX()) / 2;
             double midY = (player1.getY() + player2.getY()) / 2;
