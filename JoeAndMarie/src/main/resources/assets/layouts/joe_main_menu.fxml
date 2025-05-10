@@ -30,7 +30,7 @@
             </effect>
         </ImageView>
         <!-- Menu Box -->
-        <VBox fx:id="menuBox" alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="100.0">
+        <VBox fx:id="menuBox" alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="125.0" AnchorPane.rightAnchor="100.0">
             <children>
                 <!-- Menu Items -->
                 <StackPane fx:id="coopCampaign" onMouseClicked="#handlePlayClick" prefHeight="146.0" prefWidth="346.0">

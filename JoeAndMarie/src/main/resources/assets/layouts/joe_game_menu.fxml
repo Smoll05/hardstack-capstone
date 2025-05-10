@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+
+
+<AnchorPane fx:id="apGameMenuContainer" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.joeandmarie.controller.JoeGameMenuController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" height="1080.0" opacity="0.25" stroke="BLACK" strokeType="INSIDE" width="1920.0" />
+            <ImageView fitHeight="680.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="366.5" AnchorPane.rightAnchor="366.5" AnchorPane.topAnchor="200.0">
+               <image>
+                  <Image url="@../textures/game_menu_container.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="447.0" layoutX="728.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../textures/text_paused.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnExit" fitHeight="150.0" fitWidth="150.0" layoutX="698.0" layoutY="535.0" onMouseClicked="#handleExitClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../textures/menu_button_x.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnSettings" fitHeight="150.0" fitWidth="150.0" layoutX="877.0" layoutY="535.0" onMouseClicked="#handleSettingsClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../textures/menu_button_settings.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnPlay" fitHeight="150.0" fitWidth="150.0" layoutX="1056.0" layoutY="535.0" onMouseClicked="#handlePlayClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../textures/menu_button_play.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

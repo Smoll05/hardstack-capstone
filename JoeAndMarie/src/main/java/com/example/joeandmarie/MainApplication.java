@@ -95,10 +95,10 @@ public class MainApplication extends GameApplication {
                 return new JoeMainMenu();
             }
 
-//            @Override
-//            public FXGLMenu newGameMenu() {
-//                return new JoeGameMenu(); // This replaces the ESC menu
-//            }
+            @Override
+            public FXGLMenu newGameMenu() {
+                return new JoeGameMenu(); // This replaces the ESC menu
+            }
         });
     }
 
