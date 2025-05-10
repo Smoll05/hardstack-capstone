@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -60,6 +61,8 @@ public class MainApplication extends GameApplication {
     private static Sound sfx_splat;
     private static Sound sfx_click;
 
+    private static Music music_underground;
+
     private final GameProgressViewModel gameProgressViewModel = GameProgressViewModel.getInstance();
     private final SettingPreferenceViewModel settingPreferenceViewModel = SettingPreferenceViewModel.getInstance();
 
@@ -89,14 +92,13 @@ public class MainApplication extends GameApplication {
                 return new JoeMainMenu();
             }
 
-            @Override
-            public FXGLMenu newGameMenu() {
-                return new JoeGameMenu(); // This replaces the ESC menu
-            }
+//            @Override
+//            public FXGLMenu newGameMenu() {
+//                return new JoeGameMenu(); // This replaces the ESC menu
+//            }
 
         });
     }
-
 
     @Override
     protected void initGame() {
@@ -112,6 +114,10 @@ public class MainApplication extends GameApplication {
         sfx_cry = FXGL.getAssetLoader().loadSound("sound_back_checkpoint.wav");
         sfx_hover = FXGL.getAssetLoader().loadSound("sound_button_hover.wav");
         sfx_splat = FXGL.getAssetLoader().loadSound("sound_cry.wav");
+
+        music_underground = FXGL.getAssetLoader().loadMusic("music_underground_city.mp3");
+        FXGL.getAudioPlayer().stopMusic(JoeMainMenu.getMainMenuMusic());
+        FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
             FXGL.setLevelFromMap("kuan_sewer.tmx");

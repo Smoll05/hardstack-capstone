@@ -5,6 +5,8 @@ import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.data.database.DatabaseInit;
+import com.example.joeandmarie.data.model.SettingPreference;
+import com.example.joeandmarie.data.viewmodel.SettingPreferenceViewModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import com.almasb.fxgl.audio.Music;
@@ -13,7 +15,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getAssetLoader;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAudioPlayer;
 
 public class JoeMainMenu extends FXGLMenu {
-    private Music mainMenuMusic;
+    private static Music mainMenuMusic;
 
     public JoeMainMenu() {
         super(MenuType.MAIN_MENU);
@@ -31,5 +33,9 @@ public class JoeMainMenu extends FXGLMenu {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Music getMainMenuMusic() {
+        return mainMenuMusic;
     }
 }
