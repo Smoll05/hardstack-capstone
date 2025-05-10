@@ -1,5 +1,6 @@
 package com.example.joeandmarie.controller;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.data.dao.SettingPreferenceDao;
 import com.example.joeandmarie.data.event.SettingPreferenceEvent;
@@ -30,19 +31,23 @@ public class SettingsController implements Observer<SettingPreference> {
 
     private final SettingPreferenceViewModel viewModel = SettingPreferenceViewModel.getInstance();
     private final SettingPreferenceDao dao = new SettingPreferenceDao();
+    private SettingPreference snapshot;
 
     @FXML
     private void initialize() {
-
         viewModel.addObserver(this);
         update(viewModel.getSnapshot());
 
         slMusicVolume.valueProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_MUSIC_VOLUME, newValue.floatValue());
+            snapshot = viewModel.getSnapshot();
+            FXGL.getSettings().setGlobalMusicVolume(snapshot.getMusicVolume() / 100);
         });
 
         slFXVolume.valueProperty().addListener((_, _, newValue) -> {
             viewModel.onEvent(SettingPreferenceEvent.UPDATE_FX_VOLUME, newValue.floatValue());
+            snapshot = viewModel.getSnapshot();
+            FXGL.getSettings().setGlobalSoundVolume(snapshot.getFxVolume() / 100);
         });
 
         cbInfiJump.selectedProperty().addListener((_, _, newValue) -> {

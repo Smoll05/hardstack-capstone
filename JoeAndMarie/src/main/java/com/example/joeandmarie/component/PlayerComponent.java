@@ -12,6 +12,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.TimerAction;
+import com.example.joeandmarie.MainApplication;
 import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
@@ -93,6 +94,7 @@ public abstract class PlayerComponent extends Component {
                 physics.setVelocityX(0);
                 state.changeState(SPLAT);
                 viewModel.onEvent(GameProgressEvent.UPDATE_DEEP_FALL_COUNT, 1);
+                FXGL.getAudioPlayer().playSound(MainApplication.getSfx_splat());
             }
 
             setFriction(1f);

@@ -37,26 +37,6 @@ public class ProgressFilesController {
     @FXML private ImageView ivContainerBackground3;
 
     @FXML
-    private Label lblFileName; // file number label for container 1
-    @FXML
-    private Label lblProgress; // height progress label for container 1
-
-    @FXML
-    private ImageView btnPlay; // play button to continue playing
-    @FXML
-    private ImageView btnExport; // export current game file
-
-    @FXML
-    private ImageView btnNewGame; // new game button for file 2
-    @FXML
-    private ImageView btnImportGame; // import file button for file 2
-
-    @FXML
-    private ImageView btnNewGame2; // new game button for file 3
-    @FXML
-    private ImageView btnImportGame2; // import file button for file 3
-
-    @FXML
     private ImageView btnExit;
 
     private final SaveProgressDao saveDao = new SaveProgressDao();
@@ -107,6 +87,7 @@ public class ProgressFilesController {
                 break;
         }
 
+        FXGL.getAudioPlayer().playSound(MainApplication.getSfx_click());
         FXGL.getGameController().startNewGame();
         ScreenManager.switchScreen("/assets/layouts/joe_main_menu.fxml");
     }

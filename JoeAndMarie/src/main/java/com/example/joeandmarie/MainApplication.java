@@ -6,6 +6,8 @@ import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.IntroScene;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.audio.Music;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
@@ -16,6 +18,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.controller.JoeMainMenuController;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
@@ -25,10 +28,7 @@ import com.example.joeandmarie.factory.BlockFactory;
 import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
 import com.example.joeandmarie.threading.SaveRunnable;
-import com.example.joeandmarie.ui.HeightProgressUi;
-import com.example.joeandmarie.ui.JoeIntroScene;
-import com.example.joeandmarie.ui.JoeMainMenu;
-import com.example.joeandmarie.ui.SavingGameSpinnerUi;
+import com.example.joeandmarie.ui.*;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -56,6 +56,13 @@ public class MainApplication extends GameApplication {
     private boolean isSwinging;
     private boolean isCrouching = false;
 
+    private static Sound sfx_cry;
+    private static Sound sfx_hover;
+    private static Sound sfx_splat;
+    private static Sound sfx_click;
+
+    private static Music music_underground;
+
     private final GameProgressViewModel gameProgressViewModel = GameProgressViewModel.getInstance();
     private final SettingPreferenceViewModel settingPreferenceViewModel = SettingPreferenceViewModel.getInstance();
 
@@ -67,12 +74,12 @@ public class MainApplication extends GameApplication {
         settings.setVersion("1.0");
         settings.setWidth(1920);
         settings.setHeight(1080);
+        settings.setIntroEnabled(true);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
-//        settings.setIntroEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
-        settings.setDeveloperMenuEnabled(true);
-        settings.setProfilingEnabled(true);
+//        settings.setDeveloperMenuEnabled(true);
+//        settings.setProfilingEnabled(true);
         settings.setFullScreenFromStart(true);
 
         // Attach your custom menu
@@ -80,14 +87,18 @@ public class MainApplication extends GameApplication {
 
             @Override
             public IntroScene newIntro() {
-                return new JoeIntroScene.MyIntroScene();
+                return new JoeIntroScene();
             }
-
 
             @Override
             public FXGLMenu newMainMenu() {
                 return new JoeMainMenu();
             }
+
+//            @Override
+//            public FXGLMenu newGameMenu() {
+//                return new JoeGameMenu(); // This replaces the ESC menu
+//            }
         });
     }
 
@@ -99,6 +110,16 @@ public class MainApplication extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.getGameWorld().addEntityFactory(new BlockFactory());
+
+        sfx_click = FXGL.getAssetLoader().loadSound("sound_meow.wav");
+        sfx_cry = FXGL.getAssetLoader().loadSound("sound_back_checkpoint.wav");
+        sfx_hover = FXGL.getAssetLoader().loadSound("sound_button_hover.wav");
+        sfx_splat = FXGL.getAssetLoader().loadSound("sound_cry.wav");
+
+        music_underground = FXGL.getAssetLoader().loadMusic("music_underground_city.mp3");
+
+        FXGL.getAudioPlayer().stopMusic(JoeMainMenu.getMainMenuMusic());
+        FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
             FXGL.setLevelFromMap("FirstLevel.tmx");
@@ -226,6 +247,11 @@ public class MainApplication extends GameApplication {
 
         FXGL.getInput().addAction(new UserAction("Cry") {
             @Override
+            protected void onActionBegin() {
+                FXGL.getAudioPlayer().playSound(sfx_cry);
+            }
+
+            @Override
             protected void onAction() {
                 getControlP1().cry();
                 getControlP2().cry();
@@ -255,6 +281,7 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {
+                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveLeft();
             }
 
@@ -267,6 +294,7 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right1") {
             @Override
             protected void onAction() {
+                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveRight();
             }
 
@@ -303,6 +331,7 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left2") {
             @Override
             protected void onAction() {
+                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveLeft();
             }
 
@@ -315,6 +344,7 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right2") {
             @Override
             protected void onAction() {
+                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveRight();
             }
 
@@ -909,5 +939,24 @@ public class MainApplication extends GameApplication {
 
     public Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
+    }
+    public static Sound getSfx_hover() {
+        return sfx_hover;
+    }
+
+    public static Sound getSfx_splat() {
+        return sfx_splat;
+    }
+
+    public static Sound getSfx_click() {
+        return sfx_click;
+    }
+
+    public static void setSfx_hover(Sound sfx_hover) {
+        MainApplication.sfx_hover = sfx_hover;
+    }
+
+    public static void setSfx_click(Sound sfx_click) {
+        MainApplication.sfx_click = sfx_click;
     }
 }
