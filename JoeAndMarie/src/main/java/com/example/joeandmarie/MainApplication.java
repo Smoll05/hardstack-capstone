@@ -18,6 +18,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.config.Constants;
+import com.example.joeandmarie.controller.JoeMainMenuController;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.GameProgress;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
@@ -58,7 +59,6 @@ public class MainApplication extends GameApplication {
     private static Sound sfx_cry;
     private static Sound sfx_hover;
     private static Sound sfx_splat;
-    private static Sound sfx_meow;
     private static Sound sfx_click;
 
     private static Music music_underground;
@@ -123,7 +123,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("MAIN-LEVEL.tmx");
+            FXGL.setLevelFromMap("MainLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,7 +137,7 @@ public class MainApplication extends GameApplication {
 //        int mapHeight = 950;
 
         int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+        int mapHeight = 180 * 32; // 3,584 pixels
 
 //        viewport.setZoom(0.8);
 
@@ -282,7 +282,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left1") {
             @Override
             protected void onAction() {
-                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveLeft();
             }
 
@@ -295,7 +294,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right1") {
             @Override
             protected void onAction() {
-                if(Player1Component.isTouchingWall) return;
                 getControlP1().moveRight();
             }
 
@@ -332,7 +330,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Left2") {
             @Override
             protected void onAction() {
-                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveLeft();
             }
 
@@ -345,7 +342,6 @@ public class MainApplication extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Right2") {
             @Override
             protected void onAction() {
-                if(Player2Component.isTouchingWall) return;
                 getControlP2().moveRight();
             }
 
@@ -949,20 +945,12 @@ public class MainApplication extends GameApplication {
         return sfx_splat;
     }
 
-    public static Sound getSfx_meow() {
-        return sfx_meow;
-    }
-
     public static Sound getSfx_click() {
         return sfx_click;
     }
 
     public static void setSfx_hover(Sound sfx_hover) {
         MainApplication.sfx_hover = sfx_hover;
-    }
-
-    public static void setSfx_meow(Sound sfx_meow) {
-        MainApplication.sfx_meow = sfx_meow;
     }
 
     public static void setSfx_click(Sound sfx_click) {

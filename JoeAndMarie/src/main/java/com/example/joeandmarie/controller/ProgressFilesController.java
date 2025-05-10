@@ -60,6 +60,7 @@ public class ProgressFilesController {
         setupHoverEffect(btnExit);
     }
 
+    //    To implement: importing and exporting files, loading game onclick of AnchorPane Background
     @FXML
     private void handleFileClick(MouseEvent event) {
         ImageView clickedButton = (ImageView) event.getSource();

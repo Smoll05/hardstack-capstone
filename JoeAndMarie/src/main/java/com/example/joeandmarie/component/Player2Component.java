@@ -63,49 +63,42 @@ public class Player2Component extends PlayerComponent {
         });
     }
 
+
     @Override
-    void swingMovement(EntityState newState, int scale) {
-
+    public void swingMovement(EntityState newState, int scale) {
         getEntity().setScaleX(scale * FXGLMath.abs(getEntity().getScaleX()));
-        Point2D previousVelocity = physics.getLinearVelocity();
 
-        Point2D pivotPos = player1.getCenter();
-        Point2D swingerPos = entity.getCenter();
-        Point2D direction = swingerPos.subtract(pivotPos);
+        // Use the other player as the pivot point for the swing
+        Point2D pivot = player1.getCenter(); // Replace with your actual other entity
+        Point2D center = getEntity().getCenter();
 
-        double angleFromVertical = Math.toDegrees(Math.atan2(direction.getX(), direction.getY())); // Note X,Y swapped
+        // Vector from pivot to this entity
+        Point2D toEntity = center.subtract(pivot);
 
-        double normalizedAngle = (angleFromVertical + 360) % 360;
+        // Tangent is perpendicular to the radius vector
+        Point2D tangent = new Point2D(-toEntity.getY(), toEntity.getX()).normalize().multiply(scale);
 
-//        if(!hasTurned180 && normalizedAngle > 180) hasTurned180 = true;
-//
-//        if(hasTurned180) {
-//            if (normalizedAngle > 170 && normalizedAngle < 190) {
-//                scale = 1 - scale;
-//                System.out.println("Scale is: " + scale);
-//            } else {
-//                System.out.println("Scale is: " + scale);
-//            }
-//        }
+        // Apply tangential swing force
+        double swingSpeed = stateData.get(newState).moveSpeed * 5;
 
-        Point2D tangentialForce;
-        if (scale == -1) { // Counter-clockwise
-            tangentialForce = new Point2D(entity.getY(), entity.getX()).normalize();
-        } else { // Clockwise
-            tangentialForce = new Point2D(entity.getY(), -entity.getX()).normalize();
-        }
+        // Opposite tangent
+        Point2D oppositeTangent = tangent.multiply(-1);
 
-        int swingSpeed = scale * stateData.get(newState).moveSpeed * 5;
-        tangentialForce = tangentialForce.multiply(swingSpeed);
-        physics.applyForceToCenter(tangentialForce);
+        // Apply opposite tangential force
+        Point2D oppositeForce = oppositeTangent.multiply(swingSpeed);
+        physics.applyForceToCenter(oppositeForce);
 
-        Point2D currentVelocity = physics.getLinearVelocity();
 
-        if (currentVelocity.magnitude() < previousVelocity.magnitude()) {
-            // Apply a small force in the direction of the current velocity to boost it.
-            physics.applyForceToCenter(currentVelocity.normalize().multiply(swingSpeed * 0.75f)); // Adjust 0.5f as needed
-        }
+        // Optional boost if slowing down
+        Point2D prevVelocity = physics.getLinearVelocity();
+        FXGL.getGameTimer().runOnceAfter(() -> {
+            Point2D currentVelocity = physics.getLinearVelocity();
+            if (currentVelocity.magnitude() < prevVelocity.magnitude()) {
+                physics.applyForceToCenter(currentVelocity.normalize().multiply(swingSpeed * 0.75));
+            }
+        }, Duration.millis(100));
 
+        // Update entity state
         if (state.getCurrentState() != newState) {
             state.changeState(newState);
         }
