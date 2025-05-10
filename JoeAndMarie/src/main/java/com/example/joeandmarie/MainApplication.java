@@ -126,7 +126,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("FirstLevel.tmx");
+            FXGL.setLevelFromMap("ForestBottom.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,8 +139,8 @@ public class MainApplication extends GameApplication {
 //        int mapWidth = 1600;
 //        int mapHeight = 950;
 
-        int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+        int mapWidth = 165 * 32;  // 4,800 pixels
+        int mapHeight = 261 * 32; // 3,584 pixels
 
 //        viewport.setZoom(0.8);
 
@@ -166,9 +166,6 @@ public class MainApplication extends GameApplication {
                 showFinishImage(); // just shows image, no saving
             }
         });
-
-
-
 
         GameProgress snapshot = gameProgressViewModel.getSnapshot();
 
