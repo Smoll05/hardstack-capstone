@@ -18,6 +18,10 @@ import com.almasb.fxgl.physics.box2d.dynamics.joints.*;
 import com.example.joeandmarie.component.Player1Component;
 import com.example.joeandmarie.component.Player2Component;
 import com.example.joeandmarie.config.Constants;
+import javafx.animation.FadeTransition;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import com.almasb.fxgl.dsl.FXGL;
 import com.example.joeandmarie.controller.JoeMainMenuController;
 import com.example.joeandmarie.data.event.GameProgressEvent;
 import com.example.joeandmarie.data.model.GameProgress;
@@ -37,7 +41,6 @@ import javafx.scene.shape.CubicCurve;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
 import java.util.EnumSet;
 
 public class MainApplication extends GameApplication {
@@ -74,7 +77,7 @@ public class MainApplication extends GameApplication {
         settings.setVersion("1.0");
         settings.setWidth(1920);
         settings.setHeight(1080);
-        settings.setIntroEnabled(true);
+//        settings.setIntroEnabled(true);
         settings.setFullScreenAllowed(true);
         settings.setMainMenuEnabled(true);
         settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
@@ -122,7 +125,7 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("FirstLevel.tmx");
+            FXGL.setLevelFromMap("MainLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +139,7 @@ public class MainApplication extends GameApplication {
 //        int mapHeight = 950;
 
         int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 112 * 32; // 3,584 pixels
+        int mapHeight = 165 * 32; // 3,584 pixels
 
 //        viewport.setZoom(0.8);
 
@@ -148,6 +151,23 @@ public class MainApplication extends GameApplication {
         double x, y;
         Entity spawnPoint = FXGL.geto("spawnPoint");
         originY = spawnPoint.getY();
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER1, EntityType.Finish) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity finish) {
+                showFinishImage(); // just shows image, no saving
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER2, EntityType.Finish) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity finish) {
+                showFinishImage(); // just shows image, no saving
+            }
+        });
+
+
+
 
         GameProgress snapshot = gameProgressViewModel.getSnapshot();
 
@@ -204,6 +224,9 @@ public class MainApplication extends GameApplication {
             getPlayer2().getViewComponent().addChild(nameTag2);
         }, Duration.seconds(0.1));
     }
+
+
+
 
     protected void initInput() {
         super.initInput();
@@ -928,6 +951,32 @@ public class MainApplication extends GameApplication {
         return FXGL.getGameWorld().getSingleton(e -> e.hasComponent(Player2Component.class))
                 .getComponent(Player2Component.class);
     }
+
+    private void showFinishImage() {
+        Image image = FXGL.image("finish.png");
+        ImageView imageView = new ImageView(image);
+
+        // Set to full screen size
+        double screenWidth = FXGL.getSettings().getWidth();
+        double screenHeight = FXGL.getSettings().getHeight();
+        imageView.setFitWidth(screenWidth);
+        imageView.setFitHeight(screenHeight);
+        imageView.setTranslateX(0);
+        imageView.setTranslateY(0);
+
+        // Set initial opacity to 0 (fully transparent)
+        imageView.setOpacity(0);
+
+        // Add to scene first
+        FXGL.getGameScene().addUINode(imageView);
+
+        // Create fade-in animation
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(4), imageView);
+        fadeIn.setFromValue(0);   // Start transparent
+        fadeIn.setToValue(1);     // End fully visible
+        fadeIn.play();            // Start animation
+    }
+
 
     public static void main(String[] args) {
         launch(args);

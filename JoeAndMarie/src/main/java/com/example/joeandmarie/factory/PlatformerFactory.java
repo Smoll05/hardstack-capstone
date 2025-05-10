@@ -60,5 +60,18 @@ public class PlatformerFactory implements EntityFactory {
                 .build();
     }
 
+    @Spawns("Finish")
+    public Entity Finish(SpawnData data) {
+        return entityBuilder(data)
+                .type(EntityType.Finish)
+                .bbox(new HitBox(BoundingShape.box(
+                        data.<Integer>get("width"),
+                        data.<Integer>get("height")
+                )))
+                .with(new CollidableComponent(true))
+                .build();
+    }
+
+
 }
 

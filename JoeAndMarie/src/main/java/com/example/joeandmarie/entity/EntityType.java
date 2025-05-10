@@ -8,5 +8,6 @@ public enum EntityType {
     ROPE_SEGMENT,
     FLAG,
     SPAWN_POINT,
-    CHECK_POINT
+    CHECK_POINT,
+    Finish
 }
