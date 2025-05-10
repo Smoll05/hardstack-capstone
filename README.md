@@ -40,14 +40,6 @@
 
 ## Object-Oriented Programming Principles
 
-Absolutely! Here's a polished and more professional version of your content, suitable for inclusion in a `README.md` file:
-
----
-
-### Object-Oriented Programming (OOP) Principles in Our Codebase
-
-Our project makes extensive use of core Object-Oriented Programming (OOP) principles to ensure maintainability, reusability, and clarity. Here's how each principle is applied:
-
 #### **Encapsulation**
 
 We **encapsulate** data by keeping most classes and fields private, exposing only necessary access through public getters and setters. This prevents unintended modifications from outside the class and keeps the internal workings hidden. For example, our **Model** classes act as data entities for the database and ViewModel state holders. They contain private fields accessed through well-defined getter and setter methods, ensuring controlled interaction.
@@ -79,10 +71,6 @@ We also use generic observers that can subscribe to any type of `ViewModel`, ena
 #### **Generic Collections**
 
 We make use of Java’s built-in generic collections such as `ArrayList` and `HashMap` throughout the codebase. These collections allow us to store and manage objects of any type while preserving type safety. Using these generic collections helps ensure code flexibility and reduces the need for manual type casting, making our code cleaner and less error-prone.
-
----
-
-Here’s a polished and more professional version of your **Multithreading and Concurrency** section, suitable for your `README.md` or project documentation:
 
 ---
 
