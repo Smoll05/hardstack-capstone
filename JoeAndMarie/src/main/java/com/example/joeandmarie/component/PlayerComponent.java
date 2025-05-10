@@ -14,7 +14,9 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.TimerAction;
 import com.example.joeandmarie.config.Constants;
 import com.example.joeandmarie.data.event.GameProgressEvent;
+import com.example.joeandmarie.data.model.SettingPreference;
 import com.example.joeandmarie.data.viewmodel.GameProgressViewModel;
+import com.example.joeandmarie.data.viewmodel.SettingPreferenceViewModel;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -23,7 +25,12 @@ import java.util.Map;
 
 public abstract class PlayerComponent extends Component {
 
-    private GameProgressViewModel viewModel = GameProgressViewModel.getInstance();
+    private GameProgressViewModel gameViewModel = GameProgressViewModel.getInstance();
+    private SettingPreferenceViewModel settingViewModel = SettingPreferenceViewModel.getInstance();
+
+    protected boolean isInfiniteJump = false;
+    protected boolean isClimbWalls = false;
+    protected boolean isInfiniteGrip = false;
 
     protected StateComponent state;
     protected PhysicsComponent physics;
@@ -92,7 +99,7 @@ public abstract class PlayerComponent extends Component {
             if (physics.isOnGround()) {
                 physics.setVelocityX(0);
                 state.changeState(SPLAT);
-                viewModel.onEvent(GameProgressEvent.UPDATE_DEEP_FALL_COUNT, 1);
+                gameViewModel.onEvent(GameProgressEvent.UPDATE_DEEP_FALL_COUNT, 1);
             }
 
             setFriction(1f);
@@ -115,6 +122,12 @@ public abstract class PlayerComponent extends Component {
         state = getEntity().getComponent(StateComponent.class);
         physics = getEntity().getComponent(PhysicsComponent.class);
         view = getEntity().getComponent(ViewComponent.class);
+
+        SettingPreference settingPref = settingViewModel.getSnapshot();
+
+        isInfiniteJump = settingPref.isInfiniteJump();
+        isClimbWalls = settingPref.isClimbWalls();
+        isInfiniteGrip = settingPref.isInfiniteGrip();
 
         view.addChild(texture);
 
@@ -158,8 +171,17 @@ public abstract class PlayerComponent extends Component {
     }
 
     public void jump() {
-        if (!physics.isOnGround()) {
-            return;
+
+        if(!physics.isOnGround() && !isInfiniteJump) {
+
+            if(isClimbWalls) {
+                if(!isTouchingWall) {
+                    return;
+                }
+            } else {
+                return;
+            }
+
         }
 
         setFriction(0f);
@@ -193,11 +215,13 @@ public abstract class PlayerComponent extends Component {
             state.changeState(HOLD);
             setBodyStatic(true);
 
-            wallClingTimer = FXGL.getGameTimer().runOnceAfter(() -> {
-                isTiredTouchingWall = true;
-                setBodyStatic(false);
-                state.changeState(STAND);
-            }, Duration.seconds(6));
+            if(!isInfiniteGrip) {
+                wallClingTimer = FXGL.getGameTimer().runOnceAfter(() -> {
+                    isTiredTouchingWall = true;
+                    setBodyStatic(false);
+                    state.changeState(STAND);
+                }, Duration.seconds(6));
+            }
         }
 
 //        physics.setVelocityY(0);
