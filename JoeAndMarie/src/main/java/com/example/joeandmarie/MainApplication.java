@@ -139,6 +139,10 @@ public class MainApplication extends GameApplication {
         getControlP2().loadPlayer1(player1);
 
         FXGL.getGameTimer().runAtInterval(() -> {
+            // After level loading and spawning
+            FXGL.getGameScene().getRoot().setScaleX(1.5);
+            FXGL.getGameScene().getRoot().setScaleY(1.5);
+
             double midX = (player1.getX() + player2.getX()) / 2;
             double midY = (player1.getY() + player2.getY()) / 2;
 
