@@ -124,12 +124,20 @@ public class MainApplication extends GameApplication {
 
         FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
 
-        // Retrieve spawn point position
+        double x, y;
         Entity spawnPoint = FXGL.geto("spawnPoint");
-        double x = spawnPoint.getX();
-        double y = spawnPoint.getY();
+        originY = spawnPoint.getY();
 
-        originY = spawnPoint.getY() - 8;
+        GameProgress snapshot = gameProgressViewModel.getSnapshot();
+
+        if(snapshot.getHeightProgress() == 0) {
+            // Retrieve spawn point position
+            x = spawnPoint.getX();
+            y = spawnPoint.getY();
+        } else {
+            x = snapshot.getXCoordinate();
+            y = snapshot.getYCoordinate();
+        }
 
         // Spawn players at that point
         Entity player1 = FXGL.spawn("player1", x, y);

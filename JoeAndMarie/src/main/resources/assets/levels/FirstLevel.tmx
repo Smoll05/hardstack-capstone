@@ -647,6 +647,6 @@
   <object id="214" type="platform" x="2595.17" y="36.4166" width="313.667" height="58.1667"/>
   <object id="216" type="platform" x="2913.83" y="289.583" width="159" height="91.5"/>
   <object id="217" name="spawn" type="spawn" x="640" y="2889" width="45" height="50"/>
-  <object id="224" type="checkpoint" x="801.333" y="1921.33" width="158" height="316.667"/>
+  <object id="224" type="checkpoint" x="846.333" y="2031.33" width="28" height="206.667"/>
  </objectgroup>
 </map>
