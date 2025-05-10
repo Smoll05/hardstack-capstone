@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="152" height="138" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="327">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="152" height="138" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="328">
  <tileset firstgid="1" name="TX_Tileset_Ground" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="TX_Tileset_Ground.png" width="512" height="512"/>
  </tileset>
@@ -748,7 +748,7 @@
   <object id="213" type="platform" x="2817.83" y="2116.08" width="92.333" height="89.833"/>
   <object id="214" type="platform" x="2659.17" y="868.417" width="313.667" height="58.1667"/>
   <object id="216" type="platform" x="2977.83" y="1121.58" width="159" height="91.5"/>
-  <object id="217" type="spawn" x="839.33" y="3716.33" width="45" height="50"/>
+  <object id="217" type="spawn" x="483.33" y="3416.33" width="45" height="50"/>
   <object id="218" type="one_way_platform" x="1696.67" y="684.5" width="85.6667" height="20"/>
   <object id="219" type="one_way_platform" x="1055.83" y="648.667" width="85.6667" height="20"/>
   <object id="220" type="one_way_platform" x="834.5" y="585.333" width="85.6667" height="20"/>
@@ -846,5 +846,6 @@
   <object id="324" type="one_way_platform" x="1855.25" y="1919" width="34.5" height="20"/>
   <object id="325" type="platform" x="2048.5" y="1984.25" width="61.5007" height="62.5"/>
   <object id="326" type="one_way_platform" x="2621.84" y="1185.18" width="65.3182" height="17.6364"/>
+  <object id="327" type="Finish" x="928.333" y="0.666667" width="228" height="24.3333"/>
  </objectgroup>
 </map>

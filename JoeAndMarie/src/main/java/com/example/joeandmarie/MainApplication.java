@@ -29,8 +29,11 @@ import com.example.joeandmarie.factory.PlatformerFactory;
 import com.example.joeandmarie.factory.PlayerFactory;
 import com.example.joeandmarie.threading.SaveRunnable;
 import com.example.joeandmarie.ui.*;
+import javafx.animation.FadeTransition;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
@@ -116,7 +119,6 @@ public class MainApplication extends GameApplication {
         sfx_cry = FXGL.getAssetLoader().loadSound("sound_back_checkpoint.wav");
         sfx_hover = FXGL.getAssetLoader().loadSound("sound_button_hover.wav");
         sfx_splat = FXGL.getAssetLoader().loadSound("sound_cry.wav");
-        sfx_click = FXGL.getAssetLoader().loadSound("sound_button_click.wav");
 
         music_underground = FXGL.getAssetLoader().loadMusic("music_underground_city.mp3");
 
@@ -124,19 +126,49 @@ public class MainApplication extends GameApplication {
         FXGL.getAudioPlayer().loopMusic(music_underground);
 
         try {
-            FXGL.setLevelFromMap("MainLevel.tmx");
+            FXGL.setLevelFromMap("FirstLevel.tmx");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        var viewport = FXGL.getGameScene().getViewport();
+//
+//        int mapWidth = 40 * 32;
+//        int mapHeight = 23 * 32;
+
+//        int mapWidth = 1600;
+//        int mapHeight = 950;
+
         int mapWidth = 150 * 32;  // 4,800 pixels
-        int mapHeight = 180 * 32; // 3,584 pixels
+        int mapHeight = 112 * 32; // 3,584 pixels
+
+//        viewport.setZoom(0.8);
+
+//        Entity player2 = FXGL.spawn("player2", 500, 300);
+//        Entity player1 = FXGL.spawn("player1", 500, 200);
 
         FXGL.set("spawnPoint", FXGL.getGameWorld().getSingleton(EntityType.SPAWN_POINT));
 
         double x, y;
         Entity spawnPoint = FXGL.geto("spawnPoint");
         originY = spawnPoint.getY();
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER1, EntityType.Finish) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity finish) {
+                showFinishImage(); // just shows image, no saving
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER2, EntityType.Finish) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity finish) {
+                showFinishImage(); // just shows image, no saving
+            }
+        });
+
+
+
 
         GameProgress snapshot = gameProgressViewModel.getSnapshot();
 
@@ -175,6 +207,23 @@ public class MainApplication extends GameApplication {
 
         FXGL.getPhysicsWorld().setGravity(0, 1250);
 
+        FXGL.runOnce(() -> {
+            nameTag1 = new Text("Joe");
+            nameTag1.setFont(Font.font(14));
+            nameTag1.setFill(Color.BLACK);
+
+            nameTag1.setTranslateX(-nameTag1.getLayoutBounds().getWidth() / 2);
+            nameTag1.setTranslateY(-20);
+
+            nameTag2 = new Text("Marie");
+            nameTag2.setFont(Font.font(14));
+            nameTag2.setFill(Color.BLACK);
+            nameTag2.setTranslateX(-nameTag2.getLayoutBounds().getWidth() / 2);
+            nameTag2.setTranslateY(-20);
+
+            getPlayer1().getViewComponent().addChild(nameTag1);
+            getPlayer2().getViewComponent().addChild(nameTag2);
+        }, Duration.seconds(0.1));
     }
 
     protected void initInput() {
@@ -897,6 +946,33 @@ public class MainApplication extends GameApplication {
                 .getComponent(Player2Component.class);
     }
 
+    private void showFinishImage() {
+        Image image = FXGL.image("finish.png");
+        ImageView imageView = new ImageView(image);
+
+        // Set to full screen size
+        double screenWidth = FXGL.getSettings().getWidth();
+        double screenHeight = FXGL.getSettings().getHeight();
+        imageView.setFitWidth(screenWidth);
+        imageView.setFitHeight(screenHeight);
+        imageView.setTranslateX(0);
+        imageView.setTranslateY(0);
+
+        // Set initial opacity to 0 (fully transparent)
+        imageView.setOpacity(0);
+
+        // Add to scene first
+        FXGL.getGameScene().addUINode(imageView);
+
+        // Create fade-in animation
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), imageView);
+        fadeIn.setFromValue(0);   // Start transparent
+        fadeIn.setToValue(1);     // End fully visible
+        fadeIn.play();            // Start animation
+
+    }
+
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -908,7 +984,6 @@ public class MainApplication extends GameApplication {
     public Entity getPlayer2() {
         return FXGL.getGameWorld().getSingleton(EntityType.PLAYER2);
     }
-    
     public static Sound getSfx_hover() {
         return sfx_hover;
     }
