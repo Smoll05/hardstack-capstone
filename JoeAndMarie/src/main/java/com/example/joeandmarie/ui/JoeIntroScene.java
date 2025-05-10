@@ -8,28 +8,40 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import javafx.animation.*;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javafx.scene.paint.Color; // Make sure this is imported
-
+import javafx.scene.paint.Color;
+import com.almasb.fxgl.audio.Music;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 public class JoeIntroScene {
+
     public static class MyIntroScene extends IntroScene {
+
         private final List<Animation<?>> animations = new ArrayList<>();
+        private Music mainMenuMusic;
 
         public MyIntroScene() {
             var root = getRoot();
-// --- Background image setup ---
-            var background = FXGL.texture("background_plain.png"); // Replace with your background image filename
+
+            // --- Background music ---
+            try {
+                mainMenuMusic = FXGL.getAssetLoader().loadMusic("IntroMusic.mp3");
+                FXGL.getAudioPlayer().loopMusic(mainMenuMusic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // --- Background image ---
+            var background = FXGL.texture("background_plain.png");
             background.setFitWidth(FXGL.getAppWidth());
             background.setFitHeight(FXGL.getAppHeight());
-
             root.getChildren().add(background);
 
-            // --- Title image setup ---
+            // --- Title image ---
             var titleImage = FXGL.texture("menu_title_noshadow.png");
             titleImage.setTranslateX(FXGL.getAppWidth() / 2.0 - titleImage.getWidth() / 2.0);
             titleImage.setTranslateY(-titleImage.getHeight());
@@ -48,7 +60,7 @@ public class JoeIntroScene {
             fallTransition.play();
             fadeInImage.play();
 
-            // --- Progress bar setup ---
+            // --- Progress bar ---
             ProgressBar progressBar = new ProgressBar(0);
             double barWidth = FXGL.getAppWidth() * 0.6;
             double barX = (FXGL.getAppWidth() - barWidth) / 2;
@@ -71,61 +83,52 @@ public class JoeIntroScene {
 
             root.getChildren().add(progressBar);
 
-            // --- "by HardStack" label setup ---
-            var titleImages = FXGL.texture("text_by_hardstack.png");
-//          Text byLabel = FXGL.getUIFactoryService().newText("by HardStack", 18);
-            titleImages.setOpacity(0);
-            root.getChildren().add(titleImages);
+            // --- "by HardStack" label ---
+            var labelImage = FXGL.texture("text_by_hardstack.png");
+            labelImage.setOpacity(0);
+            root.getChildren().add(labelImage);
 
-            // After fade-in animation, show "by HardStack" centered below image
             fadeInImage.setOnFinished(event -> {
-                titleImages.setTranslateX(FXGL.getAppWidth() / 2.0 - titleImages.getWidth() / 2.0);
-                titleImages.setTranslateY(titleImage.getTranslateY() + titleImage.getHeight() - 20);
+                labelImage.setTranslateX(FXGL.getAppWidth() / 2.0 - labelImage.getWidth() / 2.0);
+                labelImage.setTranslateY(titleImage.getTranslateY() + titleImage.getHeight() - 20);
 
-                var labelFade = new FadeTransition(Duration.seconds(1), titleImages);
+                var labelFade = new FadeTransition(Duration.seconds(1), labelImage);
                 labelFade.setFromValue(0);
                 labelFade.setToValue(1);
                 labelFade.play();
             });
 
-            // Animate progress bar fill over 10 seconds
+            // --- Progress bar animation ---
             Timeline progressTimeline = new Timeline(
                     new KeyFrame(Duration.seconds(5),
                             new KeyValue(progressBar.progressProperty(), 1))
             );
             progressTimeline.play();
 
-            // --- Character setup ---
+            // --- Animated Joe character ---
             var move = new AnimationChannel(FXGL.image("joe_spritesheet_upscaled.png"), 8,
                     64, 64, Duration.seconds(1), 0, 5);
             var animatedJoe = new AnimatedTexture(move);
             animatedJoe.loopAnimationChannel(move);
 
-            animatedJoe.setTranslateY(barY - 50); // Position just above the progress bar
-
-// Set cat's size (optional, in case it's too big/small visually)
-// animatedJoe.setFitWidth(64);
-// animatedJoe.setFitHeight(64);
-
-// Start at the left edge of the progress bar
-            animatedJoe.setTranslateX(barX); // Start at progress bar X
+            animatedJoe.setTranslateY(barY - 50);
+            animatedJoe.setTranslateX(barX);
+            root.getChildren().add(animatedJoe);
 
             TranslateTransition walk = new TranslateTransition(Duration.seconds(5), animatedJoe);
             walk.setFromX(barX);
-            walk.setToX(barX + barWidth - 64); // End at end of progress bar minus sprite width
+            walk.setToX(barX + barWidth - 64);
             walk.setInterpolator(Interpolator.LINEAR);
             walk.play();
 
-
-            root.getChildren().add(animatedJoe);
-
-            // Clear intro scene and go to main menu after 10 seconds
+            // --- Scene transition ---
             progressTimeline.setOnFinished(e -> {
-                var fadeOut = new FadeTransition(Duration.seconds(1), getRoot());
+                var fadeOut = new FadeTransition(Duration.seconds(1), root);
                 fadeOut.setFromValue(1.0);
                 fadeOut.setToValue(0.0);
                 fadeOut.setOnFinished(ev -> {
-                    getRoot().getChildren().clear();
+                    FXGL.getAudioPlayer().stopMusic(mainMenuMusic);
+                    root.getChildren().clear();
                     finishIntro();
                 });
                 fadeOut.play();
