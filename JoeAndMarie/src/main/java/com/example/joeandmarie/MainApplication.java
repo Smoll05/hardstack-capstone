@@ -106,7 +106,7 @@ public class MainApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        FXGL.getGameScene().setBackgroundColor(Color.ALICEBLUE);
+        FXGL.getGameScene().setBackgroundColor(Color.BLACK);
 
         FXGL.getGameWorld().addEntityFactory(new PlatformerFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
