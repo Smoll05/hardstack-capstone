@@ -22,6 +22,12 @@ public class JoeIntroScene {
 
         public MyIntroScene() {
             var root = getRoot();
+// --- Background image setup ---
+            var background = FXGL.texture("background_plain.png"); // Replace with your background image filename
+            background.setFitWidth(FXGL.getAppWidth());
+            background.setFitHeight(FXGL.getAppHeight());
+
+            root.getChildren().add(background);
 
             // --- Title image setup ---
             var titleImage = FXGL.texture("menu_title_noshadow.png");
@@ -29,7 +35,7 @@ public class JoeIntroScene {
             titleImage.setTranslateY(-titleImage.getHeight());
             titleImage.setOpacity(0);
 
-            var fallTransition = new TranslateTransition(Duration.seconds(2), titleImage);
+            var fallTransition = new TranslateTransition(Duration.seconds(4), titleImage);
             fallTransition.setToY(FXGL.getAppHeight() / 2.0 - titleImage.getHeight() / 2.0);
             fallTransition.setInterpolator(Interpolators.BOUNCE.EASE_OUT());
 
@@ -66,7 +72,7 @@ public class JoeIntroScene {
             root.getChildren().add(progressBar);
 
             // --- "by HardStack" label setup ---
-            var titleImages = FXGL.texture("hardstack.png");
+            var titleImages = FXGL.texture("text_by_hardstack.png");
 //          Text byLabel = FXGL.getUIFactoryService().newText("by HardStack", 18);
             titleImages.setOpacity(0);
             root.getChildren().add(titleImages);
